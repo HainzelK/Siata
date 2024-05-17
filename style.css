@@ -164,7 +164,7 @@ span a:hover{
     padding: 10px;
     background: linear-gradient(135deg, #71b7e6, #9b59b6);
   }
-  .container{
+  .container-sign{
     max-width: 700px;
     width: 100%;
     background-color: #fff;
@@ -172,12 +172,12 @@ span a:hover{
     border-radius: 5px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.15);
   }
-  .container .title{
+  .container-sign .title{
     font-size: 25px;
     font-weight: 500;
     position: relative;
   }
-  .container .title::before{
+  .container-sign .title::before{
     content: "";
     position: absolute;
     left: 0;
