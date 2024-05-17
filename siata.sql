@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 17, 2024 at 06:23 AM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Waktu pembuatan: 17 Bulan Mei 2024 pada 06.58
+-- Versi server: 8.0.30
+-- Versi PHP: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `calendar`
+-- Struktur dari tabel `calendar`
 --
 
 CREATE TABLE `calendar` (
@@ -39,7 +39,7 @@ CREATE TABLE `calendar` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comments`
+-- Struktur dari tabel `comments`
 --
 
 CREATE TABLE `comments` (
@@ -54,7 +54,7 @@ CREATE TABLE `comments` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `destinations`
+-- Struktur dari tabel `destinations`
 --
 
 CREATE TABLE `destinations` (
@@ -69,7 +69,7 @@ CREATE TABLE `destinations` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `events`
+-- Struktur dari tabel `events`
 --
 
 CREATE TABLE `events` (
@@ -78,14 +78,13 @@ CREATE TABLE `events` (
   `event_description` text,
   `event_date` date NOT NULL,
   `event_time` time NOT NULL,
-  `location` varchar(255) DEFAULT NULL,
-  `created_by` int DEFAULT NULL
+  `location` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `media_gallery`
+-- Struktur dari tabel `media_gallery`
 --
 
 CREATE TABLE `media_gallery` (
@@ -100,7 +99,7 @@ CREATE TABLE `media_gallery` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `statistics`
+-- Struktur dari tabel `statistics`
 --
 
 CREATE TABLE `statistics` (
@@ -114,7 +113,7 @@ CREATE TABLE `statistics` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -129,7 +128,7 @@ CREATE TABLE `users` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `volunteers`
+-- Struktur dari tabel `volunteers`
 --
 
 CREATE TABLE `volunteers` (
@@ -143,14 +142,14 @@ CREATE TABLE `volunteers` (
 --
 
 --
--- Indexes for table `calendar`
+-- Indeks untuk tabel `calendar`
 --
 ALTER TABLE `calendar`
   ADD PRIMARY KEY (`calendar_id`),
   ADD KEY `event_id` (`event_id`);
 
 --
--- Indexes for table `comments`
+-- Indeks untuk tabel `comments`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`comment_id`),
@@ -159,21 +158,20 @@ ALTER TABLE `comments`
   ADD KEY `event_id` (`event_id`);
 
 --
--- Indexes for table `destinations`
+-- Indeks untuk tabel `destinations`
 --
 ALTER TABLE `destinations`
   ADD PRIMARY KEY (`destination_id`),
   ADD KEY `created_by` (`created_by`);
 
 --
--- Indexes for table `events`
+-- Indeks untuk tabel `events`
 --
 ALTER TABLE `events`
-  ADD PRIMARY KEY (`event_id`),
-  ADD KEY `created_by` (`created_by`);
+  ADD PRIMARY KEY (`event_id`);
 
 --
--- Indexes for table `media_gallery`
+-- Indeks untuk tabel `media_gallery`
 --
 ALTER TABLE `media_gallery`
   ADD PRIMARY KEY (`media_id`),
@@ -182,7 +180,7 @@ ALTER TABLE `media_gallery`
   ADD KEY `uploaded_by` (`uploaded_by`);
 
 --
--- Indexes for table `statistics`
+-- Indeks untuk tabel `statistics`
 --
 ALTER TABLE `statistics`
   ADD PRIMARY KEY (`stat_id`),
@@ -190,13 +188,13 @@ ALTER TABLE `statistics`
   ADD KEY `event_id` (`event_id`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`);
 
 --
--- Indexes for table `volunteers`
+-- Indeks untuk tabel `volunteers`
 --
 ALTER TABLE `volunteers`
   ADD PRIMARY KEY (`volunteer_id`),
@@ -204,69 +202,69 @@ ALTER TABLE `volunteers`
   ADD KEY `event_id` (`event_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `calendar`
+-- AUTO_INCREMENT untuk tabel `calendar`
 --
 ALTER TABLE `calendar`
   MODIFY `calendar_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `comments`
+-- AUTO_INCREMENT untuk tabel `comments`
 --
 ALTER TABLE `comments`
   MODIFY `comment_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `destinations`
+-- AUTO_INCREMENT untuk tabel `destinations`
 --
 ALTER TABLE `destinations`
   MODIFY `destination_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `events`
+-- AUTO_INCREMENT untuk tabel `events`
 --
 ALTER TABLE `events`
   MODIFY `event_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `media_gallery`
+-- AUTO_INCREMENT untuk tabel `media_gallery`
 --
 ALTER TABLE `media_gallery`
   MODIFY `media_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `statistics`
+-- AUTO_INCREMENT untuk tabel `statistics`
 --
 ALTER TABLE `statistics`
   MODIFY `stat_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
   MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `volunteers`
+-- AUTO_INCREMENT untuk tabel `volunteers`
 --
 ALTER TABLE `volunteers`
   MODIFY `volunteer_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `calendar`
+-- Ketidakleluasaan untuk tabel `calendar`
 --
 ALTER TABLE `calendar`
   ADD CONSTRAINT `calendar_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
 
 --
--- Constraints for table `comments`
+-- Ketidakleluasaan untuk tabel `comments`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
@@ -274,19 +272,13 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_3` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
 
 --
--- Constraints for table `destinations`
+-- Ketidakleluasaan untuk tabel `destinations`
 --
 ALTER TABLE `destinations`
   ADD CONSTRAINT `destinations_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`);
 
 --
--- Constraints for table `events`
---
-ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`);
-
---
--- Constraints for table `media_gallery`
+-- Ketidakleluasaan untuk tabel `media_gallery`
 --
 ALTER TABLE `media_gallery`
   ADD CONSTRAINT `media_gallery_ibfk_1` FOREIGN KEY (`destination_id`) REFERENCES `destinations` (`destination_id`),
@@ -294,14 +286,14 @@ ALTER TABLE `media_gallery`
   ADD CONSTRAINT `media_gallery_ibfk_3` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`user_id`);
 
 --
--- Constraints for table `statistics`
+-- Ketidakleluasaan untuk tabel `statistics`
 --
 ALTER TABLE `statistics`
   ADD CONSTRAINT `statistics_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `statistics_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
 
 --
--- Constraints for table `volunteers`
+-- Ketidakleluasaan untuk tabel `volunteers`
 --
 ALTER TABLE `volunteers`
   ADD CONSTRAINT `volunteers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
