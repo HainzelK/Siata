@@ -32,7 +32,9 @@ function addCard(name, sprite) {
     // Create the card structure
     card.innerHTML = `
         <div class="card">
-            <img src="${sprite}" class="card-img-top" alt="${name}" style="width: 25%; display: block; margin: 10px auto;">
+            <a href="detailEvent.html?name=${name}">
+                <img src="${sprite}" class="card-img-top" alt="${name}">
+            </a>
             <div class="card-body">
                 <h5 class="card-title text-center">${name}</h5>
             </div>
@@ -42,3 +44,9 @@ function addCard(name, sprite) {
     // Append the card to the card container
     cardContainer.appendChild(card);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Optionally fetch initial data
+    fetchData();
+});
+
