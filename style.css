@@ -6,14 +6,18 @@
     font-family: 'Poppins', sans-serif;
 }
 .wrapper{
-    background:linear-gradient(to bottom right, #0A4D68, #088395, #05BFDB, #00FFCA);
-    padding: 0 20px 0 20px;
+    background: #577f9b; 
+    /* linear-gradient(to bottom right, #1fc7a0,#1b9aaa,  #46c26b); */
+    /* padding: 0 20px 0 20px; */
+    position: relative;
+    z-index: 1;
 }
 .main{
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    
 }
 .side-image{
     background-image: url("img/img_login.png");
@@ -23,6 +27,105 @@
     border-radius: 10px 0 0 10px;
     position: relative;
 }
+
+*
+{
+  margin: 0;
+  padding: 0;
+}
+
+section{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+section .wave{
+  position: absolute;
+  top:40vh; 
+  left: 0;
+  width: 200%; /* Increased width to allow seamless looping */
+  height: 100%;
+  background: url('img/wave.svg') repeat-x center center; /* Changed no-repeat to repeat-x */
+  background-size:50%  /* Adjusted to cover the viewport */
+}
+
+section .wave.wave1{
+  animation: animate 30s linear infinite;
+  z-index: 1000;
+  opacity: 1;
+  animation-delay: 0s;
+  bottom: 0px;
+  overflow: hidden;
+}
+
+section .wave.wave2{
+  animation: animate2 25s linear infinite;
+  z-index: 999;
+  opacity: 0.5;
+  animation-delay: -5s;
+  bottom: 10px;
+  overflow: hidden;
+}
+
+section .wave.wave3{
+  animation: animate3 20s linear infinite;
+  z-index: 998;
+  opacity: 0.25;
+  animation-delay: -2s;
+  bottom: 15px;
+  overflow: hidden;
+}
+section .wave.wave4{
+  animation: animate4 16s linear infinite;
+  z-index: 997;
+  opacity: 0.7;
+  animation-delay: -5s;
+  bottom: 20px;
+  overflow: hidden;
+}
+
+@keyframes animate {
+  0%{
+    background-position-x: 0;
+  }
+  100%{
+    background-position-x: -100%; 
+  }
+}
+
+@keyframes animate2 {
+  0%{
+    background-position-x: 0;
+  }
+  100%{
+    background-position-x: 100%; 
+  }
+}
+
+@keyframes animate3 {
+  0%{
+    background-position-x: 0;
+  }
+  100%{
+    background-position-x: 200%; 
+  }
+}
+
+@keyframes animate4 {
+  0%{
+    background-position-x: 0;
+  }
+  100%{
+    background-position-x: 200%; 
+  }
+}
+
+
 .row{
   width:  900px;
   height:550px;
@@ -101,7 +204,7 @@ img{
    color: #5d5076;
  }
  .input-field .input:focus, .input-field .input:valid{
-    border-bottom: 1px solid #088395;
+    border-bottom: 1px solid #743ae1;
  }
  .submit{
     border: none;
