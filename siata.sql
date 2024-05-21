@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 17 Bulan Mei 2024 pada 06.58
+-- Waktu pembuatan: 21 Bulan Mei 2024 pada 01.05
 -- Versi server: 8.0.30
 -- Versi PHP: 8.1.10
 
@@ -62,8 +62,7 @@ CREATE TABLE `destinations` (
   `destination_name` varchar(100) NOT NULL,
   `description` text,
   `location` varchar(255) DEFAULT NULL,
-  `photo_url` varchar(255) DEFAULT NULL,
-  `created_by` int DEFAULT NULL
+  `photo_url` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -76,9 +75,10 @@ CREATE TABLE `events` (
   `event_id` int NOT NULL,
   `event_name` varchar(100) NOT NULL,
   `event_description` text,
-  `event_date` date NOT NULL,
-  `event_time` time NOT NULL,
-  `location` varchar(255) DEFAULT NULL
+  `event_date` date DEFAULT NULL,
+  `event_time` time(6) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `event_img` blob
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -92,8 +92,7 @@ CREATE TABLE `media_gallery` (
   `destination_id` int DEFAULT NULL,
   `event_id` int DEFAULT NULL,
   `media_type` varchar(50) NOT NULL,
-  `media_url` varchar(255) NOT NULL,
-  `uploaded_by` int DEFAULT NULL
+  `media_url` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -122,7 +121,9 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
   `full_name` varchar(100) DEFAULT NULL,
-  `profile_pic` blob
+  `profile_pic` blob,
+  `gender` enum('Male','Female') NOT NULL,
+  `no_telp` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -161,8 +162,7 @@ ALTER TABLE `comments`
 -- Indeks untuk tabel `destinations`
 --
 ALTER TABLE `destinations`
-  ADD PRIMARY KEY (`destination_id`),
-  ADD KEY `created_by` (`created_by`);
+  ADD PRIMARY KEY (`destination_id`);
 
 --
 -- Indeks untuk tabel `events`
@@ -176,8 +176,7 @@ ALTER TABLE `events`
 ALTER TABLE `media_gallery`
   ADD PRIMARY KEY (`media_id`),
   ADD KEY `destination_id` (`destination_id`),
-  ADD KEY `event_id` (`event_id`),
-  ADD KEY `uploaded_by` (`uploaded_by`);
+  ADD KEY `event_id` (`event_id`);
 
 --
 -- Indeks untuk tabel `statistics`
@@ -227,7 +226,7 @@ ALTER TABLE `destinations`
 -- AUTO_INCREMENT untuk tabel `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `event_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `media_gallery`
@@ -272,18 +271,11 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_3` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
 
 --
--- Ketidakleluasaan untuk tabel `destinations`
---
-ALTER TABLE `destinations`
-  ADD CONSTRAINT `destinations_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`);
-
---
 -- Ketidakleluasaan untuk tabel `media_gallery`
 --
 ALTER TABLE `media_gallery`
   ADD CONSTRAINT `media_gallery_ibfk_1` FOREIGN KEY (`destination_id`) REFERENCES `destinations` (`destination_id`),
-  ADD CONSTRAINT `media_gallery_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
-  ADD CONSTRAINT `media_gallery_ibfk_3` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `media_gallery_ibfk_2` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`);
 
 --
 -- Ketidakleluasaan untuk tabel `statistics`
