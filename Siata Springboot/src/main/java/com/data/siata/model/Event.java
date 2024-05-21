@@ -1,5 +1,6 @@
 package com.data.siata.model;
 
+import javax.sql.rowset.serial.SerialBlob;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,29 +13,55 @@ import jakarta.persistence.GenerationType;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")
-    private Long eventId;
+    @Column(name = "event_id", nullable = false)
+    private int eventId;
 
-    @Column(name = "event_name")
+    @Column(name = "event_name", columnDefinition = "VARCHAR(100)")
     private String eventName;
 
-    @Column(name = "event_description")
+    @Column(name = "event_description", columnDefinition = "TEXT")
     private String eventDescription;
 
-    @Column(name = "event_date")
+    @Column(name = "event_date", columnDefinition = "DATE")
     private String eventDate;
 
-    @Column(name = "event_time")
+    @Column(name = "event_time", columnDefinition = "TIME")
     private String eventTime;
 
-    @Column(name = "location")
+    @Column(name = "location", columnDefinition = "VARCHAR(255)")
     private String location;
+
+    @Column(name = "event_img", columnDefinition = "BLOB")
+    private SerialBlob eventImg;
+
+
+    public Event() {
+    }
+
+    public Event(String eventName, String eventDescription, String eventDate, String eventTime, String location,
+            SerialBlob eventImg) {
+        this.eventName = eventName;
+        this.eventDescription = eventDescription;
+        this.eventDate = eventDate;
+        this.eventTime = eventTime;
+        this.location = location;
+        this.eventImg = eventImg;
+    }
+
+    public SerialBlob getEventImg() {
+        return eventImg;
+    }
+
+    public void setEventImg(SerialBlob eventImg) {
+        this.eventImg = eventImg;
+    }
+
     // Getters and Setters
-    public Long getEventId() {
+    public int getEventId() {
         return eventId;
     }
 
-    public void setEventId(Long eventId) {
+    public void setEventId(int eventId) {
         this.eventId = eventId;
     }
 

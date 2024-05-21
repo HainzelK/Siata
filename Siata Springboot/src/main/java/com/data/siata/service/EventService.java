@@ -18,7 +18,7 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public Optional<Event> getEventById(long id) {
+    public Optional<Event> getEventById(int id) {
         return eventRepository.findById(id);
     }
 
@@ -26,7 +26,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public void deleteEvent(long id) {
+    public void deleteEvent(int id) {
         eventRepository.deleteById(id);
     }
 }

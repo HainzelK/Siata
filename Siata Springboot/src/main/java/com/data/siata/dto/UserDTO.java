@@ -1,19 +1,33 @@
 package com.data.siata.dto;
 
-import com.mysql.cj.jdbc.Blob;
+import javax.sql.rowset.serial.SerialBlob;
 
 public class UserDTO {
     private String username;
     private String password;
     private String email;
     private String fullName;
-    private Blob profilePic;
+    private SerialBlob profilePic;
+    private String gender;
+    private String noTelp;
 
     public String getUsername() {
         return username;
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    public String getNoTelp() {
+        return noTelp;
+    }
+    public void setNoTelp(String noTelp) {
+        this.noTelp = noTelp;
     }
     public String getPassword() {
         return password;
@@ -33,10 +47,10 @@ public class UserDTO {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    public Blob getProfilePic() {
+    public SerialBlob getProfilePic() {
         return profilePic;
     }
-    public void setProfilePic(Blob profilePic) {
+    public void setProfilePic(SerialBlob profilePic) {
         this.profilePic = profilePic;
     }
 }

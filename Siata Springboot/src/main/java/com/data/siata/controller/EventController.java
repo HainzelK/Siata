@@ -40,6 +40,7 @@ public class EventController {
         event.setEventDate(eventDTO.getEventDate());
         event.setEventTime(eventDTO.getEventTime());
         event.setLocation(eventDTO.getLocation());
+        event.setEventImg(eventDTO.getEventImg());
         eventService.saveEvent(event);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Event created successfully");
@@ -55,6 +56,7 @@ public class EventController {
                 event.setEventDate(eventDetails.getEventDate());
                 event.setEventTime(eventDetails.getEventTime());
                 event.setLocation(eventDetails.getLocation());
+                event.setEventImg(eventDetails.getEventImg());
                 Event updatedEvent = eventService.saveEvent(event);
                 return ResponseEntity.ok(updatedEvent);
             }).orElse(ResponseEntity.notFound().build());

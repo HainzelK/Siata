@@ -40,6 +40,8 @@ public class UserController {
         user.setEmail(userDTO.getEmail());
         user.setFullName(userDTO.getFullName());
         user.setProfilePic(userDTO.getProfilePic());
+        user.setGender(userDTO.getGender());
+        user.setNoTelp(userDTO.getNoTelp());
         userService.saveUser(user);
         Map<String, String> response = new HashMap<>();
         response.put("message", "User created successfully");
@@ -55,6 +57,8 @@ public class UserController {
                 user.setEmail(userDetails.getEmail());
                 user.setFullName(userDetails.getFullName());
                 user.setProfilePic(userDetails.getProfilePic());
+                user.setGender(userDetails.getGender());
+                user.setNoTelp(userDetails.getNoTelp());
                 User updatedUser = userService.saveUser(user);
                 return ResponseEntity.ok(updatedUser);
             }).orElse(ResponseEntity.notFound().build());

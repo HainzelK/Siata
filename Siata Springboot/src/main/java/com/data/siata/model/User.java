@@ -1,6 +1,6 @@
 package com.data.siata.model;
 
-import com.mysql.cj.jdbc.Blob;
+import javax.sql.rowset.serial.SerialBlob;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,48 +15,73 @@ public class User {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "user_id", nullable = false)
+    private int userId;
 
-    @Column(name = "username")
+    @Column(name = "username", columnDefinition = "VARCHAR(50)")
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", columnDefinition = "VARCHAR(255)")
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", columnDefinition = "VARCHAR(100)")
     private String email;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", columnDefinition = "VARCHAR(100)")
     private String fullName;
 
-    @Column(name = "profile_pic")
-    private Blob profilePic;
+    @Column(name = "profile_pic", columnDefinition = "BLOB")
+    private SerialBlob profilePic;
+
+    @Column(name = "gender", columnDefinition = "ENUM('Male', 'Female')")
+    private String gender;
+
+    @Column(name = "no_telp", columnDefinition = "VARCHAR(20)")
+    private String noTelp;
 
     public User() {
     }
 
-    public User(String username, String password, String email, String fullName) {
+    //Sign in
+    public User(String username, String password, String email, String fullName, String gender,String noTelp) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.fullName = fullName;
+        this.gender = gender;
+        this.noTelp = noTelp;
     }
 
-    public User(Blob profilePic) {
+    public User(SerialBlob profilePic) {
         this.profilePic = profilePic;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getNoTelp() {
+        return noTelp;
+    }
+
+    public void setNoTelp(String noTelp) {
+        this.noTelp = noTelp;
     }
 
     public void setUsername(String username) {
@@ -87,11 +112,11 @@ public class User {
         this.fullName = fullName;
     }
 
-    public Blob getProfilePic() {
+    public SerialBlob getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(Blob profilePic) {
+    public void setProfilePic(SerialBlob profilePic) {
         this.profilePic = profilePic;
     }
 
