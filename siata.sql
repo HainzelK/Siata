@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 21 Bulan Mei 2024 pada 01.05
+-- Waktu pembuatan: 22 Bulan Mei 2024 pada 04.07
 -- Versi server: 8.0.30
 -- Versi PHP: 8.1.10
 
@@ -32,8 +32,7 @@ CREATE TABLE `calendar` (
   `event_id` int NOT NULL,
   `start_time` datetime NOT NULL,
   `end_time` datetime NOT NULL,
-  `summary` varchar(255) DEFAULT NULL,
-  `description` text
+  `summary` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -62,7 +61,7 @@ CREATE TABLE `destinations` (
   `destination_name` varchar(100) NOT NULL,
   `description` text,
   `location` varchar(255) DEFAULT NULL,
-  `photo_url` varchar(255) DEFAULT NULL
+  `photo_url` blob
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -76,10 +75,17 @@ CREATE TABLE `events` (
   `event_name` varchar(100) NOT NULL,
   `event_description` text,
   `event_date` date DEFAULT NULL,
-  `event_time` time(6) DEFAULT NULL,
+  `event_time` time DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `event_img` blob
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `events`
+--
+
+INSERT INTO `events` (`event_id`, `event_name`, `event_description`, `event_date`, `event_time`, `location`, `event_img`) VALUES
+(13, 'Bersih-bersih', 'Bersih-bersih bosqq', '2024-05-31', '09:00:00', 'Lanjukkang', NULL);
 
 -- --------------------------------------------------------
 
@@ -91,8 +97,8 @@ CREATE TABLE `media_gallery` (
   `media_id` int NOT NULL,
   `destination_id` int DEFAULT NULL,
   `event_id` int DEFAULT NULL,
-  `media_type` varchar(50) NOT NULL,
-  `media_url` varchar(255) NOT NULL
+  `media_type` enum('Image','Video') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `media_url` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -122,7 +128,7 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `full_name` varchar(100) DEFAULT NULL,
   `profile_pic` blob,
-  `gender` enum('Male','Female') NOT NULL,
+  `gender` enum('Male','Female') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `no_telp` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -133,7 +139,6 @@ CREATE TABLE `users` (
 --
 
 CREATE TABLE `volunteers` (
-  `volunteer_id` int NOT NULL,
   `user_id` int NOT NULL,
   `event_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -196,7 +201,6 @@ ALTER TABLE `users`
 -- Indeks untuk tabel `volunteers`
 --
 ALTER TABLE `volunteers`
-  ADD PRIMARY KEY (`volunteer_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `event_id` (`event_id`);
 
@@ -226,7 +230,7 @@ ALTER TABLE `destinations`
 -- AUTO_INCREMENT untuk tabel `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `event_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `media_gallery`
@@ -245,12 +249,6 @@ ALTER TABLE `statistics`
 --
 ALTER TABLE `users`
   MODIFY `user_id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `volunteers`
---
-ALTER TABLE `volunteers`
-  MODIFY `volunteer_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
