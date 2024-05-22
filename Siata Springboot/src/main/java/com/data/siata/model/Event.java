@@ -5,6 +5,7 @@ import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
@@ -33,8 +34,9 @@ public class Event {
     @Column(name = "location", columnDefinition = "VARCHAR(255)")
     private String location;
 
-    @Column(name = "event_img", columnDefinition = "BLOB")
-    private String eventImg;
+    @Lob
+    @Column(name = "event_img", columnDefinition = "MEDIUMBLOB")
+    private byte[] eventImg;
 
     @ManyToMany(mappedBy = "events")
     private Set<User> users;
@@ -43,7 +45,7 @@ public class Event {
     }
 
     public Event(String eventName, String eventDescription, String eventDate, String eventTime, String location,
-            String eventImg) {
+    byte[] eventImg) {
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
@@ -60,11 +62,11 @@ public class Event {
         this.users = users;
     }
 
-    public String getEventImg() {
+    public byte[] getEventImg() {
         return eventImg;
     }
 
-    public void setEventImg(String eventImg) {
+    public void setEventImg(byte[] eventImg) {
         this.eventImg = eventImg;
     }
 

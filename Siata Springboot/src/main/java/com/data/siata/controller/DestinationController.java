@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,8 @@ public class DestinationController {
         destination.setDestinationName(destinationDTO.getDestinationName());
         destination.setDescription(destinationDTO.getDescription());
         destination.setLocation(destinationDTO.getLocation());
-        destination.setPhoto(destinationDTO.getPhoto());
+        byte[] decodedBytes = Base64.getDecoder().decode(destinationDTO.getPhoto().split(",")[1]);
+        destination.setPhoto(decodedBytes);        
         destinationService.saveDestination(destination);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Destination created successfully");
@@ -46,13 +48,14 @@ public class DestinationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Destination> updateDestination(@PathVariable int id, @RequestBody Destination destinationDetails) {
+    public ResponseEntity<Destination> updateDestination(@PathVariable int id, @RequestBody DestinationDTO destinationDetails) {
         return destinationService.getDestinationById(id)
             .map(destination -> {
                 destination.setDestinationName(destinationDetails.getDestinationName());
                 destination.setDescription(destinationDetails.getDescription());
                 destination.setLocation(destinationDetails.getLocation());
-                destination.setPhoto(destinationDetails.getPhoto());
+                byte[] decodedBytes = Base64.getDecoder().decode(destinationDetails.getPhoto().split(",")[1]);
+                destination.setPhoto(decodedBytes);        
                 Destination updatedDestination = destinationService.saveDestination(destination);
                 return ResponseEntity.ok(updatedDestination);
             }).orElse(ResponseEntity.notFound().build());

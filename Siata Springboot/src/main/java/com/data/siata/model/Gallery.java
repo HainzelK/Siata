@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -26,16 +27,17 @@ public class Gallery {
     @JoinColumn(name = "event_id", referencedColumnName = "event_id", columnDefinition = "INT")
     private Event event;
 
-    @Column(name = "media_type", columnDefinition = "ENUM('Image', 'Video')")
+    @Column(name = "media_type", columnDefinition = "ENUM('Image','Video')")
     private String mediaType;
 
-    @Column(name = "media_url", columnDefinition = "BLOB")
-    private String mediaUrl;
+    @Lob
+    @Column(name = "media_url", columnDefinition = "MEDIUMBLOB")
+    private byte[] mediaUrl;
 
     public Gallery() {
     }
 
-    public Gallery(Destination destination, Event event, String mediaType, String mediaUrl) {
+    public Gallery(Destination destination, Event event, String mediaType, byte[] mediaUrl) {
         this.destination = destination;
         this.event = event;
         this.mediaType = mediaType;
@@ -74,11 +76,11 @@ public class Gallery {
         this.mediaType = mediaType;
     }
 
-    public String getMediaUrl() {
+    public byte[] getMediaUrl() {
         return mediaUrl;
     }
 
-    public void setMediaUrl(String mediaUrl) {
+    public void setMediaUrl(byte[] mediaUrl) {
         this.mediaUrl = mediaUrl;
     }
     

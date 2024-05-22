@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,8 @@ public class EventController {
         event.setEventDate(eventDTO.getEventDate());
         event.setEventTime(eventDTO.getEventTime());
         event.setLocation(eventDTO.getLocation());
-        event.setEventImg(eventDTO.getEventImg());
+        byte[] decodedBytes = Base64.getDecoder().decode(eventDTO.getEventImg().split(",")[1]);
+        event.setEventImg(decodedBytes);        
         eventService.saveEvent(event);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Event created successfully");
@@ -48,7 +50,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable int id, @RequestBody Event eventDetails) {
+    public ResponseEntity<Event> updateEvent(@PathVariable int id, @RequestBody EventDTO eventDetails) {
         return eventService.getEventById(id)
             .map(event -> {
                 event.setEventName(eventDetails.getEventName());
@@ -56,7 +58,8 @@ public class EventController {
                 event.setEventDate(eventDetails.getEventDate());
                 event.setEventTime(eventDetails.getEventTime());
                 event.setLocation(eventDetails.getLocation());
-                event.setEventImg(eventDetails.getEventImg());
+                byte[] decodedBytes = Base64.getDecoder().decode(eventDetails.getEventImg().split(",")[1]);
+                event.setEventImg(decodedBytes);                
                 Event updatedEvent = eventService.saveEvent(event);
                 return ResponseEntity.ok(updatedEvent);
             }).orElse(ResponseEntity.notFound().build());

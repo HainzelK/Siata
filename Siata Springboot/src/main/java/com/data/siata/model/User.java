@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
@@ -32,10 +33,11 @@ public class User {
     @Column(name = "full_name", columnDefinition = "VARCHAR(100)")
     private String fullName;
 
-    @Column(name = "profile_pic", columnDefinition = "BLOB")
-    private String profilePic;
+    @Lob
+    @Column(name = "profile_pic", columnDefinition = "MEDIUMBLOB")
+    private byte[] profilePic;
 
-    @Column(name = "gender", columnDefinition = "ENUM('Male', 'Female')")
+    @Column(name = "gender", columnDefinition = "ENUM('Male','Female')")
     private String gender;
 
     @Column(name = "no_telp", columnDefinition = "VARCHAR(20)")
@@ -69,7 +71,7 @@ public class User {
         this.noTelp = noTelp;
     }
 
-    public User(String profilePic) {
+    public User(byte[] profilePic) {
         this.profilePic = profilePic;
     }
 
@@ -129,11 +131,11 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getProfilePic() {
+    public byte[] getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(String profilePic) {
+    public void setProfilePic(byte[] profilePic) {
         this.profilePic = profilePic;
     }
 

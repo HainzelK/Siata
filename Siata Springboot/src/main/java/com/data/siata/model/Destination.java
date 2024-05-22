@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,13 +26,14 @@ public class Destination {
     @Column(name = "location", columnDefinition = "VARCHAR(255)")
     private String location;
 
-    @Column(name = "photo_url", columnDefinition = "BLOB")
-    private String photo;
+    @Lob
+    @Column(name = "photo_url", columnDefinition = "MEDIUMBLOB")
+    private byte[] photo;
 
     public Destination() {
     }
 
-    public Destination(String destinationName, String description, String location, String photo) {
+    public Destination(String destinationName, String description, String location, byte[] photo) {
         this.destinationName = destinationName;
         this.description = description;
         this.location = location;
@@ -70,11 +72,11 @@ public class Destination {
         this.location = location;
     }
 
-    public String getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 }

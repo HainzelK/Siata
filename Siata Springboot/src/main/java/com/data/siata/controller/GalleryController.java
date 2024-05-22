@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,8 @@ public class GalleryController {
     public ResponseEntity<Map<String, String>> createGallery(@RequestBody GalleryDTO galleryDTO) {
         Gallery gallery = new Gallery();
         gallery.setMediaType(galleryDTO.getMediaType());
-        gallery.setMediaUrl(galleryDTO.getMediaUrl());
+        byte[] decodedBytes = Base64.getDecoder().decode(galleryDTO.getMediaUrl().split(",")[1]);
+        gallery.setMediaUrl(decodedBytes);        
         galleryService.saveGallery(gallery);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Gallery created successfully");
@@ -44,11 +46,12 @@ public class GalleryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Gallery> updateGallery(@PathVariable int id, @RequestBody Gallery galleryDetails) {
+    public ResponseEntity<Gallery> updateGallery(@PathVariable int id, @RequestBody GalleryDTO galleryDetails) {
         return galleryService.getGalleryById(id)
             .map(gallery -> {
                 gallery.setMediaType(galleryDetails.getMediaType());
-                gallery.setMediaUrl(galleryDetails.getMediaUrl());
+                byte[] decodedBytes = Base64.getDecoder().decode(galleryDetails.getMediaUrl().split(",")[1]);
+                gallery.setMediaUrl(decodedBytes);        
                 Gallery updatedGallery = galleryService.saveGallery(gallery);
                 return ResponseEntity.ok(updatedGallery);
             }).orElse(ResponseEntity.notFound().build());

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,8 @@ public class UserController {
         user.setPassword(userDTO.getPassword());
         user.setEmail(userDTO.getEmail());
         user.setFullName(userDTO.getFullName());
-        user.setProfilePic(userDTO.getProfilePic());
+        byte[] decodedBytes = Base64.getDecoder().decode(userDTO.getProfilePic().split(",")[1]);
+        user.setProfilePic(decodedBytes);        
         user.setGender(userDTO.getGender());
         user.setNoTelp(userDTO.getNoTelp());
         userService.saveUser(user);
@@ -49,14 +51,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UserDTO userDetails) {
         return userService.getUserById(id)
             .map(user -> {
                 user.setUsername(userDetails.getUsername());
                 user.setPassword(userDetails.getPassword());
                 user.setEmail(userDetails.getEmail());
                 user.setFullName(userDetails.getFullName());
-                user.setProfilePic(userDetails.getProfilePic());
+                byte[] decodedBytes = Base64.getDecoder().decode(userDetails.getProfilePic().split(",")[1]);
+                user.setProfilePic(decodedBytes);        
                 user.setGender(userDetails.getGender());
                 user.setNoTelp(userDetails.getNoTelp());
                 User updatedUser = userService.saveUser(user);
