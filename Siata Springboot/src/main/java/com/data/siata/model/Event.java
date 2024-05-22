@@ -1,9 +1,11 @@
 package com.data.siata.model;
 
-import javax.sql.rowset.serial.SerialBlob;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,14 +34,16 @@ public class Event {
     private String location;
 
     @Column(name = "event_img", columnDefinition = "BLOB")
-    private SerialBlob eventImg;
+    private String eventImg;
 
+    @ManyToMany(mappedBy = "events")
+    private Set<User> users;
 
     public Event() {
     }
 
     public Event(String eventName, String eventDescription, String eventDate, String eventTime, String location,
-            SerialBlob eventImg) {
+            String eventImg) {
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
@@ -48,11 +52,19 @@ public class Event {
         this.eventImg = eventImg;
     }
 
-    public SerialBlob getEventImg() {
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public String getEventImg() {
         return eventImg;
     }
 
-    public void setEventImg(SerialBlob eventImg) {
+    public void setEventImg(String eventImg) {
         this.eventImg = eventImg;
     }
 

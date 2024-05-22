@@ -1,14 +1,12 @@
 package com.data.siata.dto;
 
-import javax.sql.rowset.serial.SerialBlob;
-
 public class EventDTO {
     private String eventName;
     private String eventDescription;
     private String eventDate;
     private String eventTime;
     private String location;
-    private SerialBlob eventImg;
+    private String eventImg;
 
     // Getters and Setters
     public String getEventName() {
@@ -19,11 +17,11 @@ public class EventDTO {
         this.eventName = eventName;
     }
 
-    public SerialBlob getEventImg() {
+    public String getEventImg() {
         return eventImg;
     }
 
-    public void setEventImg(SerialBlob eventImg) {
+    public void setEventImg(String eventImg) {
         this.eventImg = eventImg;
     }
 

@@ -1,13 +1,11 @@
 package com.data.siata.dto;
 
-import javax.sql.rowset.serial.SerialBlob;
-
 public class UserDTO {
     private String username;
     private String password;
     private String email;
     private String fullName;
-    private SerialBlob profilePic;
+    private String profilePic;
     private String gender;
     private String noTelp;
 
@@ -47,10 +45,10 @@ public class UserDTO {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    public SerialBlob getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
-    public void setProfilePic(SerialBlob profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 }
