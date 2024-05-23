@@ -1,52 +1,55 @@
-async function fetchData(){
-    try {
-        //nnti semua yg pokemon mo diganti jd api asli ta
+async function fetchData() {
+  try {
+      const response = await fetch("/api/events");
 
-        // Fetch random Pokémon data from the API
-        const pokemonId = Math.floor(Math.random() * 898) + 1;  // There are 898 Pokémon as of now //se jujur nd tau mo bemana nnti ini tp utk sementara begini saja aokawoakow
-        const response  = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+      if (!response.ok) {
+          throw new Error("Could not fetch data");
+      }
 
-        if (!response.ok) {
-            throw new Error('Could not fetch data');
-        }
+      const data = await response.json();
+      console.log("Fetched data:", data);
 
-        
-        const data = await response.json();
-        const pokemonSprite = data.sprites.front_default; //pokemon sprite mo diganti jd gambar event
-        const pokemonName = data.name; //pokemon name mo diganti jd event_name
+      const events = data.map(event => ({
+          eventName: event.eventName,
+          event_img: event.eventImg, // Ensure this matches the actual property name for the image
+          eventDesc: event.eventDescription,
+      }));
+      console.log("Mapped events:", events);
 
-        // Add a new card with the fetched data
-        addCard(pokemonName, pokemonSprite);
-    } catch (error) {
-        console.error(error);
-    }
+      const cardContainer = document.getElementById("card-container");
+      cardContainer.innerHTML = "";
+
+      if (events.length === 0) {
+          cardContainer.innerHTML = "<p>No events found.</p>";
+          return;
+      }
+
+      events.forEach(event => {
+          addCard(event.eventName, event.event_img);
+      });
+  } catch (error) {
+      console.error("Error fetching data:", error);
+  }
 }
 
-function addCard(name, sprite) {
-    const cardContainer = document.getElementById("card-container");
+function addCard(eventName, event_img) {
+  const cardContainer = document.getElementById("card-container");
 
-    // Create a new card element
-    const card = document.createElement("div");
-    card.className = "col-sm-4 mb-3";
+  const card = document.createElement("div");
+  card.className = "col-sm-4 mb-3";
 
-    // Create the card structure
-    card.innerHTML = `
-        <div class="card">
-            <a href="detailEvent.html?name=${name}">
-                <img src="${sprite}" class="card-img-top" alt="${name}">
-            </a>
-            <div class="card-body">
-                <h5 class="card-title text-center">${name}</h5>
-            </div>
-        </div>
-    `;
+  card.innerHTML = `
+      <div class="card">
+          <a href="detailEvent.html?name=${encodeURIComponent(eventName)}">
+              <img src="data:image/jpeg;base64,${event_img}" class="card-img-top" alt="${eventName}">
+          </a>
+          <div class="card-body">
+              <h5 class="card-title text-center">${eventName}</h5>
+          </div>
+      </div>
+  `;
 
-    // Append the card to the card container
-    cardContainer.appendChild(card);
+  cardContainer.appendChild(card);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Optionally fetch initial data
-    fetchData();
-});
-
+document.addEventListener("DOMContentLoaded", fetchData);
