@@ -1,43 +1,80 @@
 package com.data.siata.service;
 
+import com.data.siata.dto.VolunteerDTO;
 import com.data.siata.model.Volunteer;
 import com.data.siata.model.Id.VolunteerId;
 import com.data.siata.repository.VolunteerRepository;
+import com.data.siata.repository.UserRepository;
+import com.data.siata.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VolunteerService {
 
-    private final VolunteerRepository volunteerRepository;
+    @Autowired
+    private VolunteerRepository volunteerRepository;
 
     @Autowired
-    public VolunteerService(VolunteerRepository volunteerRepository) {
-        this.volunteerRepository = volunteerRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    public List<VolunteerDTO> findAllVolunteers() {
+        return volunteerRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    // Method to create a new volunteer
-    public Volunteer saveVolunteer(Volunteer volunteer) {
-        return volunteerRepository.save(volunteer);
+    public Optional<VolunteerDTO> findVolunteerById(int userId, int eventId) {
+        return volunteerRepository.findById(new VolunteerId(userId, eventId))
+                .map(this::convertToDto);
     }
 
-    // Method to find a volunteer by its composite key
-    public Optional<Volunteer> findVolunteerById(int userId, int eventId) {
-        VolunteerId volunteerId = new VolunteerId(userId, eventId);
-        return volunteerRepository.findById(volunteerId);
+    public List<VolunteerDTO> findVolunteersByEventId(int eventId) {
+        return volunteerRepository.findByIdEventId(eventId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    // Method to get all volunteers
-    public List<Volunteer> findAllVolunteers() {
-        return volunteerRepository.findAll();
+    public List<VolunteerDTO> findVolunteersByUserId(int userId) {
+        return volunteerRepository.findByIdUserId(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    // Method to delete a volunteer by its composite key
+    public VolunteerDTO createVolunteer(VolunteerDTO volunteerDTO) {
+        Volunteer volunteer = convertToEntity(volunteerDTO);
+        Volunteer savedVolunteer = volunteerRepository.save(volunteer);
+        return convertToDto(savedVolunteer);
+    }
+
     public void deleteVolunteer(int userId, int eventId) {
-        VolunteerId volunteerId = new VolunteerId(userId, eventId);
-        volunteerRepository.deleteById(volunteerId);
+        volunteerRepository.deleteById(new VolunteerId(userId, eventId));
+    }
+
+    private VolunteerDTO convertToDto(Volunteer volunteer) {
+        VolunteerDTO volunteerDTO = new VolunteerDTO();
+        volunteerDTO.setUserId(volunteer.getId().getUserId());
+        volunteerDTO.setEventId(volunteer.getId().getEventId());
+
+        // Fetch and set user details
+        userRepository.findById(volunteer.getId().getUserId()).ifPresent(volunteerDTO::setUser);
+
+        // Fetch and set event details
+        eventRepository.findById(volunteer.getId().getEventId()).ifPresent(volunteerDTO::setEvent);
+
+        return volunteerDTO;
+    }
+
+    private Volunteer convertToEntity(VolunteerDTO volunteerDTO) {
+        Volunteer volunteer = new Volunteer();
+        volunteer.setId(new VolunteerId(volunteerDTO.getUserId(), volunteerDTO.getEventId()));
+        return volunteer;
     }
 }

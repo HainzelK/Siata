@@ -2,34 +2,30 @@ package com.data.siata.model;
 
 import com.data.siata.model.Id.VolunteerId;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@IdClass(VolunteerId.class)
 @Table(name = "volunteers")
 public class Volunteer {
+    @EmbeddedId
+    private VolunteerId id;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @MapsId("userId")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", columnDefinition = "INT")
     private User user;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "event_id")
+    @MapsId("eventId")
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id", columnDefinition = "INT")
     private Event event;
 
-    public Volunteer(User user, Event event) {
-        this.user = user;
-        this.event = event;
+    public VolunteerId getId() {
+        return id;
     }
 
-    public Volunteer() {
+    public void setId(VolunteerId id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -48,5 +44,5 @@ public class Volunteer {
         this.event = event;
     }
 
-
+    // Getters and setters
 }

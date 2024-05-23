@@ -1,15 +1,11 @@
 package com.data.siata.model;
 
-import java.util.Set;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -43,25 +39,16 @@ public class User {
     @Column(name = "no_telp", columnDefinition = "VARCHAR(20)")
     private String noTelp;
 
-    @ManyToMany
-    @JoinTable(
-      name = "volunteers", 
-      joinColumns = @jakarta.persistence.JoinColumn(name = "user_id"), 
-      inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "event_id"))
-    private Set<Event> events;
+    // @ManyToMany
+    // @JoinTable(
+    //   name = "volunteers", 
+    //   joinColumns = @jakarta.persistence.JoinColumn(name = "user_id"), 
+    //   inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "event_id"))
+    // private Set<Event> events;
 
     public User() {
     }
 
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
-
-    //Sign in
     public User(String username, String password, String email, String fullName, String gender,String noTelp) {
         this.username = username;
         this.password = password;

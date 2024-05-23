@@ -10,7 +10,7 @@
     <h1>Event Management</h1>
     <div>
         <h2>Add Event</h2>
-        <form id="eventForm">
+        <form id="eventForm" enctype="multipart/form-data">
             <label for="eventName">Event Name:</label>
             <input type="text" id="eventName" name="eventName" required>
             <label for="eventDescription">Event Description:</label>
@@ -21,6 +21,7 @@
             <input type="time" id="eventTime" name="eventTime" required>
             <label for="location">Location:</label>
             <input type="text" id="location" name="location" required>
+            <input type="file" id="imgInput" name="imgInput" />
             <button type="submit">Add Event</button>
         </form>
     </div>

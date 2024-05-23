@@ -1,32 +1,47 @@
 package com.data.siata.model.Id;
 
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class VolunteerId implements Serializable {
-
-    private int user;
-    private int event;
+    private int userId;
+    private int eventId;
 
     public VolunteerId() {}
 
-    public VolunteerId(int user, int event) {
-        this.user = user;
-        this.event = event;
+    public VolunteerId(int userId, int eventId) {
+        this.userId = userId;
+        this.eventId = eventId;
     }
-
-    // getters, setters, equals, and hashCode methods
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VolunteerId that = (VolunteerId) o;
-        return Objects.equals(user, that.user) && Objects.equals(event, that.event);
+        return userId == that.userId && eventId == that.eventId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, event);
+        return Objects.hash(userId, eventId);
     }
 }

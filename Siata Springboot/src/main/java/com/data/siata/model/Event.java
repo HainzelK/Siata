@@ -1,12 +1,10 @@
 package com.data.siata.model;
 
-import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,9 +36,6 @@ public class Event {
     @Column(name = "event_img", columnDefinition = "MEDIUMBLOB")
     private byte[] eventImg;
 
-    @ManyToMany(mappedBy = "events")
-    private Set<User> users;
-
     public Event() {
     }
 
@@ -54,13 +49,6 @@ public class Event {
         this.eventImg = eventImg;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 
     public byte[] getEventImg() {
         return eventImg;
