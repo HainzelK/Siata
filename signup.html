@@ -1,41 +1,51 @@
 <!DOCTYPE html>
-
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="style.css">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   </head>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      .error-message {
+        color: red;
+        font-size: 0.9em;
+        display: none;
+      }
+    </style>
+  </head>
 <body class="test">
   <div class="container-sign">
     <div class="title">Registration</div>
     <div class="content">
-      <form action="#">
+      <form id="registrationForm" novalidate>
         <div class="user-details">
           <div class="input-box">
             <span class="details">Full Name</span>
-            <input type="text" placeholder="Enter your name" required>
+            <input type="text" id="name" placeholder="Enter your name" required>
           </div>
           <div class="input-box">
             <span class="details">Username</span>
-            <input type="text" placeholder="Enter your username" required>
+            <input type="text" id="username" placeholder="Enter your username" required>
           </div>
           <div class="input-box">
             <span class="details">Email</span>
-            <input type="text" placeholder="Enter your email" required>
+            <input type="email" id="email" placeholder="Enter your email" required pattern="^[a-zA-Z0-9._%+-]+@example\.com$">
+            <div class="error-message" id="emailError">Please enter a valid email address with the domain @example.com.</div>
           </div>
           <div class="input-box">
             <span class="details">Phone Number</span>
-            <input type="text" placeholder="Enter your number" required>
+            <input type="tel" id="phone" placeholder="Enter your number" required pattern="^(\+62|62|0)8[1-9][0-9]{6,9}$">
+            <div class="error-message" id="phoneError">Please enter a valid Indonesian phone number.</div>
           </div>
           <div class="input-box">
             <span class="details">Password</span>
-            <input type="text" placeholder="Enter your password" required>
+            <input type="password" id="password" placeholder="Enter your password" required minlength="8">
+            <div class="error-message" id="passwordError">Password must be at least 8 characters long.</div>
           </div>
           <div class="input-box">
             <span class="details">Confirm Password</span>
-            <input type="text" placeholder="Confirm your password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+            <div class="error-message" id="confirmPasswordError">Passwords do not match.</div>
           </div>
         </div>
         <div class="gender-details">
@@ -45,16 +55,16 @@
           <span class="gender-title">Gender</span>
           <div class="category">
             <label for="dot-1">
-            <span class="dot one"></span>
-            <span class="gender">Male</span>
-          </label>
-          <label for="dot-2">
-            <span class="dot two"></span>
-            <span class="gender">Female</span>
-          </label>
-          <label for="dot-3">
-            <span class="dot three"></span>
-            <span class="gender">Prefer not to say</span>
+              <span class="dot one"></span>
+              <span class="gender">Male</span>
+            </label>
+            <label for="dot-2">
+              <span class="dot two"></span>
+              <span class="gender">Female</span>
+            </label>
+            <label for="dot-3">
+              <span class="dot three"></span>
+              <span class="gender">Prefer not to say</span>
             </label>
           </div>
         </div>
@@ -66,5 +76,54 @@
     </div>
   </div>
 
+  <script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+      let isValid = true;
+
+      // Validate email
+      const email = document.getElementById('email');
+      const emailError = document.getElementById('emailError');
+      if (!email.checkValidity()) {
+        emailError.style.display = 'block';
+        isValid = false;
+      } else {
+        emailError.style.display = 'none';
+      }
+
+      // Validate phone number
+      const phone = document.getElementById('phone');
+      const phoneError = document.getElementById('phoneError');
+      if (!phone.checkValidity()) {
+        phoneError.style.display = 'block';
+        isValid = false;
+      } else {
+        phoneError.style.display = 'none';
+      }
+
+      // Validate password
+      const password = document.getElementById('password');
+      const passwordError = document.getElementById('passwordError');
+      if (!password.checkValidity()) {
+        passwordError.style.display = 'block';
+        isValid = false;
+      } else {
+        passwordError.style.display = 'none';
+      }
+
+      // Validate confirm password
+      const confirmPassword = document.getElementById('confirmPassword');
+      const confirmPasswordError = document.getElementById('confirmPasswordError');
+      if (password.value !== confirmPassword.value) {
+        confirmPasswordError.style.display = 'block';
+        isValid = false;
+      } else {
+        confirmPasswordError.style.display = 'none';
+      }
+
+      if (!isValid) {
+        event.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>
