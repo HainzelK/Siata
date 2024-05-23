@@ -5,77 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Detail Event</title>
-
-<style>
-    .body-detailevent{ /*warnanya masih mau di ganti*/
-        background:linear-gradient(to bottom right, #0A4D68, #088395, #05BFDB, #00FFCA);
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
-        padding: 10px;
-    }
-    .kontener{
-        background-color: white;
-        border-radius: 20px;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
-        margin: 20px;
-        padding: 20px;
-    }
-    .card{ /*mau di ganti, di kasi border supaya kelihatan yang ditarik masuknya nanti kemana*/
-        border: 2.5px solid #088395;
-    }
-
-
-</style>
-
+    <style>
+        .body-detailevent {
+            background: linear-gradient(to bottom right, #0A4D68, #088395, #05BFDB, #00FFCA);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            padding: 10px;
+        }
+        .kontener {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+            margin: 20px;
+            padding: 20px;
+        }
+        .card {
+            border: 2.5px solid #088395;
+        }
+        button {
+            float: right;
+        }
+    </style>
 </head>
 <body class="body-detailevent">
     <div class="kontener">
         <h1>Detail Event</h1>
         <div id="detail-event" class="card">
             <div class="card-body text-center">
-                <!-- detail event di taru di sini, jangan taru ap" -->
+                <!-- detail event will be placed here -->
             </div>
         </div>
-        <button>tombol</button> <!--tombolnya taru di sini (align right)-->
+        <button>tombol</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const pokemonName = urlParams.get('name');
+            const eventName = urlParams.get('name');
 
-            if (pokemonName) {
-                fetchPokemonDetails(pokemonName);
+            if (eventName) {
+                fetchEventDetails(eventName);
             }
         });
 
-        async function fetchPokemonDetails(name) {
+        async function fetchEventDetails(eventName) {
             try {
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+                const response = await fetch(`/api/events`);
 
                 if (!response.ok) {
                     throw new Error('Could not fetch data');
                 }
 
-                const data = await response.json();
-                const pokemonSprite = data.sprites.front_default;
-                const pokemonName = data.name;
+                const events = await response.json();
+                const event = events.find(event => event.eventName === eventName);
 
-                displayPokemonDetails(pokemonName, pokemonSprite);
+                if (event) {
+                    displayEventDetails(event.eventName, event.eventImg, event.eventDescription);
+                } else {
+                    throw new Error('Event not found');
+                }
             } catch (error) {
                 console.error(error);
             }
         }
 
-        function displayPokemonDetails(name, sprite) {
-            const detailsContainer = document.getElementById("detail-event");
+        function displayEventDetails(eventName, event_img, eventDescription) {
+            const detailsContainer = document.getElementById("detail-event").querySelector(".card-body");
             detailsContainer.innerHTML = `
-                <img src="${sprite}" class="card-img-top" alt="${name}" style="width: 50%; margin: 10px auto;">
-                <h5 class="card-title">${name}</h5>
+                <img src="data:image/jpeg;base64,${event_img}" class="card-img-top" alt="${eventName}" style="width: 50%; margin: 10px auto;">
+                <h5 class="card-title">${eventName}</h5>
+                <p class="text">${eventDescription}</p
             `;
         }
     </script>
-
 </body>
 </html>
