@@ -39,8 +39,8 @@
           </div>
           <div class="input-box">
             <span class="details">Phone Number</span>
-            <input type="tel" id="phone" name="no_telp" placeholder="Enter your number" required pattern="(\+62|62|0)8[1-9][0-9]{6,9}">
-            <div class="error-message" id="phoneError">Please enter a valid Indonesian phone number.</div>
+            <input type="tel" id="phone" name="no_telp" placeholder="Enter your number" required pattern="(\+62|62|0)8[1-9][0-9]{8,11}" maxlength="13">
+            <div class="error-message" id="phoneError">Please enter a valid Indonesian phone number between 10 and 13 digits.</div>
           </div>
           <div class="input-box">
             <span class="details">Password</span>
@@ -118,7 +118,8 @@
         // Validate phone number
         const phone = document.getElementById('phone');
         const phoneError = document.getElementById('phoneError');
-        if (!phone.checkValidity()) {
+        const phonePattern = /(\+62|62|0)8[1-9][0-9]{8,11}/;
+        if (!phone.value.match(phonePattern)) {
             phoneError.style.display = 'block';
             isValid = false;
         } else {
