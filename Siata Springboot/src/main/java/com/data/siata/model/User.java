@@ -17,13 +17,13 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private int userId;
 
-    @Column(name = "username", columnDefinition = "VARCHAR(50)")
+    @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true)
     private String username;
 
     @Column(name = "password", columnDefinition = "VARCHAR(255)")
     private String password;
 
-    @Column(name = "email", columnDefinition = "VARCHAR(100)")
+    @Column(name = "email", columnDefinition = "VARCHAR(100)", unique = true)
     private String email;
 
     @Column(name = "full_name", columnDefinition = "VARCHAR(100)")
@@ -36,15 +36,8 @@ public class User {
     @Column(name = "gender", columnDefinition = "ENUM('Male','Female')")
     private String gender;
 
-    @Column(name = "no_telp", columnDefinition = "VARCHAR(20)")
+    @Column(name = "no_telp", columnDefinition = "VARCHAR(20)", unique = true)
     private String noTelp;
-
-    // @ManyToMany
-    // @JoinTable(
-    //   name = "volunteers", 
-    //   joinColumns = @jakarta.persistence.JoinColumn(name = "user_id"), 
-    //   inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "event_id"))
-    // private Set<Event> events;
 
     public User() {
     }

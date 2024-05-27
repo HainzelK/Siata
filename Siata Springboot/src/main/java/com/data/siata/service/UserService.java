@@ -30,4 +30,20 @@ public class UserService {
     public void deleteUser(int id) {
         userRepository.deleteById(id);
     }
+    
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean existsByNoTelp(String noTelp) {
+        return userRepository.existsByNoTelp(noTelp);
+    }
 }

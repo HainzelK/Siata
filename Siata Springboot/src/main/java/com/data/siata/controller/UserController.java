@@ -1,11 +1,14 @@
 package com.data.siata.controller;
 
+import com.data.siata.dto.LoginDTO;
+import com.data.siata.dto.RegisterDTO;
 import com.data.siata.dto.UserDTO;
 import com.data.siata.model.User;
 import com.data.siata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
@@ -21,6 +24,35 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public class Message {
+        String message;
+        Boolean status;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public Boolean getStatus() {
+            return status;
+        }
+
+        public void setStatus(Boolean status) {
+            this.status = status;
+        }
+
+        public Message(String message, Boolean status) {
+            this.message = message;
+            this.status = status;
+        }
+    }
+
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -29,19 +61,60 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         return userService.getUserById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/login")
+    public Message loginUser(@RequestBody LoginDTO loginDTO) {
+        User user = userService.findByEmail(loginDTO.getEmail());
+        if (user != null) {
+            String password = loginDTO.getPassword();
+            String encodedPassword = user.getPassword();
+            boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
+            if (isPwdRight) {
+                return new Message("Login Success", true);
+            } else {
+                return new Message("Invalid email or password", false);
+            }
+        } else {
+            return new Message("Invalid email or password", false);
+        }
+    }
+
+        @PostMapping("/register")
+    public Message registerUser(@RequestBody RegisterDTO registerDTO) {
+        if (userService.existsByUsername(registerDTO.getUsername())) {
+            return new Message("Username already exists", false);
+        }
+        if (userService.existsByEmail(registerDTO.getEmail())) {
+            return new Message("Email already exists", false);
+        }
+        if (userService.existsByNoTelp(registerDTO.getNoTelp())) {
+            return new Message("Phone number already exists", false);
+        }
+
+        User user = new User();
+        user.setUsername(registerDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        user.setEmail(registerDTO.getEmail());
+        user.setFullName(registerDTO.getFullName());
+        user.setGender(registerDTO.getGender());
+        user.setNoTelp(registerDTO.getNoTelp());
+        
+        userService.saveUser(user);
+        return new Message("User registered successfully", true);
     }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createUser(@RequestBody UserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setEmail(userDTO.getEmail());
         user.setFullName(userDTO.getFullName());
         byte[] decodedBytes = Base64.getDecoder().decode(userDTO.getProfilePic().split(",")[1]);
-        user.setProfilePic(decodedBytes);        
+        user.setProfilePic(decodedBytes);
         user.setGender(userDTO.getGender());
         user.setNoTelp(userDTO.getNoTelp());
         userService.saveUser(user);
@@ -53,18 +126,18 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UserDTO userDetails) {
         return userService.getUserById(id)
-            .map(user -> {
-                user.setUsername(userDetails.getUsername());
-                user.setPassword(userDetails.getPassword());
-                user.setEmail(userDetails.getEmail());
-                user.setFullName(userDetails.getFullName());
-                byte[] decodedBytes = Base64.getDecoder().decode(userDetails.getProfilePic().split(",")[1]);
-                user.setProfilePic(decodedBytes);        
-                user.setGender(userDetails.getGender());
-                user.setNoTelp(userDetails.getNoTelp());
-                User updatedUser = userService.saveUser(user);
-                return ResponseEntity.ok(updatedUser);
-            }).orElse(ResponseEntity.notFound().build());
+                .map(user -> {
+                    user.setUsername(userDetails.getUsername());
+                    user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+                    user.setEmail(userDetails.getEmail());
+                    user.setFullName(userDetails.getFullName());
+                    byte[] decodedBytes = Base64.getDecoder().decode(userDetails.getProfilePic().split(",")[1]);
+                    user.setProfilePic(decodedBytes);
+                    user.setGender(userDetails.getGender());
+                    user.setNoTelp(userDetails.getNoTelp());
+                    User updatedUser = userService.saveUser(user);
+                    return ResponseEntity.ok(updatedUser);
+                }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
