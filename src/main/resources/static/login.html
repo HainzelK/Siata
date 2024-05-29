@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container main">
+        <div class="row">
+          <div class="col-md-6 side-image">
+            <img src="" alt="" />
+            <div class="text">
+              <p>Kalau bukan kita, siapa lagi? <i>Siata</i></p>
+            </div>
+          </div>
+
+          <div class="col-md-6 right">
+            <div class="input-box">
+              <header>Log In</header>
+              <form id="loginForm">
+                <div class="input-field">
+                  <input type="email" class="input" id="email" required autocomplete="off" />
+                  <label for="email">Email</label>
+                </div>
+                <div class="input-field">
+                  <input type="password" class="input" id="password" required />
+                  <label for="password">Password</label>
+                </div>
+                <div class="input-field">
+                  <input type="submit" class="submit" id="loginButton" value="Login" disabled />
+                </div>
+              </form>
+              <div class="login">
+                <span>Belum punya akun? <a href="signup.html">Sign Up disini</a></span>
+              </div>
+              <p id="login-message"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section>
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+        <div class="wave wave4"></div>
+      </section>
+    </div>
+    <script>
+      document.getElementById("loginForm").addEventListener("submit", login);
+      document.getElementById("email").addEventListener("input", checkInput);
+      document.getElementById("password").addEventListener("input", checkInput);
+
+      function checkInput() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const loginButton = document.getElementById("loginButton");
+        loginButton.disabled = !(email && password);
+      }
+
+      async function login(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+          const response = await fetch("/api/login/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Login failed");
+          }
+
+          const data = await response.json();
+          console.log("Server response:", data); // Added for debugging
+
+          if (data.status === true) {
+            console.log("Successful login");
+            //cek token dengan alert
+            alert("Token: " + data.token);
+            console.log("Token received:", data.token);
+            // Store the token in session storage
+            document.cookie = `token=${data.token}; path=/`;
+            window.location.href = "listEvent.html";
+          } else {
+            document.getElementById("login-message").innerText = "Invalid email or password";
+          }
+        } catch (error) {
+          console.log("Error during login:", error);
+          document.getElementById("login-message").innerText = "Error during login. Please try again.";
+        }
+      }
+    </script>
+  </body>
+</html>
