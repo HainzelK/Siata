@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      display: none;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="test">
+  <div class="container-sign">
+    <div class="title">Registration</div>
+    <div class="content">
+      <form class="form" id="registrationForm" novalidate>
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details">Full Name</span>
+            <input type="text" id="name" name="full_name" placeholder="Enter your name" required>
+            <div class="error-message" id="nameError">Please enter your full name.</div>
+          </div>
+          <div class="input-box">
+            <span class="details">Username</span>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            <div class="error-message" id="usernameError">Please enter a username.</div>
+          </div>
+          <div class="input-box">
+            <span class="details">Email</span>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <div class="error-message" id="emailError">Please enter a valid email address with the domain @example.com.</div>
+          </div>
+          <div class="input-box">
+            <span class="details">Phone Number</span>
+            <input type="tel" id="phone" name="no_telp" placeholder="Enter your number" required pattern="(\+62|62|0)8[1-9][0-9]{8,11}" maxlength="13">
+            <div class="error-message" id="phoneError">Please enter a valid Indonesian phone number between 10 and 13 digits.</div>
+          </div>
+          <div class="input-box">
+            <span class="details">Password</span>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="8">
+            <div class="error-message" id="passwordError">Password must be at least 8 characters long.</div>
+          </div>
+          <div class="input-box">
+            <span class="details">Confirm Password</span>
+            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+            <div class="error-message" id="confirmPasswordError">Passwords do not match.</div>
+          </div>
+        </div>
+        <div class="gender-details">
+          <input type="radio" name="gender" id="dot-1" value="Male" required>
+          <input type="radio" name="gender" id="dot-2" value="Female" required>
+          <span class="gender-title">Gender</span>
+          <div class="category">
+            <label for="dot-1">
+              <span class="dot one"></span>
+              <span class="gender">Male</span>
+            </label>
+            <label for="dot-2">
+              <span class="dot two"></span>
+              <span class="gender">Female</span>
+            </label>
+          </div>
+          <div class="error-message" id="genderError">Please select a gender.</div>
+        </div>
+        <div class="button">
+          <input type="submit" value="Register">
+          <span id="test">Sudah punya akun? <a href="login.html">Login disini</a></span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        let isValid = true;
+
+        // Validate full name
+        const name = document.getElementById('name');
+        const nameError = document.getElementById('nameError');
+        if (!name.value.trim()) {
+            nameError.style.display = 'block';
+            isValid = false;
+        } else {
+            nameError.style.display = 'none';
+        }
+
+        // Validate username
+        const username = document.getElementById('username');
+        const usernameError = document.getElementById('usernameError');
+        if (!username.value.trim()) {
+            usernameError.style.display = 'block';
+            isValid = false;
+        } else {
+            usernameError.style.display = 'none';
+        }
+
+        // Validate email
+        const email = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+        if (!email.checkValidity()) {
+            emailError.style.display = 'block';
+            isValid = false;
+        } else {
+            emailError.style.display = 'none';
+        }
+
+        // Validate phone number
+        const phone = document.getElementById('phone');
+        const phoneError = document.getElementById('phoneError');
+        const phonePattern = /(\+62|62|0)8[1-9][0-9]{8,11}/;
+        if (!phone.value.match(phonePattern)) {
+            phoneError.style.display = 'block';
+            isValid = false;
+        } else {
+            phoneError.style.display = 'none';
+        }
+
+        // Validate password
+        const password = document.getElementById('password');
+        const passwordError = document.getElementById('passwordError');
+        if (!password.checkValidity()) {
+            passwordError.style.display = 'block';
+            isValid = false;
+        } else {
+            passwordError.style.display = 'none';
+        }
+
+        // Validate confirm password
+        const confirmPassword = document.getElementById('confirmPassword');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        if (password.value !== confirmPassword.value) {
+            confirmPasswordError.style.display = 'block';
+            isValid = false;
+        } else {
+            confirmPasswordError.style.display = 'none';
+        }
+
+        // Validate gender
+        const genderError = document.getElementById('genderError');
+        const selectedGender = document.querySelector('input[name="gender"]:checked');
+        if (!selectedGender) {
+            genderError.style.display = 'block';
+            isValid = false;
+        } else {
+            genderError.style.display = 'none';
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        const formData = new FormData(form);
+        const data = {
+            fullName: formData.get('full_name'),
+            username: formData.get('username'),
+            email: formData.get('email'),
+            noTelp: formData.get('no_telp'),
+            password: formData.get('password'),
+            gender: formData.get('gender'),
+        };
+
+        fetch('/api/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            // Handle success response here, maybe show a success message
+            window.location.href = "login.html";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error, maybe show an error message to the user
+        });
+    });
+  </script>
+
+</body>
+</html>

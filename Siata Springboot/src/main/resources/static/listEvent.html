@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>List Event</title>
+
+    <style>
+    .body-listevent { /*warnanya masih mau di ganti*/
+        background:linear-gradient(to bottom right, #0A4D68, #088395, #05BFDB, #00FFCA);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        padding: 10px;
+    }
+    .card {
+        border: 2.5px solid #088395;
+        border-radius: 10px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+    }
+    .card-body{
+        background-color: #088395;
+        border-radius: 7px;
+        color: whitesmoke;
+    }
+    .wrapper{
+    background:linear-gradient(to bottom right, #0A4D68, #088395, #05BFDB, #00FFCA);
+    padding: 0 20px 0 20px;
+    }
+    .kontener {
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+        margin: 20px;
+        padding: 20px;
+    }
+    .hasatu {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 40px;
+
+    }
+    </style>
+
+</head>
+<body class="body-listevent">
+    <div class="kontener">
+        <h1 class="hasatu">List Kegiatan Kami</h1>
+        <div class="row" id="card-container">
+            <!-- Cards will be populated here by fetchData() -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch initial data from the backend when the page loads
+            fetchData();
+        });
+    </script>
+</body>
+
+
+</html>

@@ -48,6 +48,18 @@ public class VolunteerService {
                 .collect(Collectors.toList());
     }
 
+    public List<VolunteerDTO> findEventsJoinedByUser(int userId) {
+        return volunteerRepository.findByIdUserId(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<VolunteerDTO> findUsersJoiningEvent(int eventId) {
+        return volunteerRepository.findByIdEventId(eventId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     public VolunteerDTO createVolunteer(VolunteerDTO volunteerDTO) {
         Volunteer volunteer = convertToEntity(volunteerDTO);
         Volunteer savedVolunteer = volunteerRepository.save(volunteer);

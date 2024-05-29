@@ -43,6 +43,4 @@ public class Volunteer {
     public void setEvent(Event event) {
         this.event = event;
     }
-
-    // Getters and setters
 }

@@ -8,7 +8,14 @@ public class UserDTO {
     private String profilePic;
     private String gender;
     private String noTelp;
+    private String dob;
 
+    public String getDob() {
+        return dob;
+    }
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
     public String getUsername() {
         return username;
     }

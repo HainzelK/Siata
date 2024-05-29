@@ -1,10 +1,10 @@
 package com.data.siata.controller;
 
-import com.data.siata.dto.LoginDTO;
 import com.data.siata.dto.RegisterDTO;
 import com.data.siata.dto.UserDTO;
 import com.data.siata.model.User;
 import com.data.siata.service.UserService;
+import com.data.siata.util.Message;  // Tambahkan import ini
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,32 +27,6 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public class Message {
-        String message;
-        Boolean status;
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public Boolean getStatus() {
-            return status;
-        }
-
-        public void setStatus(Boolean status) {
-            this.status = status;
-        }
-
-        public Message(String message, Boolean status) {
-            this.message = message;
-            this.status = status;
-        }
-    }
-
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -65,24 +39,7 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/login")
-    public Message loginUser(@RequestBody LoginDTO loginDTO) {
-        User user = userService.findByEmail(loginDTO.getEmail());
-        if (user != null) {
-            String password = loginDTO.getPassword();
-            String encodedPassword = user.getPassword();
-            boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
-            if (isPwdRight) {
-                return new Message("Login Success", true);
-            } else {
-                return new Message("Invalid email or password", false);
-            }
-        } else {
-            return new Message("Invalid email or password", false);
-        }
-    }
-
-        @PostMapping("/register")
+    @PostMapping("/register")
     public Message registerUser(@RequestBody RegisterDTO registerDTO) {
         if (userService.existsByUsername(registerDTO.getUsername())) {
             return new Message("Username already exists", false);
@@ -101,6 +58,7 @@ public class UserController {
         user.setFullName(registerDTO.getFullName());
         user.setGender(registerDTO.getGender());
         user.setNoTelp(registerDTO.getNoTelp());
+        user.setDob(registerDTO.getDob());
         
         userService.saveUser(user);
         return new Message("User registered successfully", true);

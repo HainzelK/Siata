@@ -31,24 +31,6 @@ public class VolunteerController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<VolunteerDTO>> getVolunteersByEventId(@PathVariable int eventId) {
-        List<VolunteerDTO> volunteers = volunteerService.findVolunteersByEventId(eventId);
-        if (volunteers.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(volunteers);
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<VolunteerDTO>> getVolunteersByUserId(@PathVariable int userId) {
-        List<VolunteerDTO> volunteers = volunteerService.findVolunteersByUserId(userId);
-        if (volunteers.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(volunteers);
-    }
-
     @PostMapping
     public ResponseEntity<Map<String, String>> createVolunteer(@RequestBody VolunteerDTO volunteerDTO) {
         VolunteerDTO createdVolunteer = volunteerService.createVolunteer(volunteerDTO);
@@ -61,5 +43,23 @@ public class VolunteerController {
     public ResponseEntity<Void> deleteVolunteer(@PathVariable int userId, @PathVariable int eventId) {
         volunteerService.deleteVolunteer(userId, eventId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/user/{userId}/events")
+    public ResponseEntity<List<VolunteerDTO>> getEventsJoinedByUser(@PathVariable int userId) {
+        List<VolunteerDTO> eventsJoinedByUser = volunteerService.findEventsJoinedByUser(userId);
+        if (eventsJoinedByUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(eventsJoinedByUser);
+    }
+
+    @GetMapping("/event/{eventId}/users")
+    public ResponseEntity<List<VolunteerDTO>> getUsersJoiningEvent(@PathVariable int eventId) {
+        List<VolunteerDTO> usersJoiningEvent = volunteerService.findUsersJoiningEvent(eventId);
+        if (usersJoiningEvent.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(usersJoiningEvent);
     }
 }

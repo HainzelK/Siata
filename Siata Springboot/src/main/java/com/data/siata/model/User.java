@@ -39,7 +39,18 @@ public class User {
     @Column(name = "no_telp", columnDefinition = "VARCHAR(20)", unique = true)
     private String noTelp;
 
+    @Column(name = "date_of_birth", columnDefinition = "DATE")
+    private String dob;
+
     public User() {
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
     public User(String username, String password, String email, String fullName, String gender,String noTelp) {

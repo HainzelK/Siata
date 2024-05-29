@@ -7,20 +7,34 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import com.data.siata.util.JwtUtil;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    @Autowired
+    private AuthenticationConfiguration authenticationConfiguration;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF protection for simplicity
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/**").permitAll()
-                .requestMatchers("/api/**").permitAll() // Permitting all requests to API endpoints
+                .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
             )
+            .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
+            .securityContext(context -> context
+            .securityContextRepository(new HttpSessionSecurityContextRepository()))
             .formLogin((form) -> form
                 .loginPage("/login")
                 .permitAll()
@@ -30,6 +44,11 @@ public class WebSecurityConfig {
             );
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean

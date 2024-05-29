@@ -7,9 +7,16 @@ public class RegisterDTO {
     private String fullName;
     private String gender;
     private String noTelp;
+    private String dob;
     
     public String getUsername() {
         return username;
+    }
+    public String getDob() {
+        return dob;
+    }
+    public void setDob(String dob) {
+        this.dob = dob;
     }
     public void setUsername(String username) {
         this.username = username;
