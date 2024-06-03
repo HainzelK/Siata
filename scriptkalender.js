@@ -94,6 +94,9 @@ function createCalendar(date, side) {
       }
 
    }, !side ? 0 : 270);
+
+   // Call fetchData to fetch data from the backend
+   fetchData();
 }
 
 createCalendar(currentDate);
@@ -249,4 +252,62 @@ addEventButton.onclick = function (e) {
       labels[i].className = "";
    }
 
+}
+
+async function fetchData() {
+    const response = await fetch("/api/calendar");
+
+    if (!response.ok) {
+        throw new Error("Could not fetch data");
+    }
+
+    const data = await response.json();
+    console.log("Fetched data:", data);  // Log the fetched data
+
+    // Check the length of data
+    console.log("Data length:", data.length);
+
+    const calendarEvents = data.map(calendar => ({
+        calendar_id: calendar.calendarId,
+        event_id: calendar.eventId.eventId,
+        start_time: calendar.startTime,
+        end_time: calendar.endTime,
+        summary: calendar.summary
+    }));
+
+    console.log("Calendar events:", calendarEvents);  // Log the mapped data
+
+    // Populate globalEventObj with fetched events
+    calendarEvents.forEach(event => {
+        const eventDate = new Date(event.start_time); // Assuming start_time contains date information
+        const dateString = eventDate.toDateString();
+
+        if (!globalEventObj[dateString]) {
+            globalEventObj[dateString] = {};
+        }
+        globalEventObj[dateString][event.summary] = event.summary;
+    });
+
+    // Mark the grid cells with events
+// Mark the grid cells with events
+calendarEvents.forEach(event => {
+    const eventDate = new Date(event.start_time); // Assuming start_time contains date information
+
+    // Check if the event date matches the current month and year
+    if (eventDate.getMonth() === currentDate.getMonth() && eventDate.getFullYear() === currentDate.getFullYear()) {
+        const day = eventDate.getDate();
+
+        // Find the grid cell corresponding to the event date and mark it
+        const gridCells = gridTable.querySelectorAll('.col');
+        gridCells.forEach(cell => {
+            if (parseInt(cell.innerHTML) === day) {
+                if (!cell.querySelector('.day-mark')) {
+                    const dayMark = document.createElement('div');
+                    dayMark.className = 'day-mark';
+                    cell.appendChild(dayMark);
+                }
+            }
+        });
+    }
+});
 }
