@@ -17,7 +17,7 @@ public class JwtUtil {
     private String secretKey = "keyy";
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -38,16 +38,17 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
-        logger.info("Generating token for username: {}", username);
-        return Jwts.builder().setSubject(username)
+    public String generateToken(String email) {
+        logger.info("Generating token for email: {}", email);
+        return Jwts.builder().setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                 .signWith(SignatureAlgorithm.HS256, secretKey).compact();
     }
 
-    public Boolean validateToken(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        return (username.equals(extractedUsername) && !isTokenExpired(token));
+    public Boolean validateToken(String token, String email) {
+        final String extractedEmail = extractEmail(token);
+        return (email.equals(extractedEmail) && !isTokenExpired(token));
     }
+    
 }

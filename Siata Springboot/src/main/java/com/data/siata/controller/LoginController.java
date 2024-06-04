@@ -24,7 +24,7 @@ public class LoginController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login")
+    @PostMapping
     public LoginResponse loginUser(@RequestBody LoginDTO loginDTO) {
         if (loginDTO.getEmail() == null || loginDTO.getEmail().isEmpty()) {
             return new LoginResponse("Please input email", false, null);

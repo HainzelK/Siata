@@ -39,6 +39,12 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Integer> getUserIdByEmail(@RequestParam String email) {
+        Integer userId = userService.findByEmail(email).getUserId();
+        return ResponseEntity.ok(userId);
+    }
+
     @PostMapping("/register")
     public Message registerUser(@RequestBody RegisterDTO registerDTO) {
         if (userService.existsByUsername(registerDTO.getUsername())) {
