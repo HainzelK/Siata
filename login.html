@@ -8,94 +8,119 @@
     <title>Login</title>
 </head>
 <body>
-  <div class="wrapper">
-    <div class="container main">
-        <div class="row">
-            <div class="col-md-6 side-image">
-                <img src="" alt="">
-                <div class="text">
-                    <p>Kalau bukan kita, siapa lagi? <i>Siata</i></p>
+    <div class="wrapper">
+        <div class="container main">
+            <div class="row">
+                <div class="col-md-6 side-image">
+                    <img src="" alt="">
+                    <div class="text">
+                        <p>Kalau bukan kita, siapa lagi? <i>Siata</i></p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 right">
+                    <div class="input-box">
+                        <header>Log In</header>
+                        <form id="loginForm">
+                            <div class="input-wrapper">
+                                <input type="email" class="input" id="email" required autocomplete="off">
+                                <label for="email">Email</label> 
+                                
+                            </div> 
+                           
+                            <div class="input-wrapper">
+                                <input type="password" class="input" id="password" required>
+                                <label for="password">Password</label>
+                                <p id="login-message" class="text-danger"></p>
+                            </div> 
+                            
+                            <div class="input-field">
+                                <input type="submit" class="submit" id="loginButton" value="Login" disabled>
+                            </div> 
+                            
+                        </form>
+                        <div class="login">
+                            <span>Belum punya akun? <a href="signup">Sign Up disini</a></span>
+                        </div>
+                        
+                    </div>  
                 </div>
             </div>
-
-            <div class="col-md-6 right">
-                <div class="input-box">
-                   <header>Log In</header>
-                   <form id="loginForm">
-                       <div class="input-field">
-                            <input type="email" class="input" id="email" required autocomplete="off">
-                            <label for="email">Email</label> 
-                        </div> 
-                       <div class="input-field">
-                            <input type="password" class="input" id="password" required>
-                            <label for="password">Password</label>
-                        </div> 
-                       <div class="input-field">
-                            <input type="submit" class="submit" id="loginButton" value="Login" disabled>
-                       </div> 
-                   </form>
-                   <div class="login">
-                        <span>Belum punya akun? <a href="signup.html">Sign Up disini</a></span>
-                   </div>
-                   <p id="login-message"></p>
-                </div>  
-            </div>
         </div>
+        <section>
+            <div class="wave wave1"></div>
+            <div class="wave wave2"></div>
+            <div class="wave wave3"></div>
+            <div class="wave wave4"></div>
+        </section>
     </div>
-    <section>
-        <div class="wave wave1"></div>
-        <div class="wave wave2"></div>
-        <div class="wave wave3"></div>
-        <div class="wave wave4"></div>
-    </section>
-</div>
 
-<script>
-    document.getElementById('loginForm').addEventListener('submit', login);
-    document.getElementById('email').addEventListener('input', checkInput);
-    document.getElementById('password').addEventListener('input', checkInput);
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", login);
+        document.getElementById("email").addEventListener("input", checkInput);
+        document.getElementById("password").addEventListener("input", checkInput);
 
-    function checkInput() {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const loginButton = document.getElementById('loginButton');
-        loginButton.disabled = !(email && password);
-    }
-
-    async function login(event) {
-        event.preventDefault();
-
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        try {
-            const response = await fetch("/api/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (!response.ok) {
-                throw new Error("Login failed");
-            }
-
-            const data = await response.json();
-            console.log("Server response:", data); // Added for debugging
-
-            if (data.status === true) {
-                console.log("Successful login");
-                window.location.href = "testingEvent.html";
-            } else {
-                document.getElementById("login-message").innerText = "Invalid email or password";
-            }
-        } catch (error) {
-            console.log("Error during login:", error);
-            document.getElementById("login-message").innerText = "Error during login. Please try again.";
+        function checkInput() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const loginButton = document.getElementById("loginButton");
+            loginButton.disabled = !(email && password);
         }
-    }
-</script>
 
+        async function login(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+        console.log("Server response:", data);
+
+        if (data.message == "Login Success") {
+            console.log("Successful login");
+            console.log("Token received:", data.token);
+            document.cookie = `token=${data.token}; path=/; Secure; SameSite=Strict`;
+            window.location.href = "listEvent.html";
+        } else {
+            console.log("Login failed:", data.message); // Debug log
+            handleLoginError(data.message);
+        }
+    } catch (error) {
+        console.log("Error during login:", error);
+        document.getElementById("login-message").innerText = error.message || "Error during login. Please try again.";
+    }
+}
+
+function handleLoginError(message) {
+    const loginMessageElement = document.getElementById("login-message");
+    if (message === "Wrong password") {
+        loginMessageElement.innerText = "The password you entered is incorrect.";
+    } else if (message === "Email not registered") {
+        loginMessageElement.innerText = "The email you entered is not registered.";
+    } else {
+        loginMessageElement.innerText = message;
+    }
+}
+
+        function handleLoginError(message) {
+            const loginMessageElement = document.getElementById("login-message");
+            if (message === "Wrong password") {
+                loginMessageElement.innerText = "The password you entered is incorrect.";
+            } else if (message === "Email not registered") {
+                loginMessageElement.innerText = "The email you entered is not registered.";
+            } else {
+                loginMessageElement.innerText = message;
+            }
+        }
+    </script>
 </body>
 </html>
