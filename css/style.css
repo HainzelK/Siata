@@ -6,7 +6,7 @@
     font-family: 'Poppins', sans-serif;
 }
 .wrapper{
-    background: #577f9b; 
+    background: #345e86; 
     /* linear-gradient(to bottom right, #1fc7a0,#1b9aaa,  #46c26b); */
     /* padding: 0 20px 0 20px; */
     position: relative;
@@ -20,7 +20,7 @@
     
 }
 .side-image{
-    background-image: url("img/img_login.png");
+    background-image: url("img_login.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -50,7 +50,7 @@ section .wave{
   left: 0;
   width: 200%; /* Increased width to allow seamless looping */
   height: 100%;
-  background: url('img/wave.svg') repeat-x bottom center; /* Changed no-repeat to repeat-x and aligned to bottom */
+  background: url('wave.svg') repeat-x bottom center; /* Changed no-repeat to repeat-x and aligned to bottom */
   background-size:50%; /* Adjusted to cover the viewport */
 }
 
@@ -148,6 +148,13 @@ i{
     font-weight: 400;
     font-size: 15px;
 }
+.error-message {
+  color: red;
+  font-size: 1em;
+  margin-top: 10px;
+}
+
+
 .right{
   display: flex;
   justify-content: center;
@@ -398,3 +405,101 @@ span a:hover{
       flex-direction: column;
     }
   }   
+
+  /* New styles for floating labels */
+.input-wrapper {
+  position: relative;
+  margin-bottom: 20px; /* Adjust spacing between input fields */
+}
+
+.input-wrapper label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  pointer-events: none;
+  transition: .5s;
+  color: #999; /* Color for inactive label */
+}
+
+.input:focus ~ label,
+.input:not(:placeholder-shown) ~ label {
+  top: -10px;
+  font-size: 13px;
+  color: #5d5076; /* Color for active label */
+}
+
+.input {
+  height: 45px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  outline: none;
+  color: #40414a;
+}
+
+/* Adjust border color for active input field */
+.input:focus,
+.input:valid {
+  border-bottom: 1px solid #743ae1;
+}
+
+
+
+.notification{
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: max-content;
+  border-radius: 6px;
+  background-color: #313e2c;
+  color: #aaec8a;
+  box-shadow:0 1px 10px rgba(0,0,0,0.1);
+  transform: translateY(30px);
+  opacity: 0;
+  visibility: hidden;
+  animation: fade-in 3s linear;
+}
+
+.notification_icon{
+  height: 26px;
+  width: 26px;
+  margin-right: 4px;
+}
+
+.notification_body{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px 8px;
+}
+
+.notification_progress{
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: calc(100%-8px);
+  height: 3px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(to right, #313e2c, #aaec8a);
+  border-radius: inherit;
+  animation: progress 2.5s 0.3s linear;
+}
+
+@keyframes fade-in {
+  5%{
+    opacity: 1;
+    visibility: visible;
+    transform:translateY(0);
+  }
+  95%{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes progress{
+  to {
+    transform: scaleX(1);
+  }
+}
