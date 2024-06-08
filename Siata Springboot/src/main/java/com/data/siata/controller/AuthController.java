@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.data.siata.model.User;
 import com.data.siata.service.AuthService;
-import com.data.siata.service.UserService;
 
 @RestController
 @RequestMapping("/auth")
@@ -14,9 +13,6 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-
-    @Autowired
-    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {

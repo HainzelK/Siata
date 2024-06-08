@@ -33,6 +33,15 @@ public class GalleryController {
             .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/type/{mediaType}")
+    public ResponseEntity<List<Gallery>> getGalleryByMediaType(@PathVariable String mediaType) {
+        List<Gallery> galleries = galleryService.getGalleryByMediaType(mediaType);
+        if (galleries.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(galleries);
+    }
+
     @PostMapping
     public ResponseEntity<Map<String, String>> createGallery(@RequestBody GalleryDTO galleryDTO) {
         Gallery gallery = new Gallery();

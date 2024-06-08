@@ -22,11 +22,19 @@ public class GalleryService {
         return galleryRepository.findById(id);
     }
 
+    public List<Gallery> getGalleryByMediaType(String mediaType) {
+        return galleryRepository.findByMediaType(mediaType);
+    }
+
     public Gallery saveGallery(Gallery gallery) {
         return galleryRepository.save(gallery);
     }
 
     public void deleteGallery(int id) {
-        galleryRepository.deleteById(id);
+        if (galleryRepository.existsById(id)) {
+            galleryRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Gallery with id " + id + " does not exist.");
+        }
     }
 }
