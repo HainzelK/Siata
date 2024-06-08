@@ -1,0 +1,148 @@
+body {
+    margin: 0;
+    background: linear-gradient( #fff, #fff ); /*se ndtw knp ini nd bisa berubah warnanya klo bkn linear gradient*/
+    font-family: "Euclid Circular A", "Poppins";
+    color: #d6dfed;
+  }
+  
+  html,
+  body {
+    height: 100%;
+  }
+  
+  .background {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .socials {
+    gap: 20px;
+  }
+  
+  .socials a {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .links {
+    gap: 10px;
+  }
+  
+  .legal {
+    font-size: 12px;
+    margin: 0;
+  }
+  
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleY(3) scaleX(2.25);
+    transform-origin: bottom;
+    box-sizing: border-box;
+    display: block;
+    pointer-events: none;
+  }
+  
+  footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    height: 370px;
+  }
+  
+  section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 30px;
+    padding-bottom: 80px;
+    padding-left: 60px;
+    width: 100%;
+  }
+  
+  @media (width > 420px) {
+    section {
+      align-items: center;
+      padding-left: 0;
+      gap: 20px;
+    }
+  
+    .links {
+      gap: 20px;
+    }
+  }
+
+  .kontenerfitur { /*ingat, ini belum responsif 💀*/
+    margin-top: 100px;
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+
+  .sigma {
+    cursor: pointer;
+  }
+
+  /* untuk slider comparison */
+
+  *,
+  *:before,
+  *:after{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+  }
+  .badanslider{
+      height: 100vh;
+      display: grid;
+      place-items: center;
+  }
+  .container-slider{
+      height: 50vmin;
+      width: 90vmin;
+      position: relative;
+      overflow: hidden;
+  }
+  .img-comparison{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+  }
+  #my-img{
+      clip-path: polygon(0 0 , 50% 0, 50% 100%, 0 100%);
+  }
+  #slider{
+      position: relative;
+      -webkit-appearance: none;
+      width: calc( 100% + 40px);
+      height: 100%;
+      margin-left: -20px;
+      background-color: transparent;
+      outline: none;
+  }
+  #slider::-webkit-slider-thumb{
+      -webkit-appearance: none;
+      height: 40px;
+      width: 40px;
+      background: url("/asset/slider-icon.svg"),
+      rgba(255,255,255,0.3);
+      border: 3px solid #ffffff;
+      border-radius: 50%;
+      background-size: contain;
+      cursor: pointer;
+  }

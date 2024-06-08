@@ -6,8 +6,6 @@
   box-sizing: border-box;
 }
 
-
-
 button {
   all: unset;
 }
@@ -20,6 +18,8 @@ nav {
   padding: 24px 40px;
   background-color: #151515;
   overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.0);
+
 }
 
 ul .nav {
@@ -85,21 +85,25 @@ a.link:hover{
 
 .logo {
   transition: 0.35s ease;
+  text-decoration: none;
+  color: white;
 }
-.logo:hover {
+
+.logo:hover { /*kekx perlu di ganti nnti spy sesuai tema*/
   opacity: 0.5;
 }
 
-.tombol-login {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-left: 20px;
+.tombol-login { /*ini jg*/
+  background-color: white;
+  color: gray;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 7px;
+  margin-left: 20px;
+  transition-duration: 0.2s;
 }
 
 .tombol-login:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
