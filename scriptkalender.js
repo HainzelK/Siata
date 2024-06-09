@@ -1,313 +1,258 @@
-var calendar = document.getElementById("calendar-table");
-var gridTable = document.getElementById("table-body");
-var currentDate = new Date();
-var selectedDate = currentDate;
-var selectedDayBlock = null;
-var globalEventObj = {};
-
-var sidebar = document.getElementById("sidebar");
-
-function createCalendar(date, side) {
-   var currentDate = date;
-   var startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-
-   var monthTitle = document.getElementById("month-name");
-   var monthName = currentDate.toLocaleString("en-US", {
-      month: "long"
-   });
-   var yearNum = currentDate.toLocaleString("en-US", {
-      year: "numeric"
-   });
-   monthTitle.innerHTML = `${monthName} ${yearNum}`;
-
-   if (side == "left") {
-      gridTable.className = "animated fadeOutRight";
-   } else {
-      gridTable.className = "animated fadeOutLeft";
-   }
-
-   setTimeout(() => {
-      gridTable.innerHTML = "";
-
-      var newTr = document.createElement("div");
-      newTr.className = "row";
-      var currentTr = gridTable.appendChild(newTr);
-
-      for (let i = 1; i < (startDate.getDay() || 7); i++) {
-         let emptyDivCol = document.createElement("div");
-         emptyDivCol.className = "col empty-day";
-         currentTr.appendChild(emptyDivCol);
-      }
-
-      var lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      lastDay = lastDay.getDate();
-
-      for (let i = 1; i <= lastDay; i++) {
-         if (currentTr.children.length >= 7) {
-            currentTr = gridTable.appendChild(addNewRow());
-         }
-         let currentDay = document.createElement("div");
-         currentDay.className = "col";
-         if (selectedDayBlock == null && i == currentDate.getDate() || selectedDate.toDateString() == new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toDateString()) {
-            selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
-
-            document.getElementById("eventDayName").innerHTML = selectedDate.toLocaleString("en-US", {
-               month: "long",
-               day: "numeric",
-               year: "numeric"
-            });
-
-            selectedDayBlock = currentDay;
-            setTimeout(() => {
-               currentDay.classList.add("blue");
-               currentDay.classList.add("lighten-3");
-            }, 900);
-         }
-         currentDay.innerHTML = i;
-
-         //show marks
-         if (globalEventObj[new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toDateString()]) {
-            let eventMark = document.createElement("div");
-            eventMark.className = "day-mark";
-            currentDay.appendChild(eventMark);
-         }
-
-         currentTr.appendChild(currentDay);
-      }
-
-      for (let i = currentTr.getElementsByTagName("div").length; i < 7; i++) {
-         let emptyDivCol = document.createElement("div");
-         emptyDivCol.className = "col empty-day";
-         currentTr.appendChild(emptyDivCol);
-      }
-
+document.addEventListener("DOMContentLoaded", () => {
+   const calendar = document.getElementById("calendar-table");
+   const gridTable = document.getElementById("table-body");
+   const currentDate = new Date();
+   let selectedDate = currentDate;
+   let selectedDayBlock = null;
+   const globalEventObj = {};
+   const sidebar = document.getElementById("sidebar");
+ 
+   function createCalendar(date, side) {
+      const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+      const monthTitle = document.getElementById("month-name");
+      const monthName = date.toLocaleString("en-US", { month: "long" });
+      const yearNum = date.toLocaleString("en-US", { year: "numeric" });
+      monthTitle.innerHTML = `${monthName} ${yearNum}`;
+  
       if (side == "left") {
-         gridTable.className = "animated fadeInLeft";
+          gridTable.className = "animated fadeOutRight";
       } else {
-         gridTable.className = "animated fadeInRight";
+          gridTable.className = "animated fadeOutLeft";
       }
-
-      function addNewRow() {
-         let node = document.createElement("div");
-         node.className = "row";
-         return node;
+  
+      setTimeout(() => {
+          gridTable.innerHTML = "";
+          let newTr = document.createElement("div");
+          newTr.className = "row";
+          let currentTr = gridTable.appendChild(newTr);
+  
+          for (let i = 1; i < (startDate.getDay() || 7); i++) {
+              let emptyDivCol = document.createElement("div");
+              emptyDivCol.className = "col empty-day";
+              currentTr.appendChild(emptyDivCol);
+          }
+  
+          const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  
+          for (let i = 1; i <= lastDay; i++) {
+              if (currentTr.children.length >= 7) {
+                  currentTr = gridTable.appendChild(addNewRow());
+              }
+  
+              let currentDay = document.createElement("div");
+              currentDay.className = "col";
+              if (new Date().toDateString() === new Date(date.getFullYear(), date.getMonth(), i).toDateString()) {
+               currentDay.style.backgroundColor = "#b39ddb"; //warna di kalender utk hari ini
+               currentDay.style.color = "white"; // Optional: Change text color to white for better readability
+           }
+              if (selectedDayBlock == null && i == date.getDate() || selectedDate.toDateString() == new Date(date.getFullYear(), date.getMonth(), i).toDateString()) {
+                  selectedDate = new Date(date.getFullYear(), date.getMonth(), i);
+                  document.getElementById("eventDayName").innerHTML = selectedDate.toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric" });
+                  selectedDayBlock = currentDay;
+                  setTimeout(() => {
+                      currentDay.classList.add("blue", "lighten-3");
+                  }, 900);
+              }
+              currentDay.innerHTML = i;
+  
+              if (globalEventObj[new Date(date.getFullYear(), date.getMonth(), i).toDateString()]) {
+                  let eventMark = document.createElement("div");
+                  eventMark.className = "day-mark";
+                  currentDay.appendChild(eventMark);
+              }
+  
+              // Grey out past dates
+              let currentDate = new Date();
+              let cellDate = new Date(date.getFullYear(), date.getMonth(), i);
+              if (cellDate < currentDate.setHours(0,0,0,0)) {
+                  currentDay.classList.add("greyed-out");
+              }
+  
+              currentTr.appendChild(currentDay);
+          }
+  
+          for (let i = currentTr.getElementsByTagName("div").length; i < 7; i++) {
+              let emptyDivCol = document.createElement("div");
+              emptyDivCol.className = "col empty-day";
+              currentTr.appendChild(emptyDivCol);
+          }
+  
+          if (side == "left") {
+              gridTable.className = "animated fadeInLeft";
+          } else {
+              gridTable.className = "animated fadeInRight";
+          }
+      }, !side ? 0 : 270);
+  
+      fetchData();
+  }
+  
+ 
+   createCalendar(currentDate);
+ 
+   document.getElementById("todayDayName").innerHTML = "Today is " + currentDate.toLocaleString("en-US", { weekday: "long", day: "numeric", month: "short" });
+ 
+   document.getElementById("prev").onclick = () => {
+     currentDate.setMonth(currentDate.getMonth() - 1);
+     createCalendar(currentDate, "left");
+   };
+ 
+   document.getElementById("next").onclick = () => {
+     currentDate.setMonth(currentDate.getMonth() + 1);
+     createCalendar(currentDate, "right");
+   };
+ 
+   function addEvent(title, desc) {
+     if (!globalEventObj[selectedDate.toDateString()]) {
+       globalEventObj[selectedDate.toDateString()] = {};
+     }
+     globalEventObj[selectedDate.toDateString()][title] = desc;
+   }
+ 
+   function showEvents() {
+      const sidebarEvents = document.getElementById("sidebarEvents");
+      const objWithDate = globalEventObj[selectedDate.toDateString()];
+      sidebarEvents.innerHTML = "";
+  
+      if (objWithDate) {
+          let eventsCount = 0;
+          for (let key in objWithDate) {
+              let eventContainer = document.createElement("div");
+              eventContainer.className = "eventCard";
+              eventContainer.addEventListener("click", () => {
+                  window.location.href = `detailEvent.html?name=${encodeURIComponent(key)}`;
+              });
+  
+              let eventHeader = document.createElement("div");
+              eventHeader.className = "eventCard-header";
+              let eventDescription = document.createElement("div");
+              eventDescription.className = "eventCard-description";
+  
+              eventHeader.textContent = key;
+              eventDescription.textContent = objWithDate[key];
+              eventContainer.append(eventHeader, eventDescription);
+  
+              let markWrapper = document.createElement("div");
+              markWrapper.className = "eventCard-mark-wrapper";
+              let mark = document.createElement("div");
+              mark.classList = "eventCard-mark";
+              markWrapper.appendChild(mark);
+              eventContainer.appendChild(markWrapper);
+  
+              // Grey out past events
+              let currentDate = new Date();
+              if (selectedDate < currentDate.setHours(0,0,0,0)) {
+                  eventContainer.classList.add("greyed-out");
+                  mark.classList.add("greyed-out");
+              }
+  
+              sidebarEvents.appendChild(eventContainer);
+              eventsCount++;
+          }
+          document.getElementById("emptyFormTitle").innerHTML = `There are ${eventsCount} events today`;
+      } else {
+          let emptyMessage = document.createElement("div");
+          emptyMessage.className = "empty-message";
+          emptyMessage.innerHTML = "No events on the selected date.";
+          sidebarEvents.appendChild(emptyMessage);
+          document.getElementById("emptyFormTitle").innerHTML = "No events today.";
       }
-
-   }, !side ? 0 : 270);
-
-   // Call fetchData to fetch data from the backend
-   fetchData();
-}
-
-createCalendar(currentDate);
-
-var todayDayName = document.getElementById("todayDayName");
-todayDayName.innerHTML = "Today is " + currentDate.toLocaleString("en-US", {
-   weekday: "long",
-   day: "numeric",
-   month: "short"
-});
-
-var prevButton = document.getElementById("prev");
-var nextButton = document.getElementById("next");
-
-prevButton.onclick = function changeMonthPrev() {
-   currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1);
-   createCalendar(currentDate, "left");
-}
-nextButton.onclick = function changeMonthNext() {
-   currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
-   createCalendar(currentDate, "right");
-}
-
-function addEvent(title, desc) {
-   if (!globalEventObj[selectedDate.toDateString()]) {
-      globalEventObj[selectedDate.toDateString()] = {};
-   }
-   globalEventObj[selectedDate.toDateString()][title] = desc;
-}
-
-function showEvents() {
-   let sidebarEvents = document.getElementById("sidebarEvents");
-   let objWithDate = globalEventObj[selectedDate.toDateString()];
-
-   sidebarEvents.innerHTML = "";
-
-   if (objWithDate) {
-      let eventsCount = 0;
-      for (key in globalEventObj[selectedDate.toDateString()]) {
-         let eventContainer = document.createElement("div");
-         eventContainer.className = "eventCard";
-
-         let eventHeader = document.createElement("div");
-         eventHeader.className = "eventCard-header";
-
-         let eventDescription = document.createElement("div");
-         eventDescription.className = "eventCard-description";
-
-         eventHeader.appendChild(document.createTextNode(key));
-         eventContainer.appendChild(eventHeader);
-
-         eventDescription.appendChild(document.createTextNode(objWithDate[key]));
-         eventContainer.appendChild(eventDescription);
-
-         let markWrapper = document.createElement("div");
-         markWrapper.className = "eventCard-mark-wrapper";
-         let mark = document.createElement("div");
-         mark.classList = "eventCard-mark";
-         markWrapper.appendChild(mark);
-         eventContainer.appendChild(markWrapper);
-
-         sidebarEvents.appendChild(eventContainer);
-
-         eventsCount++;
-      }
-      let emptyFormMessage = document.getElementById("emptyFormTitle");
-      emptyFormMessage.innerHTML = `ada ${eventsCount} event pada hari ini`;
-   } else {
-      let emptyMessage = document.createElement("div");
-      emptyMessage.className = "empty-message";
-      emptyMessage.innerHTML = "tidak ada event pada tanggal yang di pilih.";
-      sidebarEvents.appendChild(emptyMessage);
-      let emptyFormMessage = document.getElementById("emptyFormTitle");
-      emptyFormMessage.innerHTML = "tidak/belum ada event hari ini.";
-   }
-}
-
-gridTable.onclick = function (e) {
-
-   if (!e.target.classList.contains("col") || e.target.classList.contains("empty-day")) {
-      return;
-   }
-
-   if (selectedDayBlock) {
-      if (selectedDayBlock.classList.contains("blue") && selectedDayBlock.classList.contains("lighten-3")) {
-         selectedDayBlock.classList.remove("blue");
-         selectedDayBlock.classList.remove("lighten-3");
-      }
-   }
-   selectedDayBlock = e.target;
-   selectedDayBlock.classList.add("blue");
-   selectedDayBlock.classList.add("lighten-3");
-
-   selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(e.target.innerHTML));
-
-   showEvents();
-
-   document.getElementById("eventDayName").innerHTML = selectedDate.toLocaleString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric"
+  }
+   
+   gridTable.addEventListener("click", (e) => {
+     if (!e.target.classList.contains("col") || e.target.classList.contains("empty-day")) {
+       return;
+     }
+ 
+     if (selectedDayBlock) {
+       selectedDayBlock.classList.remove("blue", "lighten-3");
+     }
+ 
+     selectedDayBlock = e.target;
+     selectedDayBlock.classList.add("blue", "lighten-3");
+     selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(e.target.innerHTML));
+     showEvents();
+     document.getElementById("eventDayName").innerHTML = selectedDate.toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric" });
    });
-
-}
-
-var changeFormButton = document.getElementById("changeFormButton");
-var addForm = document.getElementById("addForm");
-changeFormButton.onclick = function (e) {
-   addForm.style.top = 0;
-}
-
-var cancelAdd = document.getElementById("cancelAdd");
-cancelAdd.onclick = function (e) {
-   addForm.style.top = "100%";
-   let inputs = addForm.getElementsByTagName("input");
-   for (let i = 0; i < inputs.length; i++) {
-      inputs[i].value = "";
+ 
+   document.getElementById("changeFormButton").onclick = () => {
+     document.getElementById("addForm").style.top = 0;
+   };
+ 
+   document.getElementById("cancelAdd").onclick = () => {
+     const addForm = document.getElementById("addForm");
+     addForm.style.top = "100%";
+     addForm.querySelectorAll("input").forEach(input => input.value = "");
+     addForm.querySelectorAll("label").forEach(label => label.className = "");
+   };
+ 
+   document.getElementById("addEventButton").onclick = () => {
+     const title = document.getElementById("eventTitleInput").value.trim();
+     const desc = document.getElementById("eventDescInput").value.trim();
+ 
+     if (!title || !desc) {
+       document.getElementById("eventTitleInput").value = "";
+       document.getElementById("eventDescInput").value = "";
+       document.getElementById("addForm").querySelectorAll("label").forEach(label => label.className = "");
+       return;
+     }
+ 
+     addEvent(title, desc);
+     showEvents();
+ 
+     if (!selectedDayBlock.querySelector(".day-mark")) {
+       selectedDayBlock.appendChild(document.createElement("div")).className = "day-mark";
+     }
+ 
+     document.getElementById("addForm").querySelectorAll("input").forEach(input => input.value = "");
+     document.getElementById("addForm").querySelectorAll("label").forEach(label => label.className = "");
+   };
+ 
+   async function fetchData() {
+     try {
+       const response = await fetch("/api/calendar");
+ 
+       if (!response.ok) {
+         throw new Error("Could not fetch data");
+       }
+ 
+       const data = await response.json();
+       const calendarEvents = data.map(calendar => ({
+         calendar_id: calendar.calendarId,
+         event_id: calendar.eventId.eventId,
+         start_time: calendar.startTime,
+         end_time: calendar.endTime,
+         summary: calendar.summary
+       }));
+ 
+       calendarEvents.forEach(event => {
+         const eventDate = new Date(event.start_time);
+         const dateString = eventDate.toDateString();
+ 
+         if (!globalEventObj[dateString]) {
+           globalEventObj[dateString] = {};
+         }
+         globalEventObj[dateString][event.summary] = event.summary;
+       });
+ 
+       calendarEvents.forEach(event => {
+         const eventDate = new Date(event.start_time);
+         if (eventDate.getMonth() === currentDate.getMonth() && eventDate.getFullYear() === currentDate.getFullYear()) {
+           const dateElement = Array.from(gridTable.querySelectorAll('.col')).find(el => el.innerText == eventDate.getDate() && !el.classList.contains("empty-day"));
+           if (dateElement && !dateElement.querySelector('.day-mark')) {
+             dateElement.appendChild(document.createElement("div")).className = "day-mark";
+           }
+         }
+       });
+     } catch (error) {
+       console.error(error);
+     }
    }
-   let labels = addForm.getElementsByTagName("label");
-   for (let i = 0; i < labels.length; i++) {
-      labels[i].className = "";
-   }
-}
-
-var addEventButton = document.getElementById("addEventButton");
-addEventButton.onclick = function (e) {
-   let title = document.getElementById("eventTitleInput").value.trim();
-   let desc = document.getElementById("eventDescInput").value.trim();
-
-   if (!title || !desc) {
-      document.getElementById("eventTitleInput").value = "";
-      document.getElementById("eventDescInput").value = "";
-      let labels = addForm.getElementsByTagName("label");
-      for (let i = 0; i < labels.length; i++) {
-         labels[i].className = "";
-      }
-      return;
-   }
-
-   addEvent(title, desc);
-   showEvents();
-
-   if (!selectedDayBlock.querySelector(".day-mark")) {
-      selectedDayBlock.appendChild(document.createElement("div")).className = "day-mark";
-   }
-
-   let inputs = addForm.getElementsByTagName("input");
-   for (let i = 0; i < inputs.length; i++) {
-      inputs[i].value = "";
-   }
-   let labels = addForm.getElementsByTagName("label");
-   for (let i = 0; i < labels.length; i++) {
-      labels[i].className = "";
-   }
-
-}
-
-async function fetchData() {
-    const response = await fetch("/api/calendar");
-
-    if (!response.ok) {
-        throw new Error("Could not fetch data");
-    }
-
-    const data = await response.json();
-    console.log("Fetched data:", data);  // Log the fetched data
-
-    // Check the length of data
-    console.log("Data length:", data.length);
-
-    const calendarEvents = data.map(calendar => ({
-        calendar_id: calendar.calendarId,
-        event_id: calendar.eventId.eventId,
-        start_time: calendar.startTime,
-        end_time: calendar.endTime,
-        summary: calendar.summary
-    }));
-
-    console.log("Calendar events:", calendarEvents);  // Log the mapped data
-
-    // Populate globalEventObj with fetched events
-    calendarEvents.forEach(event => {
-        const eventDate = new Date(event.start_time); // Assuming start_time contains date information
-        const dateString = eventDate.toDateString();
-
-        if (!globalEventObj[dateString]) {
-            globalEventObj[dateString] = {};
-        }
-        globalEventObj[dateString][event.summary] = event.summary;
-    });
-
-    // Mark the grid cells with events
-// Mark the grid cells with events
-calendarEvents.forEach(event => {
-    const eventDate = new Date(event.start_time); // Assuming start_time contains date information
-
-    // Check if the event date matches the current month and year
-    if (eventDate.getMonth() === currentDate.getMonth() && eventDate.getFullYear() === currentDate.getFullYear()) {
-        const day = eventDate.getDate();
-
-        // Find the grid cell corresponding to the event date and mark it
-        const gridCells = gridTable.querySelectorAll('.col');
-        gridCells.forEach(cell => {
-            if (parseInt(cell.innerHTML) === day) {
-                if (!cell.querySelector('.day-mark')) {
-                    const dayMark = document.createElement('div');
-                    dayMark.className = 'day-mark';
-                    cell.appendChild(dayMark);
-                }
-            }
-        });
-    }
-});
-}
+ });
+ 
+ function addNewRow() {
+   let node = document.createElement("div");
+   node.className = "row";
+   return node;
+ }
+ 
