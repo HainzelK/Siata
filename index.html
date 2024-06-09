@@ -38,7 +38,7 @@
       <path d="M4 6H20M4 12H20M13 18H20" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
     </svg>
   </button>
-  <button class="tombol-login"><i class="fa-regular fa-user"></i> Log in</button>
+  <button class="tombol-login login-signup-btn"><i class="fa-regular fa-user"></i> Log in</button>
 </nav>
  <!--selesai navbar-->
 
@@ -191,69 +191,67 @@
   <!--selesai footer-->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="script.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Fetch initial data from the backend when the page loads
-        fetchData();
 
         // Check if the user is logged in
         checkLoginStatus();
     });
 
     function getCookie(name) {
-        let cookieArr = document.cookie.split(";");
-        for (let i = 0; i < cookieArr.length; i++) {
-            let cookiePair = cookieArr[i].split("=");
-            if (name === cookiePair[0].trim()) {
-                return decodeURIComponent(cookiePair[1]);
+            let cookieArr = document.cookie.split(";");
+            for (let i = 0; i < cookieArr.length; i++) {
+                let cookiePair = cookieArr[i].split("=");
+                if (name === cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                }
             }
-        }
-        return null;
-    }
-
-    function extractEmailFromToken(token) {
-        try {
-            const tokenPayload = token.split('.')[1];
-            const decodedPayload = atob(tokenPayload);
-            const payloadObject = JSON.parse(decodedPayload);
-            const email = payloadObject.sub;
-            return email;
-        } catch (error) {
-            console.error('Error extracting email from JWT token:', error);
             return null;
         }
-    }
 
-    async function checkLoginStatus() {
-        const token = getCookie('token');
-        const loginSignupButton = document.querySelector('.login-signup-btn');
-        const profileLink = document.querySelector('.profile-link');
-
-        if (token) {
+        function extractEmailFromToken(token) {
             try {
-                const email = extractEmailFromToken(token);
-                if (email) {
-                    // User is logged in
-                    loginSignupButton.style.display = 'none';
-                    profileLink.style.display = 'inline';
-                } else {
-                    // Token is invalid
+                const tokenPayload = token.split('.')[1];
+                const decodedPayload = atob(tokenPayload);
+                const payloadObject = JSON.parse(decodedPayload);
+                const email = payloadObject.sub;
+                return email;
+            } catch (error) {
+                console.error('Error extracting email from JWT token:', error);
+                return null;
+            }
+        }
+
+        async function checkLoginStatus() {
+            const token = getCookie('token');
+            const loginSignupButton = document.querySelector('.login-signup-btn');
+            const profileLink = document.querySelector('.profile-link');
+
+            if (token) {
+                try {
+                    const email = extractEmailFromToken(token);
+                    if (email) {
+                        // User is logged in
+                        loginSignupButton.style.display = 'none';
+                        profileLink.style.display = 'inline';
+                    } else {
+                        // Token is invalid
+                        loginSignupButton.style.display = 'inline';
+                        profileLink.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error checking login status:', error);
                     loginSignupButton.style.display = 'inline';
                     profileLink.style.display = 'none';
                 }
-            } catch (error) {
-                console.error('Error checking login status:', error);
+            } else {
+                // No token found, user is not logged in
                 loginSignupButton.style.display = 'inline';
                 profileLink.style.display = 'none';
             }
-        } else {
-            // No token found, user is not logged in
-            loginSignupButton.style.display = 'inline';
-            profileLink.style.display = 'none';
         }
-    }
 </script>
 <script> // script untuk slider
 function slide(){
