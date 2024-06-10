@@ -68,12 +68,13 @@
         const password = document.getElementById("password").value;
 
         try {
-          const response = await fetch("/api/login", {
+          const response = await fetch("/auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ email, password }),
+            credentials: 'include'  // Ensures cookies are included in requests
           });
 
           if (!response.ok) {
@@ -82,18 +83,13 @@
 
           const data = await response.json();
           console.log("Server response:", data); // Added for debugging
+          
+          // Store the token in cookies
+          document.cookie = `accessToken=${data.access_token}; path=/`;
+          document.cookie = `refreshToken=${data.refresh_token}; path=/`;
 
-          if (data.status === true) {
-            console.log("Successful login");
-            //cek token dengan alert
-            alert("Token: " + data.token);
-            console.log("Token received:", data.token);
-            // Store the token in session storage
-            document.cookie = `token=${data.token}; path=/`;
-            window.location.href = "test.html";
-          } else {
-            document.getElementById("login-message").innerText = "Invalid email or password";
-          }
+          window.location.href = "/admin_only";
+       
         } catch (error) {
           console.log("Error during login:", error);
           document.getElementById("login-message").innerText = "Error during login. Please try again.";

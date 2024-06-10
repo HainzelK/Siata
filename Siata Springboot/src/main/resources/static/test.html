@@ -51,6 +51,7 @@
     <div class="container">
         <h1>User Information</h1>
         <button onclick="getUserInfo()">Get User Info</button>
+        <button onclick="logout()">Logout</button>
         <div id="user-info" class="user-info"></div>
     </div>
     <script>
@@ -88,7 +89,7 @@ function extractEmailFromToken(token) {
 }
 
 async function getUserInfo() {
-    const token = getCookie('token'); // Retrieve the token from cookies
+    const token = getCookie('accessToken'); // Retrieve the token from cookies
     const userInfoDiv = document.getElementById('user-info');
 
     if (!token) {
@@ -111,9 +112,31 @@ async function getUserInfo() {
             <p><strong>Name:</strong> ${userData.username}</p>
             <p><strong>Email:</strong> ${userData.email}</p>
             <p><strong>Phone:</strong> ${userData.noTelp}</p>
+            <p><strong>Role:</strong> ${userData.role}</p>
         `;
     } catch (error) {
         userInfoDiv.innerHTML = '<p style="color: red;">' + error.message + '</p>';
+    }
+}
+
+async function logout() {
+    try {
+        const response = await fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getCookie('accessToken')
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Logout failed');
+        }
+        // Clear user interface
+        document.getElementById('user-info').innerHTML = '';
+        // Optionally redirect or reload
+        window.location.href = '/login.html';
+    } catch (error) {
+        console.error('Error during logout:', error);
     }
 }
     </script>

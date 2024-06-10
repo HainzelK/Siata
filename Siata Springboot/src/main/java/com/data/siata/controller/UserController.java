@@ -1,10 +1,8 @@
 package com.data.siata.controller;
 
-import com.data.siata.dto.RegisterDTO;
 import com.data.siata.dto.UserDTO;
 import com.data.siata.model.User;
 import com.data.siata.service.UserService;
-import com.data.siata.util.Message;  // Tambahkan import ini
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,30 +43,31 @@ public class UserController {
         return ResponseEntity.ok(userId);
     }
 
-    @PostMapping("/register")
-    public Message registerUser(@RequestBody RegisterDTO registerDTO) {
-        if (userService.existsByUsername(registerDTO.getUsername())) {
-            return new Message("Username already exists", false);
-        }
-        if (userService.existsByEmail(registerDTO.getEmail())) {
-            return new Message("Email already exists", false);
-        }
-        if (userService.existsByNoTelp(registerDTO.getNoTelp())) {
-            return new Message("Phone number already exists", false);
-        }
+    //pindahke AuthController>AuthService
+    // @PostMapping("/register")
+    // public Message registerUser(@RequestBody RegisterDTO registerDTO) {
+    //     if (userService.existsByUsername(registerDTO.getUsername())) {
+    //         return new Message("Username already exists", false);
+    //     }
+    //     if (userService.existsByEmail(registerDTO.getEmail())) {
+    //         return new Message("Email already exists", false);
+    //     }
+    //     if (userService.existsByNoTelp(registerDTO.getNoTelp())) {
+    //         return new Message("Phone number already exists", false);
+    //     }
 
-        User user = new User();
-        user.setUsername(registerDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        user.setEmail(registerDTO.getEmail());
-        user.setFullName(registerDTO.getFullName());
-        user.setGender(registerDTO.getGender());
-        user.setNoTelp(registerDTO.getNoTelp());
-        user.setDob(registerDTO.getDob());
+    //     User user = new User();
+    //     user.setUsername(registerDTO.getUsername());
+    //     user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+    //     user.setEmail(registerDTO.getEmail());
+    //     user.setFullName(registerDTO.getFullName());
+    //     user.setGender(registerDTO.getGender());
+    //     user.setNoTelp(registerDTO.getNoTelp());
+    //     user.setDob(registerDTO.getDob());
         
-        userService.saveUser(user);
-        return new Message("User registered successfully", true);
-    }
+    //     userService.saveUser(user);
+    //     return new Message("User registered successfully", true);
+    // }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createUser(@RequestBody UserDTO userDTO) {

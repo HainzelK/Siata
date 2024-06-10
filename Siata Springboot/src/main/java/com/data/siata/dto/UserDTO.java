@@ -9,6 +9,7 @@ public class UserDTO {
     private String gender;
     private String noTelp;
     private String dob;
+    private String role;
 
     public String getDob() {
         return dob;
@@ -57,5 +58,11 @@ public class UserDTO {
     }
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 }
