@@ -74,7 +74,7 @@ public class AuthService {
 
         saveUserToken(accessToken, refreshToken, user);
 
-        return new AuthResponse("User registration was successful", accessToken, refreshToken);
+        return new AuthResponse("User registration was successful");
     }
 
     public AuthResponse authenticate(LoginDTO loginDTO){
@@ -107,7 +107,7 @@ public class AuthService {
                 revokeAllTokenByUser(user);
                 saveUserToken(accessToken, refreshToken, user);
     
-                return new AuthResponse("User login was successful", accessToken, refreshToken);
+                return new AuthResponse("User login was successful");
             } else {
                 return new AuthResponse("Wrong password");
             }
@@ -166,7 +166,7 @@ public class AuthService {
             revokeAllTokenByUser(user);
             saveUserToken(accessToken, refreshToken, user);
 
-            return new ResponseEntity(new AuthResponse("New token generated" , accessToken, refreshToken), HttpStatus.OK);
+            return new ResponseEntity(new AuthResponse("New token generated"), HttpStatus.OK);
         }
 
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
