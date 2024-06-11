@@ -1,149 +1,187 @@
 body {
-    margin: 0;
-    background: linear-gradient( #fff, #fff ); /*se ndtw knp ini nd bisa berubah warnanya klo bkn linear gradient*/
-    font-family: "Euclid Circular A", "Poppins";
-    color: #d6dfed;
-  }
-  
-  html,
-  body {
-    height: 100%;
-    overflow-x: hidden;
-  }
-  
-  .background {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  
-  ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .socials {
-    gap: 20px;
-  }
-  
-  .socials a {
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .links {
-    gap: 10px;
-  }
-  
-  .legal {
-    font-size: 12px;
-    margin: 0;
-  }
-  
-  svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: scaleY(3) scaleX(2.25);
-    transform-origin: bottom;
-    box-sizing: border-box;
-    display: block;
-    pointer-events: none;
-  }
-  
-  footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    display: flex;
-    width: 100%;
-    height: 370px;
-  }
-  
-  section {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 30px;
-    padding-bottom: 80px;
-    padding-left: 60px;
-    width: 100%;
-  }
-  
-  @media (width > 420px) {
-    section {
-      align-items: center;
-      padding-left: 0;
-      gap: 20px;
-    }
-  
-    .links {
-      gap: 20px;
-    }
+  background: linear-gradient( #F0F3FA , #F0F3FA ); /* nd bs background color */
+  overflow-x: hidden;
+}
+
+.crslbtn {
+  text-decoration: none;
+  color: white;
+  background-color: rgba(98, 142, 203, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.aksen6 {
+  color: #002a68;
+}
+
+.sigma {
+  cursor: pointer;
+}
+
+/* mulai css comparison */
+*,
+*:before,
+*:after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.badanslider {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.container-slider {
+  height: 50vmin;
+  width: 90vmin;
+  position: relative;
+  overflow: hidden;
+}
+
+.img-comparison {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+#my-img {
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
+
+#slider {
+  position: relative;
+  -webkit-appearance: none;
+  width: calc(100% + 40px);
+  height: 100%;
+  margin-left: -20px;
+  background-color: transparent;
+  outline: none;
+}
+
+#slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 40px;
+  width: 40px;
+  background: url("/asset/slider-icon.svg"),
+    rgba(255, 255, 255, 0.3);
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background-size: contain;
+  cursor: pointer;
+}
+/* selesai css comparison */
+
+/* mulai css footer */
+.footer {
+  position: relative;
+  background: #8AAEE0;
+  min-height: 100px;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 35%;
+}
+
+.menu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+
+.menu__item {
+  list-style: none;
+}
+
+.menu__link {
+  font-size: 1.2rem;
+  color: #fff;
+  margin: 0 10px;
+  display: inline-block;
+  transition: 0.5s;
+  text-decoration: none;
+  opacity: 0.75;
+  font-weight: 300;
+}
+
+.menu__link:hover {
+  color: white;
+  opacity: 1;
+}
+
+.footer p {
+  color: #fff;
+  margin: 15px 0 10px 0;
+  font-size: 1rem;
+}
+
+.footer a {
+  font-weight: 475;
+  font-size: large;
+}
+
+.wave {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: url("/asset/wave.svg");
+  background-size: 1000px 100px;
+}
+
+.wave#wave1 {
+  z-index: 1000;
+  opacity: 1;
+  bottom: 0;
+  animation: animateWaves 4s linear infinite;
+}
+
+.wave#wave2 {
+  z-index: 999;
+  opacity: 0.5;
+  bottom: 10px;
+  animation: animate 4s linear infinite !important;
+}
+
+.wave#wave3 {
+  z-index: 1000;
+  opacity: 0.2;
+  bottom: 15px;
+  animation: animateWaves 3s linear infinite;
+}
+
+.wave#wave4 {
+  z-index: 999;
+  opacity: 0.7;
+  bottom: 20px;
+  animation: animate 3s linear infinite;
+}
+
+@keyframes animateWaves {
+  0% {
+    background-position-x: 1000px;
   }
 
-  .kontenerfitur { /*ingat, ini belum responsif 💀*/
-    margin-top: 100px;
-    margin-left: 100px;
-    margin-right: 100px;
+  100% {
+    background-positon-x: 0px;
+  }
+}
+
+@keyframes animate {
+  0% {
+    background-position-x: -1000px;
   }
 
-  .sigma {
-    cursor: pointer;
+  100% {
+    background-positon-x: 0px;
   }
-
-  /* untuk slider comparison */
-
-  *,
-  *:before,
-  *:after{
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-  }
-  .badanslider{
-      height: 100vh;
-      display: grid;
-      place-items: center;
-  }
-  .container-slider{
-      height: 50vmin;
-      width: 90vmin;
-      position: relative;
-      overflow: hidden;
-  }
-  .img-comparison{
-      width: 100%;
-      height: 100%;
-      position: absolute;
-  }
-  #my-img{
-      clip-path: polygon(0 0 , 50% 0, 50% 100%, 0 100%);
-  }
-  #slider{
-      position: relative;
-      -webkit-appearance: none;
-      width: calc( 100% + 40px);
-      height: 100%;
-      margin-left: -20px;
-      background-color: transparent;
-      outline: none;
-  }
-  #slider::-webkit-slider-thumb{
-      -webkit-appearance: none;
-      height: 40px;
-      width: 40px;
-      background: url("/asset/slider-icon.svg"),
-      rgba(255,255,255,0.3);
-      border: 3px solid #ffffff;
-      border-radius: 50%;
-      background-size: contain;
-      cursor: pointer;
-  }
+}
+/* selesai css footer */
