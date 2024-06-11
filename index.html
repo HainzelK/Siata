@@ -21,7 +21,7 @@
 <body>
 
  <!--mulai navbar-->
- <nav>
+ <nav style="background-color: #395886; position: sticky; top: 0; z-index: 1000;">
   <a href="#" class="logo"> <p>ᨔᨗᨕᨈᨕ</p>
     <svg>
         <!-- logo  -->
@@ -43,20 +43,20 @@
  <!--selesai navbar-->
 
   <!--mulai carousel pembuka-->
-  <div id="carouselAlim" class="carousel slide mb-6" data-bs-ride="carousel" data-bs-theme="dark">
+  <div id="carouselAlim" class="carousel slide mb-6" data-bs-ride="carousel">
     <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselAlim" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselAlim" data-bs-slide-to="1" aria-label="Slide 2" class="active" aria-current="true"></button>
-      <button type="button" data-bs-target="#carouselAlim" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+      <button type="button" data-bs-target="#carouselAlim" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
+      <button type="button" data-bs-target="#carouselAlim" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselAlim" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active"> 
         <img src="img/carousel-img1.jpg" class="d-block w-100" alt="...">
         <div class="container">
           <div class="carousel-caption text-start">
-            <h1>Headline Alim #1</h1>
-            <p class="opacity-75">lorem ipsum kendor si memed aduh saya ini anak alim diem diem asjdajsdhasd</p>
-            <p><a class="btn btn-lg btn-secondary" href="#">tombol 1</a></p>
+            <h1 class="opacity-75 aksen6">Headline Alim #1</h1>
+            <p class="opacity-75 aksen6">lorem ipsum kendor si memed aduh saya ini anak alim diem diem asjdajsdhasd</p>
+            <p><a class="crslbtn" href="#">tombol 1</a></p>
           </div>
         </div>
       </div>
@@ -64,9 +64,9 @@
         <img src="img/carousel-img2.jpg" class="d-block w-100" alt="...">
         <div class="container">
           <div class="carousel-caption">
-            <h1>Headline Alim #2</h1>
-            <p class="opacity-75">lorem ipsum kendor si memed aduh saya ini anak alim diem diem asjdajsdhasd</p>
-            <p><a class="btn btn-lg btn-secondary" href="#">tombol 2</a></p>
+            <h1 class="opacity-75 aksen6">Headline Alim #2</h1>
+            <p class="opacity-75 aksen6">lorem ipsum kendor si memed aduh saya ini anak alim diem diem asjdajsdhasd</p>
+            <p><a class="crslbtn" href="#">tombol 2</a></p>
           </div>
         </div>
       </div>
@@ -74,9 +74,9 @@
         <img src="img/carousel-img3.jpg" class="d-block w-100" alt="...">
         <div class="container">
           <div class="carousel-caption text-end">
-            <h1>Headline Alim #3</h1>
-            <p class="opacity-75">lorem ipsum kendor si memed aduh saya ini anak alim diem diem asjdajsdhasd</p>
-            <p><a class="btn btn-lg btn-secondary" href="#">tombol 3</a></p>
+            <h1 class="opacity-75 aksen6">Headline Alim #3</h1>
+            <p class="opacity-75 aksen6">lorem ipsum kendor si memed aduh saya ini anak alim diem diem asjdajsdhasd</p>
+            <p><a class="crslbtn" href="#">tombol 3</a></p>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@
   <!-- selesai carousel pembuka -->
 
   <!-- mulai grid untuk fitur -->
-<div class="container kontenerfitur">
+<div class="container-sm" style="margin-top: 100px;">
   <div class="row row-cols-1 row-cols-lg-3 g-4">
 
     <div class="col"> <!-- masih mau di dekorasi -->
@@ -147,46 +147,26 @@
   <!-- selesai comparison slider -->
 
   <!--mulai footer-->
-  <footer>
-    <div class="background">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-        width="100%" height="100%" viewBox="0 0 1600 900">
-        <defs>
-          <path id="wave" fill="rgba(39, 192, 245, 0.6)" d="M-363.852,502.589c0,0,236.988-41.997,505.475,0
-      s371.981,38.998,575.971,0s293.985-39.278,505.474,5.859s493.475,48.368,716.963-4.995v560.106H-363.852V502.589z" /> <!--ingat ganti fill nya untuk ganti warna wave-->
-        </defs>
-        <g>
-          <use xlink:href="#wave" opacity=".4">
-            <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="8s" calcMode="spline"
-              values="270 230; -334 180; 270 230" keyTimes="0; .5; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
-              repeatCount="indefinite" />
-          </use>
-          <use xlink:href="#wave" opacity=".6">
-            <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="6s" calcMode="spline"
-              values="-270 230;243 220;-270 230" keyTimes="0; .6; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
-              repeatCount="indefinite" />
-          </use>
-          <use xlink:href="#wave" opacty=".9">
-            <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="4s" calcMode="spline"
-              values="0 230;-140 200;0 230" keyTimes="0; .4; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
-              repeatCount="indefinite" />
-          </use>
-        </g>
-      </svg>
+  <footer class="footer" >
+    <div class="waves">
+      <div class="wave" id="wave1"></div>
+      <div class="wave" id="wave2"></div>
+      <div class="wave" id="wave3"></div>
+      <div class="wave" id="wave4"></div>
     </div>
-    <section>
-      <ul class="socials">
-        <li><a class="fa-brands fa-x-twitter" href="#" style="color: #d6dfed; text-decoration: none;"></a></li>
-        <li><a class="fa-brands fa-instagram" href="#" style="color: #d6dfed; text-decoration: none;"></a></li>
-        <li><a class="fa-brands fa-facebook" href="#" style="color: #d6dfed; text-decoration: none;"></a></li>
-      </ul>
-      <ul class="links">
-        <li><a href="#" style="color: #d6dfed; text-decoration: none;">Home</a></li>
-        <li><a href="#" style="color: #d6dfed; text-decoration: none;">About</a></li>
-        <li><a href="#" style="color: #d6dfed; text-decoration: none;">Contact Us</a></li>
-      </ul>
-      <p class="legal">© Siata 2024 All rights reserved</p>
-    </section>
+  
+    <ul class="menu">
+      <li class="menu__item"><a class="menu__link" href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
+      <li class="menu__item"><a class="menu__link" href="#"><i class="fa-brands fa-instagram"></i></i></a></li>
+      <li class="menu__item"><a class="menu__link" href="#"><i class="fa-brands fa-facebook"></i></a></li>
+    </ul>
+
+    <ul class="menu">
+      <li class="menu__item"><a class="menu__link" href="#">Home</a></li>
+      <li class="menu__item"><a class="menu__link" href="#">About us</a></li>
+      <li class="menu__item"><a class="menu__link" href="#">Contact us</a></li>
+    </ul>
+  
   </footer>
   <!--selesai footer-->
 
