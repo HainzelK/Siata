@@ -31,6 +31,7 @@ public class User implements UserDetails{
     private String username;
 
     @Column(name = "password", columnDefinition = "VARCHAR(255)")
+    @JsonIgnore
     private String password;
 
     @Column(name = "email", columnDefinition = "VARCHAR(100)", unique = true)
