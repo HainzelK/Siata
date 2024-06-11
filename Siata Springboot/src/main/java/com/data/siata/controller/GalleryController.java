@@ -26,7 +26,7 @@ public class GalleryController {
         return galleryService.getAllGallery();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Gallery> getGalleryById(@PathVariable int id) {
         return galleryService.getGalleryById(id)
             .map(ResponseEntity::ok)
@@ -54,7 +54,7 @@ public class GalleryController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<Gallery> updateGallery(@PathVariable int id, @RequestBody GalleryDTO galleryDetails) {
         return galleryService.getGalleryById(id)
             .map(gallery -> {
@@ -66,7 +66,7 @@ public class GalleryController {
             }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> deleteGallery(@PathVariable int id) {
         galleryService.deleteGallery(id);
         return ResponseEntity.noContent().build();

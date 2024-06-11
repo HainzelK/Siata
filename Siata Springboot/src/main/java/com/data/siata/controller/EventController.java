@@ -15,7 +15,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3306")
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/api/event")
 public class EventController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable int id) {
         return eventService.getEventById(id)
             .map(ResponseEntity::ok)
@@ -49,7 +49,7 @@ public class EventController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable int id, @RequestBody EventDTO eventDetails) {
         return eventService.getEventById(id)
             .map(event -> {
@@ -65,7 +65,7 @@ public class EventController {
             }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable int id) {
         eventService.deleteEvent(id);
         return ResponseEntity.noContent().build();

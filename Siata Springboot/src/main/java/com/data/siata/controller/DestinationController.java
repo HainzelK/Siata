@@ -26,7 +26,7 @@ public class DestinationController {
         return destinationService.getAllDestination();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Destination> getDestinationById(@PathVariable int id) {
         return destinationService.getDestinationById(id)
             .map(ResponseEntity::ok)
@@ -47,7 +47,7 @@ public class DestinationController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<Destination> updateDestination(@PathVariable int id, @RequestBody DestinationDTO destinationDetails) {
         return destinationService.getDestinationById(id)
             .map(destination -> {
@@ -61,7 +61,7 @@ public class DestinationController {
             }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> deleteDestination(@PathVariable int id) {
         destinationService.deleteDestination(id);
         return ResponseEntity.noContent().build();

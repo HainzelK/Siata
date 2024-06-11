@@ -21,9 +21,9 @@ public class WebController {
         return "forward:/signup.html";
     }
 
-    @GetMapping("/calendar")
+    @GetMapping("/kalender")
     public String calendar() {
-        return "forward:/calendar.html";
+        return "forward:/kalender.html";
     }
 
     @GetMapping("/listEvent")

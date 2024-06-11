@@ -13,7 +13,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3306")
 @RestController
-@RequestMapping("/api/volunteers")
+@RequestMapping("/api/volunteer")
 public class VolunteerController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class VolunteerController {
         return volunteerService.findAllVolunteers();
     }
 
-    @GetMapping("/{userId}/{eventId}")
+    @GetMapping("/id/{userId}/{eventId}")
     public ResponseEntity<VolunteerDTO> getVolunteerById(@PathVariable int userId, @PathVariable int eventId) {
         return volunteerService.findVolunteerById(userId, eventId)
                 .map(ResponseEntity::ok)
@@ -39,7 +39,7 @@ public class VolunteerController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{userId}/{eventId}")
+    @DeleteMapping("/id/{userId}/{eventId}")
     public ResponseEntity<Void> deleteVolunteer(@PathVariable int userId, @PathVariable int eventId) {
         volunteerService.deleteVolunteer(userId, eventId);
         return ResponseEntity.noContent().build();

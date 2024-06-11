@@ -25,7 +25,7 @@ public class StatisticController {
         return statisticService.getAllStatistic();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Statistic> getStatisticById(@PathVariable int id) {
         return statisticService.getStatisticById(id)
             .map(ResponseEntity::ok)
@@ -43,7 +43,7 @@ public class StatisticController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<Statistic> updateStatistic(@PathVariable int id, @RequestBody Statistic statisticDetails) {
         return statisticService.getStatisticById(id)
             .map(statistic -> {
@@ -54,7 +54,7 @@ public class StatisticController {
             }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> deleteStatistic(@PathVariable int id) {
         statisticService.deleteStatistic(id);
         return ResponseEntity.noContent().build();
