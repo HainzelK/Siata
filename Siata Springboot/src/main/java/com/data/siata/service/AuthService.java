@@ -74,7 +74,7 @@ public class AuthService {
 
         saveUserToken(accessToken, refreshToken, user);
 
-        return new AuthResponse("User registration was successful");
+        return new AuthResponse("User registration was successful", accessToken, refreshToken);
     }
 
     public AuthResponse authenticate(LoginDTO loginDTO){
@@ -107,7 +107,7 @@ public class AuthService {
                 revokeAllTokenByUser(user);
                 saveUserToken(accessToken, refreshToken, user);
     
-                return new AuthResponse("User login was successful");
+                return new AuthResponse("User login was successful", accessToken, refreshToken);
             } else {
                 return new AuthResponse("Wrong password");
             }
