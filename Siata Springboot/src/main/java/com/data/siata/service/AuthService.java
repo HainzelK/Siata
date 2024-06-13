@@ -1,6 +1,10 @@
 package com.data.siata.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -45,37 +49,37 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthResponse register(RegisterDTO registerDTO) {
-        if (userService.existsByUsername(registerDTO.getUsername())) {
-            return new AuthResponse("Username already exists");
-        }
-        if (userService.existsByEmail(registerDTO.getEmail())) {
-            return new AuthResponse("Email already exists");
-        }
-        if (userService.existsByNoTelp(registerDTO.getNoTelp())) {
-            return new AuthResponse("Phone number already exists");
-        }
+    // public AuthResponse register(RegisterDTO registerDTO) {
+    //     if (userService.existsByUsername(registerDTO.getUsername())) {
+    //         return new AuthResponse("Username already exists");
+    //     }
+    //     if (userService.existsByEmail(registerDTO.getEmail())) {
+    //         return new AuthResponse("Email already exists");
+    //     }
+    //     if (userService.existsByNoTelp(registerDTO.getNoTelp())) {
+    //         return new AuthResponse("Phone number already exists");
+    //     }
 
-        User user = new User();
-        user.setUsername(registerDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        user.setEmail(registerDTO.getEmail());
-        user.setFullName(registerDTO.getFullName());
-        user.setGender(registerDTO.getGender());
-        user.setNoTelp(registerDTO.getNoTelp());
-        user.setDob(registerDTO.getDob());
+    //     User user = new User();
+    //     user.setUsername(registerDTO.getUsername());
+    //     user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+    //     user.setEmail(registerDTO.getEmail());
+    //     user.setFullName(registerDTO.getFullName());
+    //     user.setGender(registerDTO.getGender());
+    //     user.setNoTelp(registerDTO.getNoTelp());
+    //     user.setDob(registerDTO.getDob());
 
-        user.setRole(Role.USER); // Using the imported Role enum
+    //     user.setRole(Role.USER); // Using the imported Role enum
         
-        user = repository.save(user);
+    //     user = repository.save(user);
 
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+    //     String accessToken = jwtService.generateAccessToken(user);
+    //     String refreshToken = jwtService.generateRefreshToken(user);
 
-        saveUserToken(accessToken, refreshToken, user);
+    //     saveUserToken(accessToken, refreshToken, user);
 
-        return new AuthResponse("User registration was successful", accessToken, refreshToken);
-    }
+    //     return new AuthResponse("User registration was successful", accessToken, refreshToken);
+    // }
 
     public AuthResponse authenticate(LoginDTO loginDTO){
         if (loginDTO.getEmail() == null || loginDTO.getEmail().isEmpty()) {
@@ -116,6 +120,88 @@ public class AuthService {
         }
 
     }
+
+
+public AuthResponse register(RegisterDTO registerDTO) {
+    // Validate password length
+    if (registerDTO.getPassword().length() < 8) {
+        return new AuthResponse("Password must be at least 8 characters long");
+    }
+
+    // Validate email format
+    String emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$";
+    if (!Pattern.matches(emailPattern, registerDTO.getEmail())) {
+        return new AuthResponse("Invalid email format");
+    }
+
+    // Validate full name (no numbers or special characters)
+    String fullNamePattern = "^[a-zA-Z\\s]+$";
+    if (!Pattern.matches(fullNamePattern, registerDTO.getFullName())) {
+        return new AuthResponse("Full name cannot contain numbers or special characters");
+    }
+
+    // Validate gender
+    if (!registerDTO.getGender().equalsIgnoreCase("Male") && 
+        !registerDTO.getGender().equalsIgnoreCase("Female")) {
+        return new AuthResponse("Gender must be either 'Male' or 'Female'");
+    }
+
+    // Validate and sanitize phone number
+    String phonePattern = "^[0-9]{9,12}$";
+    String sanitizedPhoneNumber = registerDTO.getNoTelp().startsWith("+62") 
+                                  ? "0" + registerDTO.getNoTelp().substring(3) 
+                                  : registerDTO.getNoTelp();
+    if (!Pattern.matches(phonePattern, sanitizedPhoneNumber)) {
+        return new AuthResponse("Phone number must be between 9 and 12 digits long");
+    }
+
+    // Validate date of birth
+    LocalDate today = LocalDate.now();
+    LocalDate dob;
+    try {
+        dob = LocalDate.parse(registerDTO.getDob(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        if (dob.isAfter(today)) {
+            return new AuthResponse("Date of birth cannot be in the future");
+        }
+    } catch (DateTimeParseException e) {
+        return new AuthResponse("Date of birth must be in the format YYYY-MM-DD");
+    }
+
+    // Convert LocalDate to String
+    String dobString = dob.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+    // Check for existing username, email, or phone number
+    if (userService.existsByUsername(registerDTO.getUsername())) {
+        return new AuthResponse("Username already exists");
+    }
+    if (userService.existsByEmail(registerDTO.getEmail())) {
+        return new AuthResponse("Email already exists");
+    }
+    if (userService.existsByNoTelp(sanitizedPhoneNumber)) {
+        return new AuthResponse("Phone number already exists");
+    }
+
+    // Create and save the new user
+    User user = new User();
+    user.setUsername(registerDTO.getUsername());
+    user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+    user.setEmail(registerDTO.getEmail());
+    user.setFullName(registerDTO.getFullName());
+    user.setGender(registerDTO.getGender());
+    user.setNoTelp(sanitizedPhoneNumber);
+    user.setDob(dobString); // Set dob as String
+    user.setRole(Role.USER);
+
+    user = repository.save(user);
+
+    String accessToken = jwtService.generateAccessToken(user);
+    String refreshToken = jwtService.generateRefreshToken(user);
+
+    saveUserToken(accessToken, refreshToken, user);
+
+    return new AuthResponse("User registration was successful", accessToken, refreshToken);
+}
+
 
     private void revokeAllTokenByUser(User user) {
         List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getUserId());

@@ -24,6 +24,11 @@ public class VolunteerController {
         return volunteerService.findAllVolunteers();
     }
 
+    @GetMapping("/countuser/{eventId}")
+    public long countUsersByEventId(@PathVariable int eventId) {
+        return volunteerService.countUsersByEventId(eventId);
+    }
+
     @GetMapping("/id/{userId}/{eventId}")
     public ResponseEntity<VolunteerDTO> getVolunteerById(@PathVariable int userId, @PathVariable int eventId) {
         return volunteerService.findVolunteerById(userId, eventId)
@@ -33,7 +38,7 @@ public class VolunteerController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createVolunteer(@RequestBody VolunteerDTO volunteerDTO) {
-        VolunteerDTO createdVolunteer = volunteerService.createVolunteer(volunteerDTO);
+        volunteerService.createVolunteer(volunteerDTO); // Directly call the service method without assigning it to a variable
         Map<String, String> response = new HashMap<>();
         response.put("message", "Volunteer created successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);

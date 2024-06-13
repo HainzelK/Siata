@@ -42,15 +42,12 @@ public class GalleryController {
         return ResponseEntity.ok(galleries);
     }
 
+    // di body masukkan cuma salah satu (eventId atau destinationId)
     @PostMapping
     public ResponseEntity<Map<String, String>> createGallery(@RequestBody GalleryDTO galleryDTO) {
-        Gallery gallery = new Gallery();
-        gallery.setMediaType(galleryDTO.getMediaType());
-        byte[] decodedBytes = Base64.getDecoder().decode(galleryDTO.getMediaUrl().split(",")[1]);
-        gallery.setMediaUrl(decodedBytes);        
-        galleryService.saveGallery(gallery);
+        galleryService.createGallery(galleryDTO);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Gallery created successfully");
+        response.put("message", "Gallery entry created successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

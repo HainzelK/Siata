@@ -34,15 +34,12 @@ public class StatisticController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createStatistic(@RequestBody StatisticDTO statisticDTO) {
-        Statistic statistic = new Statistic();
-        statistic.setHoursVolunteered(statisticDTO.getHoursVolunteered());
-        statistic.setDateRecorded(statisticDTO.getDateRecorded());
-        statisticService.saveStatistic(statistic);
+        statisticService.createStatistic(statisticDTO);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Statistic created successfully");
+        response.put("message", "Statistic entry created successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
+    
     @PutMapping("/id/{id}")
     public ResponseEntity<Statistic> updateStatistic(@PathVariable int id, @RequestBody Statistic statisticDetails) {
         return statisticService.getStatisticById(id)

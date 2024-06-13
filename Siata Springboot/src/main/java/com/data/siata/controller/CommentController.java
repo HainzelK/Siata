@@ -32,12 +32,10 @@ public class CommentController {
             .orElse(ResponseEntity.notFound().build());
     }
 
+    // di body masukkan cuma salah satu (eventId atau destinationId)
     @PostMapping
     public ResponseEntity<Map<String, String>> createComment(@RequestBody CommentDTO commentDTO) {
-        Comment comment = new Comment();
-        comment.setCommentText(commentDTO.getCommentText());
-        comment.setCreatedAt(commentDTO.getCreatedAt());
-        commentService.saveComment(comment);
+        commentService.createComment(commentDTO);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Comment created successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);

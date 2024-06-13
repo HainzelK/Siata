@@ -1,11 +1,16 @@
 package com.data.siata.service;
 
 import com.data.siata.dto.VolunteerDTO;
+import com.data.siata.model.Event;
+import com.data.siata.model.User;
 import com.data.siata.model.Volunteer;
 import com.data.siata.model.Id.VolunteerId;
-import com.data.siata.repository.VolunteerRepository;
-import com.data.siata.repository.UserRepository;
 import com.data.siata.repository.EventRepository;
+import com.data.siata.repository.UserRepository;
+import com.data.siata.repository.VolunteerRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +29,10 @@ public class VolunteerService {
 
     @Autowired
     private EventRepository eventRepository;
+
+    public int countUsersByEventId(int eventId) {
+        return volunteerRepository.countByEventId(eventId);
+    }
 
     public List<VolunteerDTO> findAllVolunteers() {
         return volunteerRepository.findAll().stream()
@@ -60,10 +69,23 @@ public class VolunteerService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public VolunteerDTO createVolunteer(VolunteerDTO volunteerDTO) {
-        Volunteer volunteer = convertToEntity(volunteerDTO);
-        Volunteer savedVolunteer = volunteerRepository.save(volunteer);
-        return convertToDto(savedVolunteer);
+        User user = userRepository.findById(volunteerDTO.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + volunteerDTO.getUserId()));
+
+        Event event = eventRepository.findById(volunteerDTO.getEventId())
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with id: " + volunteerDTO.getEventId()));
+
+        Volunteer volunteer = new Volunteer();
+        VolunteerId volunteerId = new VolunteerId(volunteerDTO.getUserId(), volunteerDTO.getEventId());
+        volunteer.setId(volunteerId);
+        volunteer.setUser(user);
+        volunteer.setEvent(event);
+
+        volunteerRepository.save(volunteer);
+
+        return volunteerDTO;
     }
 
     public void deleteVolunteer(int userId, int eventId) {
@@ -75,18 +97,7 @@ public class VolunteerService {
         volunteerDTO.setUserId(volunteer.getId().getUserId());
         volunteerDTO.setEventId(volunteer.getId().getEventId());
 
-        // Fetch and set user details
-        userRepository.findById(volunteer.getId().getUserId()).ifPresent(volunteerDTO::setUser);
-
-        // Fetch and set event details
-        eventRepository.findById(volunteer.getId().getEventId()).ifPresent(volunteerDTO::setEvent);
-
         return volunteerDTO;
     }
 
-    private Volunteer convertToEntity(VolunteerDTO volunteerDTO) {
-        Volunteer volunteer = new Volunteer();
-        volunteer.setId(new VolunteerId(volunteerDTO.getUserId(), volunteerDTO.getEventId()));
-        return volunteer;
-    }
 }
