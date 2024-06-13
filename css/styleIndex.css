@@ -1,5 +1,5 @@
 body {
-  background: linear-gradient( #F0F3FA , #F0F3FA ); /* nd bs background color */
+  background: linear-gradient(#F0F3FA, #F0F3FA); /* nd bs background color */
   overflow-x: hidden;
 }
 
@@ -11,13 +11,72 @@ body {
   border-radius: 5px;
 }
 
-.aksen6 {
-  color: #002a68;
+.carousel-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
+  z-index: 1;
 }
 
-.sigma {
-  cursor: pointer;
+.carousel-item img {
+  position: relative;
+  z-index: 0;
+  width: 100%; /* Ensures image scales with the container */
+  height: auto; /* Maintains aspect ratio */
+  max-height: 75vh; /* Limits image height to 75% of the viewport height */
+  object-fit: cover; /* Ensures the image covers the container without being stretched */
 }
+
+.carousel-caption {
+  position: relative;
+  z-index: 2;
+  text-align: center; /* Centers the caption text */
+}
+
+.tekscarousel {
+  color: #002a68;
+  font-weight: bold;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, #252525, #FFF, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* grid fitur */
+.teksfitur {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.teksfitur h1 {
+  color: #f0f3fae3;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.animasigrid {
+	transition: transform 0.2s;	
+}
+
+.animasigrid:hover {
+	transform: scale(1.05);
+}
+/* sls grid fitur */
 
 /* mulai css comparison */
 *,
@@ -28,17 +87,31 @@ body {
   box-sizing: border-box;
 }
 
-.badanslider {
-  height: 100vh;
+/* ini yang original */
+/* .badanslider { 
+  height: 75vh;
   display: grid;
   place-items: center;
+} */
+
+.badanslider {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.badanslider h1 {
+  margin-bottom: 25px;
 }
 
 .container-slider {
-  height: 50vmin;
-  width: 90vmin;
+  height: 60vmin;
+  width: 100vmin;
   position: relative;
   overflow: hidden;
+}
+
+.container-slider img {
+  border:5px solid #8aaee0;
 }
 
 .img-comparison {
@@ -74,114 +147,134 @@ body {
 }
 /* selesai css comparison */
 
-/* mulai css footer */
-.footer {
+/* Splide Komen  */
+.kontener-komen {
+  background-color: #8AAEE0;
+}
+
+#testimonial-slider {
+  max-width: 1200px;
+  margin: 25vh auto;
+}
+
+.splide__slide .testimonial blockquote {
+  margin: 10px 10px 0;
+  background: #efefef;
+  padding: 20px 60px;
   position: relative;
-  background: #8AAEE0;
-  min-height: 100px;
-  padding: 20px 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 35%;
+  border: none;
+  border-radius: 8px;
+  font-style: italic;
 }
 
-.menu {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px 0;
-  flex-wrap: wrap;
-}
-
-.menu__item {
-  list-style: none;
-}
-
-.menu__link {
-  font-size: 1.2rem;
-  color: #fff;
-  margin: 0 10px;
-  display: inline-block;
-  transition: 0.5s;
-  text-decoration: none;
-  opacity: 0.75;
-  font-weight: 300;
-}
-
-.menu__link:hover {
-  color: white;
-  opacity: 1;
-}
-
-.footer p {
-  color: #fff;
-  margin: 15px 0 10px 0;
-  font-size: 1rem;
-}
-
-.footer a {
-  font-weight: 475;
-  font-size: large;
-}
-
-.wave {
+.splide__slide .testimonial blockquote:before,
+.splide__slide .testimonial blockquote:after {
+  content: "\201C";
   position: absolute;
-  top: -100px;
-  left: 0;
+  font-size: 80px;
+  line-height: 1;
+  color: #757f9a;
+  font-style: normal;
+}
+
+.splide__slide .testimonial blockquote:before {
+  top: 0;
+  left: 10px;
+}
+
+.splide__slide .testimonial blockquote:after {
+  content: "\201D";
+  right: 10px;
+  bottom: -0.5em;
+}
+
+.splide__slide .testimonial div {
+  width: 0;
+  height: 0;
+  border-left: 0 solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #efefef;
+  margin: 0 0 0 60px;
+}
+
+.splide__slide .testimonial p {
+  margin: 8px 0 0 20px;
+  text-align: left;
+  color: #fff;
+}
+/* End splide komen */
+
+@media (max-width: 1200px) {
+  .carousel-item img {
+    max-height: 70vh; /* Adjust image height for large tablets */
+  }
+}
+
+@media (max-width: 992px) {
+  .carousel-item img {
+    max-height: 65vh; /* Adjust image height for smaller tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-item img {
+    height: 60vh; /* Adjust image height for large smartphones */
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-item img {
+    max-height: 55vh; /* Adjust image height for smaller smartphones */
+  }
+
+  .carousel-caption {
+    padding: 10px; /* Add padding for better text readability */
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+}
+
+@media (max-width: 375px) {
+  .carousel-caption {
+    font-size: 12px; /* Further adjust font size for very small screens */
+  }
+}
+
+.title-container {
+  text-align: left;
+  margin: 20px 0;
+}
+
+.responsive-title {
+  display: inline-block;
+  position: relative;
+  font-size: 2em; /* Adjust size as needed */
+  color: #002a68; /* Example color */
+  margin-left: 123px;
+}
+
+.responsive-title::after {
+  content: '';
+  display: block;
   width: 100%;
-  height: 100px;
-  background: url("/asset/wave.svg");
-  background-size: 1000px 100px;
+  height: 2px;
+  background-color: #002a68; /* Example color */
+  margin-top: 5px;
 }
 
-.wave#wave1 {
-  z-index: 1000;
-  opacity: 1;
-  bottom: 0;
-  animation: animateWaves 4s linear infinite;
-}
-
-.wave#wave2 {
-  z-index: 999;
-  opacity: 0.5;
-  bottom: 10px;
-  animation: animate 4s linear infinite !important;
-}
-
-.wave#wave3 {
-  z-index: 1000;
-  opacity: 0.2;
-  bottom: 15px;
-  animation: animateWaves 3s linear infinite;
-}
-
-.wave#wave4 {
-  z-index: 999;
-  opacity: 0.7;
-  bottom: 20px;
-  animation: animate 3s linear infinite;
-}
-
-@keyframes animateWaves {
-  0% {
-    background-position-x: 1000px;
-  }
-
-  100% {
-    background-positon-x: 0px;
+@media (max-width: 768px) {
+  .responsive-title {
+    font-size: 1.5em; /* Smaller font size on smaller screens */
+    margin-left: 20px; /* Adjust margin for smaller screens */
   }
 }
 
-@keyframes animate {
-  0% {
-    background-position-x: -1000px;
+@media (max-width: 600px) {
+  #carouselAlim {
+    width: 100%; /* Ensures it takes the full width of its container */
+    /* margin-top: 60px;  */
   }
 
-  100% {
-    background-positon-x: 0px;
+  .responsive-title {
+    font-size: 1.2em; /* Further reduce font size for small screens */
   }
 }
-/* selesai css footer */
