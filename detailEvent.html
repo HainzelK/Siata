@@ -24,6 +24,22 @@
                 margin-top: 40%;
             }
         }
+        .tombol-login{
+            display: block;
+            margin: 0 auto 5px;
+            width: 90%;
+        }
+
+        .descPopup{
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .modal-title.fs-5{
+            text-align: center;
+            margin-left:33.5% ;
+        }
     </style>
 </head>
 <body>
@@ -79,28 +95,43 @@
         </div>
     </div>
 
-    <!-- Footer -->
-  <!--mulai footer-->
-  <footer class="footer" >
-    <div class="waves">
-      <div class="wave" id="wave1"></div>
-      <div class="wave" id="wave2"></div>
-      <div class="wave" id="wave3"></div>
-      <div class="wave" id="wave4"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="labelPopup">Anda Belum Masuk</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="descPopup">Silakan Login atau Sign Up terlebih dahulu</p>
+                    <a href="login.html" style="text-decoration: none;"><button class="btn btn-primary tombol-login" type="button">Log In</button></a>
+                    <a href="signup.html" style="text-decoration: none;"><button class="btn btn-primary tombol-login" type="button">Sign Up</button></a>
+                </div>
+            </div>
+        </div>
     </div>
-  
-    <ul class="menu">
-      <li class="menu__item"><a class="menu__link" href="#"><img src="asset/xtwitter-icon.svg" width="22" height="auto"></a></li>
-      <li class="menu__item"><a class="menu__link" href="#"><img src="asset/instagram-icon.svg" width="22" height="auto"></a></li>
-      <li class="menu__item"><a class="menu__link" href="#"><img src="asset/facebook-icon.svg"width="22" height="auto"></a></li>
-    </ul>
 
-    <ul class="menu">
-      <li class="menu__link">Siata</li>
-    </ul>
-  
-  </footer>
-  <!--selesai footer-->
+    <!-- Footer -->
+    <footer class="footer" >
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+        </div>
+      
+        <ul class="menu">
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/xtwitter-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/instagram-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/facebook-icon.svg" width="22" height="auto"></a></li>
+        </ul>
+      
+        <ul class="menu">
+            <li class="menu__link">Siata</li>
+        </ul>
+      
+    </footer>
     <!-- End Footer -->
 
     <!-- Scripts -->
@@ -198,77 +229,76 @@ function displayEventDetails(eventName, eventImg, eventDescription, location, ev
         });
     }
 }
-        // Function to volunteer for an event
-        async function volunteerForEvent(eventId) {
-            const token = getCookie('accessToken');
-            if (!token) {
-                alert('Please log in or sign up to volunteer for this event.');
-                window.location.href = 'login.html'; // Redirect to login page
-                return;
-            }
 
-            const email = extractEmailFromToken(token);
-            if (!email) {
-                throw new Error('Email not found in token');
-            }
+// Function to volunteer for an event
+async function volunteerForEvent(eventId) {
+    const token = getCookie('accessToken');
+    if (!token) {
+        $('#exampleModal').modal('show');
+        return;
+    }
 
-            const userId = await searchUserIdByEmail(email);
-            try {
-                if (!userId) {
-                    alert('Please log in to volunteer for the event.');
-                    return;
-                }
+    const email = extractEmailFromToken(token);
+    if (!email) {
+        throw new Error('Email not found in token');
+    }
 
-                const response = await fetch('/api/volunteer', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ userId, eventId })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Could not volunteer for the event');
-                }
-
-                const result = await response.json();
-                alert('You have successfully volunteered for the event!');
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred. Please try again.');
-            }
+    const userId = await searchUserIdByEmail(email);
+    try {
+        if (!userId) {
+            $('#exampleModal').modal('show');
+            return;
         }
 
-        // Add event listener to volunteer button
-        document.getElementById('volunteer-button').addEventListener('click', function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const eventId = urlParams.get('id');
-            if (eventId) {
-                volunteerForEvent(eventId); // Pass the event ID
-            }
+        const response = await fetch('/api/volunteer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, eventId })
         });
 
-        // Placeholder function to get the logged-in user's ID
-        function getUserId() {
-            // Replace with actual logic to get the logged-in user's ID
-            // For example, from session storage or a global variable
-            return sessionStorage.getItem('userId');
+        if (!response.ok) {
+            throw new Error('Could not volunteer for the event');
         }
-        // Call checkLoginStatus on page load
-        document.addEventListener('DOMContentLoaded', checkLoginStatus);
 
-        // Add event listener to logout button
-        document.getElementById('logout-button').addEventListener('click', logout);
+        const result = await response.json();
+        alert('You have successfully volunteered for the event!');
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred. Please try again.');
+    }
+}
 
-        // Load event details on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const eventId = urlParams.get('id');
-            if (eventId) {
-                fetchEventDetails(eventId);
-            }
-        });
+// Add event listener to volunteer button
+document.getElementById('volunteer-button').addEventListener('click', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('id');
+    if (eventId) {
+        volunteerForEvent(eventId); // Pass the event ID
+    }
+});
 
+// Placeholder function to get the logged-in user's ID
+function getUserId() {
+    // Replace with actual logic to get the logged-in user's ID
+    // For example, from session storage or a global variable
+    return sessionStorage.getItem('userId');
+}
+// Call checkLoginStatus on page load
+document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+// Add event listener to logout button
+document.getElementById('logout-button').addEventListener('click', logout);
+
+// Load event details on page load
+document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('id');
+    if (eventId) {
+        fetchEventDetails(eventId);
+    }
+});
     </script>
 </body>
 </html>
