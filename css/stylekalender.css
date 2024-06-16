@@ -1,6 +1,7 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-weight: 400;
+    background-color: #F0F3FA !important;
  }
  
  h3,h4,h5 {
@@ -18,7 +19,7 @@ body {
     height: 100%;
     padding: 20px;
     color: #fff;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-weight: 300;
     position: relative;
  }
@@ -35,7 +36,7 @@ body {
  }
  
  .calendar-content {
-    background-color: white;
+    background-color: #F0F3FA;
     padding: 20px;
     padding-left: 15%;
     padding-right: 15%;
@@ -54,7 +55,7 @@ body {
  
  .calendar-footer {
     height: 200px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-weight: 300;
     text-align: center;
     background-color: #4b6289 !important;
@@ -85,7 +86,7 @@ body {
  
  .addForm h4 {
     color: #fff;
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
  }
  
  .addEventButtons {
@@ -111,10 +112,10 @@ body {
  
  .sidebar-wrapper {
     color: #fff;
-    background-color: #5a649c !important;
+    background-color: #426089 !important;
     padding-top: 0;
     padding-bottom: 20px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-weight: 300;
     padding-left: 0;
     padding-right: 0;
@@ -173,7 +174,7 @@ body {
  .eventCard-mark {
     width: 8px;
     height: 8px;
-    background-color: #b39ddb;
+    background-color: #395886;
     border-radius: 100px;
     position: absolute;
     left: 50%;
@@ -183,7 +184,7 @@ body {
  .day-mark {
     width: 7px;
     height: 7px;
-    background-color: #b39ddb;
+    background-color: #395886;
     border-radius: 100px;
     position: absolute;
     left: 47%;
@@ -274,7 +275,6 @@ body {
     display: none;
     padding-top: 20px;
     padding-bottom: 20px;
-    position: fixed;
     z-index: 99;
     width: 100%;
     background-color: #5a649c !important;
@@ -295,7 +295,7 @@ body {
  
  .mobile-header h4 {
     margin: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-weight: 300;
  }
  
@@ -310,10 +310,10 @@ body {
        margin-top: 80px;
     }
     .sidebar-wrapper {
-       background-color: #EEEEEE !important;
+       background-color: #F0F3FA !important;
     }
     .sidebar-title {
-       background-color: #5A649C !important;
+       background-color: #395886 !important;
     }
     .empty-message {
        color: black;
@@ -344,20 +344,8 @@ body {
     }
  }
  
- /*untuk admin*/
- .adminkalender {
-    background-color: rgb(151, 158, 160);
-    padding: 50px;
-    border: dashed 5px rgb(96, 110, 119);
- }
-
  .greyed-out {
-   background-color: #e0e0e0 !important;
-   color: #b0b0b0 !important;
+    color: #ccc; /* Light grey text color */
+    background-color: #aaaaaa; /* Light grey background */
+    /* opacity: 0.6; Partial transparency */
 }
-
-.greyed-out .day-mark,
-.greyed-out .eventCard-mark {
-   background-color: #b0b0b0 !important;
-}
-
