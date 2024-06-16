@@ -3,7 +3,7 @@
 
 /*login*/
 *{
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito', sans-serif;
 }
 .wrapper{
     background: #345e86; 
@@ -148,13 +148,6 @@ i{
     font-weight: 400;
     font-size: 15px;
 }
-.error-message {
-  color: red;
-  font-size: 1em;
-  margin-top: 10px;
-}
-
-
 .right{
   display: flex;
   justify-content: center;
@@ -272,7 +265,7 @@ span a:hover{
     justify-content: center;
     align-items: center;
     padding: 10px;
-    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    background: #628ECB;
   }
   .container-sign{
     max-width: 700px;
@@ -281,6 +274,7 @@ span a:hover{
     padding: 25px 30px;
     border-radius: 5px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    
   }
   .container-sign .title{
     font-size: 25px;
@@ -398,6 +392,7 @@ span a:hover{
     }
     .user-details::-webkit-scrollbar{
       width: 5px;
+
     }
     }
     @media(max-width: 459px){
@@ -406,100 +401,8 @@ span a:hover{
     }
   }   
 
-  /* New styles for floating labels */
-.input-wrapper {
-  position: relative;
-  margin-bottom: 20px; /* Adjust spacing between input fields */
-}
-
-.input-wrapper label {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  pointer-events: none;
-  transition: .5s;
-  color: #999; /* Color for inactive label */
-}
-
-.input:focus ~ label,
-.input:not(:placeholder-shown) ~ label {
-  top: -10px;
-  font-size: 13px;
-  color: #5d5076; /* Color for active label */
-}
-
-.input {
-  height: 45px;
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  outline: none;
-  color: #40414a;
-}
-
-/* Adjust border color for active input field */
-.input:focus,
-.input:valid {
-  border-bottom: 1px solid #743ae1;
-}
-
-
-
-.notification{
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  width: max-content;
-  border-radius: 6px;
-  background-color: #313e2c;
-  color: #aaec8a;
-  box-shadow:0 1px 10px rgba(0,0,0,0.1);
-  transform: translateY(30px);
-  opacity: 0;
-  visibility: hidden;
-  animation: fade-in 3s linear;
-}
-
-.notification_icon{
-  height: 26px;
-  width: 26px;
-  margin-right: 4px;
-}
-
-.notification_body{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 16px 8px;
-}
-
-.notification_progress{
-  position: absolute;
-  left: 4px;
-  bottom: 4px;
-  width: calc(100%-8px);
-  height: 3px;
-  transform: scaleX(0);
-  transform-origin: left;
-  background: linear-gradient(to right, #313e2c, #aaec8a);
-  border-radius: inherit;
-  animation: progress 2.5s 0.3s linear;
-}
-
-@keyframes fade-in {
-  5%{
-    opacity: 1;
-    visibility: visible;
-    transform:translateY(0);
+  @media (min-width:280px){
+    .container-sign{
+      margin-bottom:20px ;
+    }
   }
-  95%{
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes progress{
-  to {
-    transform: scaleX(1);
-  }
-}
