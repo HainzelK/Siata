@@ -4,41 +4,38 @@
   <meta charset="UTF-8">
   <title>Sign Up</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Your existing styles here */
+    * {
+      font-family: Roboto, sans-serif !important;
+    }
     .input-box input:focus,
     .input-box input:valid {
       border-color: #9b59b6;
     }
-
     .input-box-full {
       width: 100%;
     }
-
     .gender-details {
       display: flex;
       align-items: center;
       margin-bottom: 10px;
     }
-
     .gender-title {
       font-size: 20px;
       font-weight: 500;
       margin-right: 30px;
     }
-
     .category {
       display: flex;
       justify-content: space-between;
       width: 100%;
     }
-
     .category label {
       display: flex;
       align-items: center;
     }
-
     .category .dot {
       height: 18px;
       width: 18px;
@@ -48,13 +45,11 @@
       border: 5px solid transparent;
       transition: all 0.3s ease;
     }
-
     #dot-1:checked ~ .category label .one,
     #dot-2:checked ~ .category label .two {
       background: #9b59b6;
       border-color: #d9d9d9;
     }
-
     .button input {
       height: 45px;
       width: 100%;
@@ -68,47 +63,38 @@
       transition: all 0.3s ease;
       background: #9b59b6;
     }
-
     .button input:hover {
       background: #6d44a1;
     }
-
     .error-message {
       color: red;
       font-size: 0.9em;
       display: none;
     }
-
     @media (max-width: 480px) {
       .container-sign {
         height: 100%;
         overflow-y: auto; /* Enable vertical scrollbar */
         padding: 20px;
       }
-
       .input-box {
         width: 100%; /* Full width for smaller screens */
       }
-
       .gender-title {
         font-size: 18px;
         margin-right: 10px;
       }
-
       .button input {
         font-size: 16px;
       }
     }
-
     ::-webkit-scrollbar {
       width: 8px;
     }
-
     ::-webkit-scrollbar-thumb {
       background: #9b59b6;
       border-radius: 10px;
     }
-
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
     }
@@ -116,87 +102,94 @@
 </head>
 <body class="test">
   <div class="container-sign">
-    <div class="title">Registration</div>
+    <div class="title">Registrasi</div>
     <div class="content">
       <form class="form" id="registrationForm" novalidate>
         <div class="user-details">
           <div class="input-box">
-            <span class="details">Full Name</span>
-            <input type="text" id="name" name="full_name" placeholder="Enter your name" required>
-            <div class="error-message" id="nameError">Please enter your full name.</div>
-            <div class="error-message" id="nameExistsError">Full name already exists.</div>
+            <span class="details">Nama Lengkap</span>
+            <input type="text" id="name" name="full_name" placeholder="Masukkan nama lengkap" required>
+            <div class="error-message" id="nameError">Tolong masukkan nama lengkap</div>
+            <div class="error-message" id="nameExistsError">Nama lengkap sudah ada</div>
           </div>
           <div class="input-box">
             <span class="details">Username</span>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            <div class="error-message" id="usernameError">Please enter a username.</div>
-            <div class="error-message" id="usernameExistsError">Username already exists.</div>
+            <input type="text" id="username" name="username" placeholder="Masukkan username" required>
+            <div class="error-message" id="usernameError">Tolong masukkan username</div>
+            <div class="error-message" id="usernameExistsError">Username sudah ada</div>
           </div>
           <div class="input-box">
             <span class="details">Email</span>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            <div class="error-message" id="emailError">Please enter a valid email address.</div>
-            <div class="error-message" id="emailExistsError">Email already exists.</div>
+            <input type="email" id="email" name="email" placeholder="Masukkan email" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" required>
+            <div class="error-message" id="emailError">Tolong masukkan email</div>
+            <div class="error-message" id="emailExistsError">Email sudah ada</div>
           </div>
           <div class="input-box">
-            <span class="details">Phone Number</span>
-            <input type="tel" id="phone" name="no_telp" placeholder="Enter your number" required pattern="(\+62|62|0)8[1-9][0-9]{8,11}" maxlength="15">
-            <div class="error-message" id="phoneError">Please enter a valid Indonesian phone number between 10 and 15 digits.</div>
-            <div class="error-message" id="phoneExistsError">Phone number already exists.</div>
+            <span class="details">Nomor Telepon</span>
+            <input type="tel" id="phone" name="no_telp" placeholder="Masukkan nomor telepon" required pattern="(\+62|62|0)8[1-9][0-9]{8,11}" maxlength="15">
+            <div class="error-message" id="phoneError">Tolong masukkan nomor telepon Indonesia yang valid</div>
+            <div class="error-message" id="phoneExistsError">Nomor telepon sudah ada</div>
           </div>
           <div class="input-box">
             <span class="details">Password</span>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="8">
-            <div class="error-message" id="passwordError">Password must be at least 8 characters long.</div>
+            <input type="password" id="password" name="password" placeholder="Masukkan password" required minlength="8">
+            <div class="error-message" id="passwordError">Password minimal 8 karakter</div>
           </div>
           <div class="input-box">
-            <span class="details">Confirm Password</span>
-            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
-            <div class="error-message" id="confirmPasswordError">Passwords do not match.</div>
+            <span class="details">Konfirmasi Password</span>
+            <input type="password" id="confirmPassword" placeholder="Masukkan password" required>
+            <div class="error-message" id="confirmPasswordError">Passwords tidak sama</div>
           </div>
           <div class="input-box input-box-full">
-            <span class="details">Date of Birth</span>
-            <input type="date" id="dob" name="date_of_birth" placeholder="Enter your date of birth" required>
-            <div class="error-message" id="dobError">Please enter your date of birth.</div>
+            <span class="details">Tanggal Lahir</span>
+            <input type="date" id="dob" name="date_of_birth" placeholder="Masukkan tanggal lahir" required>
+            <div class="error-message" id="dobError">Tolong masukkan tanggal lahir</div>
           </div>
         </div>
         <div class="gender-details">
           <input type="radio" name="gender" id="dot-1" value="Male" required>
           <input type="radio" name="gender" id="dot-2" value="Female" required>
-          <span class="gender-title">Gender</span>
+          <span class="gender-title">Jenis Kelamin</span>
           <div class="category">
             <label for="dot-1">
               <span class="dot one"></span>
-              <span class="gender">Male</span>
+              <span class="gender">Laki-laki</span>
             </label>
             <label for="dot-2">
               <span class="dot two"></span>
-              <span class="gender">Female</span>
+              <span class="gender">Perempuan</span>
             </label>
           </div>
-          <div class="error-message" id="genderError">Please select a gender.</div>
+          <div class="error-message" id="genderError">Tolong pilih jenis kelamin</div>
         </div>
         <div class="button">
-          <input type="submit" value="Register">
-          <span id="test">Already have an account? <a href="#">Login here</a></span>
+          <button type="submit" class="btn btn-primary btn-block" id="registerButton">
+            Register
+            <span class="spinner-border spinner-border-sm" id="loadingSpinner" role="status" aria-hidden="true" style="display: none;"></span>
+          </button>
+          <span id="test">Sudah punya akun?<a href="login">Login disini</a></span>
         </div>
 
-        <div id="card-container"></div>
+        <div id="errorNotification" class="error-message" style="display: none;"></div>
         <div id="login-message" class="error-message"></div>
       </form>
     </div>
   </div>
-  
-  <figure class="notification" id="successNotification" style="display: none;">
-    <div class="notification_body">
-      <img src="" title="Success" alt="Success" class="notification_icon">
-      Your Account has been created! &#128640;
-    </div>
-    <div class="notification_progress"></div>
-  </figure>
-  
+
+  <section>
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+    <div class="wave wave4"></div>
+  </section>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
     const form = document.getElementById('registrationForm');
+    const registerButton = document.getElementById('registerButton');
+    const loadingSpinner = document.getElementById('loadingSpinner');
 
     form.addEventListener('submit', function(event) {
       event.preventDefault(); // Prevent the default form submission
@@ -292,6 +285,9 @@
       }
 
       if (isValid) {
+        loadingSpinner.style.display = 'inline-block';
+        registerButton.disabled = true;
+
         const formData = new FormData(form);
         const data = {
           fullName: formData.get('full_name'),
@@ -303,7 +299,7 @@
           gender: formData.get('gender'),
         };
 
-        fetch('/api/users/register', {
+        fetch('/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -333,22 +329,35 @@
           return response.json();
         })
         .then(data => {
+          loadingSpinner.style.display = 'none';
+          registerButton.disabled = false;
+
           console.log('Success:', data);
-          // Handle success response here, maybe show a success message
-          document.getElementById('successNotification').style.display = 'block';
-          sessionStorage.setItem('formSubmitted', 'true');
-          setTimeout(() => {
-            window.location.href = '#';
-          }, 5000); // 5-second delay
+          if (data.status === 'false' || data.message === 'Username already exists' || data.message === 'Phone number already exists' || data.message === 'Email already exists') {
+            // document.getElementById('successNotification').style.display = 'none';
+            document.getElementById('errorNotification').innerText = data.message;
+            document.getElementById('errorNotification').style.display = 'block';
+          } else {
+            // Handle success response here, maybe show a success message
+            sessionStorage.setItem('formSubmitted', 'true');
+            setTimeout(() => {
+              window.location.href = '/login';
+            }); // 5-second delay
+          }
         })
         .catch(error => {
+          loadingSpinner.style.display = 'none';
+          registerButton.disabled = false;
+
           console.error('Error:', error);
           // Handle error, maybe show an error message to the user
-          document.getElementById('successNotification').style.display = 'none';
+          // document.getElementById('successNotification').style.display = 'none';
+          document.getElementById('errorNotification').innerText = error.message;
+          document.getElementById('errorNotification').style.display = 'block';
         });
       } else {
         // If any errors exist, prevent success notification and redirection
-        document.getElementById('successNotification').style.display = 'none';
+        // document.getElementById('successNotification').style.display = 'none';
       }
     });
 
@@ -361,4 +370,3 @@
   </script>
 </body>
 </html>
-  
