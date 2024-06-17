@@ -77,6 +77,12 @@ public class VolunteerService {
         Event event = eventRepository.findById(volunteerDTO.getEventId())
                 .orElseThrow(() -> new IllegalArgumentException("Event not found with id: " + volunteerDTO.getEventId()));
 
+        // kalo sudah max nd bisa join lagi
+        int currentVolunteerCount = countUsersByEventId(volunteerDTO.getEventId());
+        if (currentVolunteerCount >= event.getMaxVol()) {
+            throw new IllegalStateException("The event has reached its maximum number of volunteers.");
+        }
+
         Volunteer volunteer = new Volunteer();
         VolunteerId volunteerId = new VolunteerId(volunteerDTO.getUserId(), volunteerDTO.getEventId());
         volunteer.setId(volunteerId);

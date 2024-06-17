@@ -42,7 +42,8 @@ public class EventController {
         event.setEventTime(eventDTO.getEventTime());
         event.setLocation(eventDTO.getLocation());
         byte[] decodedBytes = Base64.getDecoder().decode(eventDTO.getEventImg().split(",")[1]);
-        event.setEventImg(decodedBytes);        
+        event.setEventImg(decodedBytes);   
+        event.setMaxVol(eventDTO.getMaxVol());     
         eventService.saveEvent(event);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Event created successfully");
@@ -59,7 +60,8 @@ public class EventController {
                 event.setEventTime(eventDetails.getEventTime());
                 event.setLocation(eventDetails.getLocation());
                 byte[] decodedBytes = Base64.getDecoder().decode(eventDetails.getEventImg().split(",")[1]);
-                event.setEventImg(decodedBytes);                
+                event.setEventImg(decodedBytes);           
+                event.setMaxVol(eventDetails.getMaxVol());     
                 Event updatedEvent = eventService.saveEvent(event);
                 return ResponseEntity.ok(updatedEvent);
             }).orElse(ResponseEntity.notFound().build());

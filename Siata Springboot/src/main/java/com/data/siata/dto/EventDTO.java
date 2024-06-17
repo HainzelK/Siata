@@ -7,6 +7,15 @@ public class EventDTO {
     private String eventTime;
     private String location;
     private String eventImg;
+    private int maxVol;
+
+    public int getMaxVol() {
+        return maxVol;
+    }
+
+    public void setMaxVol(int maxVol) {
+        this.maxVol = maxVol;
+    }
 
     // Getters and Setters
     public String getEventName() {

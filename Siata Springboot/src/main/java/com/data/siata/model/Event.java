@@ -36,19 +36,31 @@ public class Event {
     @Column(name = "event_img", columnDefinition = "MEDIUMBLOB")
     private byte[] eventImg;
 
+    @Column(name = "max_volunteer", columnDefinition = "INT")
+    private int maxVol;
+
     public Event() {
     }
 
     public Event(String eventName, String eventDescription, String eventDate, String eventTime, String location,
-    byte[] eventImg) {
+    byte[] eventImg, int maxVol) {
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
         this.eventTime = eventTime;
         this.location = location;
         this.eventImg = eventImg;
+        this.maxVol = maxVol;
     }
 
+
+    public int getMaxVol() {
+        return maxVol;
+    }
+
+    public void setMaxVol(int maxVol) {
+        this.maxVol = maxVol;
+    }
 
     public byte[] getEventImg() {
         return eventImg;

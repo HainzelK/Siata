@@ -38,12 +38,19 @@ public class VolunteerController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createVolunteer(@RequestBody VolunteerDTO volunteerDTO) {
-        volunteerService.createVolunteer(volunteerDTO); // Directly call the service method without assigning it to a variable
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Volunteer created successfully");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        try {
+            volunteerService.createVolunteer(volunteerDTO);
+            response.put("message", "Volunteer created successfully");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (IllegalStateException e) {
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
-
     @DeleteMapping("/id/{userId}/{eventId}")
     public ResponseEntity<Void> deleteVolunteer(@PathVariable int userId, @PathVariable int eventId) {
         volunteerService.deleteVolunteer(userId, eventId);
