@@ -1,6 +1,7 @@
 package com.data.siata.controller;
 
 import com.data.siata.dto.UserDTO;
+import com.data.siata.dto.UserProfileDTO;
 import com.data.siata.model.User;
 import com.data.siata.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,17 @@ public class UserController {
                     user.setProfilePic(decodedBytes);
                     user.setGender(userDetails.getGender());
                     user.setNoTelp(userDetails.getNoTelp());
+                    User updatedUser = userService.saveUser(user);
+                    return ResponseEntity.ok(updatedUser);
+                }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/changepp/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UserProfileDTO userDetails) {
+        return userService.getUserById(id)
+                .map(user -> {
+                    byte[] decodedBytes = Base64.getDecoder().decode(userDetails.getProfilePic().split(",")[1]);
+                    user.setProfilePic(decodedBytes);
                     User updatedUser = userService.saveUser(user);
                     return ResponseEntity.ok(updatedUser);
                 }).orElse(ResponseEntity.notFound().build());
