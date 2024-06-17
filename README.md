@@ -60,6 +60,7 @@ Kami mengundang Anda untuk berkontribusi dalam menjaga lingkungan bersama Siata.
 Selamat bergabung dengan Siata dan mari bersama-sama menjaga lingkungan!
 
 Tim : Aryo Karel Merentek, Aaron Jevon Benedict Kongdoh, Deny Wahyudi Asaloei, Hainzel Kemal
+
 Untuk kredit boleh melalui instagram @aryokm_ , aaronjevon06, denywa_ , hainzelk
 
 ---
