@@ -51,11 +51,16 @@ Aksi Nyata by IMT UC Makassar 2024
 2. Anda akan diarahkan ke halaman kalendar yang menampilkan semua event yang telah dan akan diselenggarakan.
 3. Klik pada tanggal atau event untuk melihat detail lebih lanjut.
 
+## Status Proyek
+Proyek ini untuk sekarang masih belum sempurna tetapi fitur-fitur utamanya sudah berfungsi dan dapat dioperasikan.
 
 ## Kontribusi
 Kami mengundang Anda untuk berkontribusi dalam menjaga lingkungan bersama Siata. Daftarkan diri Anda dalam event-event yang tersedia dan jadilah bagian dari perubahan positif untuk lingkungan kita.
 
 Selamat bergabung dengan Siata dan mari bersama-sama menjaga lingkungan!
+
+Tim : Aryo Karel Merentek, Aaron Jevon Benedict Kongdoh, Deny Wahyudi Asaloei, Hainzel Kemal
+Untuk kredit boleh melalui instagram @aryokm_ , aaronjevon06, denywa_ , hainzelk
 
 ---
 
