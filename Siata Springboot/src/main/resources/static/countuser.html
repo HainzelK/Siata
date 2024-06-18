@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Volunteer Count</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #volunteer-count {
+            font-size: 1.2em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Event Volunteer Count</h1>
+        <div id="event-info">
+            <p id="volunteer-count">Loading...</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const eventId = 11; // Replace with the actual event ID you want to fetch data for
+            const apiUrl = `http://localhost:8080/api/volunteer/countuser/${eventId}`;
+
+            // Function to fetch volunteer count and max volunteers for the event
+            async function fetchVolunteerData() {
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const count = await response.json();
+
+                    // Assuming you have an endpoint to fetch the event details
+                    const eventResponse = await fetch(`http://localhost:8080/api/event/id/${eventId}`);
+                    if (!eventResponse.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const event = await eventResponse.json();
+                    const maxVol = event.maxVol;
+
+                    // Update the page with the fetched data
+                    document.getElementById('volunteer-count').textContent = `${count}/${maxVol} volunteers`;
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                    document.getElementById('volunteer-count').textContent = 'Failed to load data';
+                }
+            }
+
+            // Fetch the volunteer data when the page loads
+            fetchVolunteerData();
+        });
+    </script>
+</body>
+</html>
