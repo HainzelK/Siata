@@ -2,7 +2,7 @@
 Aksi Nyata by IMT UC Makassar 2024
 
 ## Deskripsi
-**Siata** adalah organisasi yang mengajak masyarakat untuk turut serta dalam menjaga lingkungan melalui berbagai event yang diadakan. Siata menawarkan berbagai fitur yang memudahkan pengguna untuk terlibat dan berpartisipasi dalam event-event tersebut.
+**Siata** adalah organisasi yang mengajak masyarakat untuk turut serta dalam menjaga lingkungan melalui berbagai event yang diadakan. Siata menawarkan berbagai fitur yang memudahkan pengguna untuk terlibat dan berpartisipasi dalam event-event tersebut. Cara memakai website ini adalah dengan mendownload Siata Springboot. Hanya Siata Springboot. Tidak perlu file lain dibawahnya.
 
 ## Fitur Utama
 1. **Kalendar Event**: Melihat jadwal event yang akan datang.
