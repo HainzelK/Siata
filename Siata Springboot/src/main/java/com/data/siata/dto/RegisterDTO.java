@@ -8,9 +8,17 @@ public class RegisterDTO {
     private String gender;
     private String noTelp;
     private String dob;
+    private String profilePic;
+
     
     public String getUsername() {
         return username;
+    }
+    public String getProfilePic() {
+        return profilePic;
+    }
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
     public String getDob() {
         return dob;

@@ -92,7 +92,6 @@ public class UserController {
         return userService.getUserById(id)
                 .map(user -> {
                     user.setUsername(userDetails.getUsername());
-                    user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
                     user.setEmail(userDetails.getEmail());
                     user.setFullName(userDetails.getFullName());
                     byte[] decodedBytes = Base64.getDecoder().decode(userDetails.getProfilePic().split(",")[1]);

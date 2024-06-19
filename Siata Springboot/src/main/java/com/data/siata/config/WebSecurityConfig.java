@@ -42,17 +42,17 @@ public class WebSecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/auth/login/**","/auth/register/**", "/auth/refresh_token/**")
-                                .permitAll()
+                        req->req
+                                .requestMatchers("/auth/login/**","/auth/register/**","/api/user/search", "/auth/refresh_token/**").permitAll()
                                 .requestMatchers("/admin_only/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET,   "/api/statistic/id/**", "/api/gallery/**", "/api/event/**", "/api/destination/**", "api/comment/**", "/api/volunteer/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/user/id/**").hasAnyAuthority("USER","ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/volunteer/**").hasAnyAuthority("USER","ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/user/id/**").hasAnyAuthority("USER","ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/**").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/user/id/**").hasAuthority("USER")
-                                .requestMatchers(HttpMethod.POST, "/api/volunteer").hasAuthority("USER")
-                                .requestMatchers(HttpMethod.PUT, "/api/user/id/**").hasAuthority("USER")
-                                .requestMatchers(HttpMethod.GET,  "/api/user/search", "/api/statistic/id/**", "/api/gallery/**", "/api/event/**", "/api/destination/**", "api/comment/**", "/api/volunteer/**").permitAll()
                                 .requestMatchers("/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
