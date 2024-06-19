@@ -101,16 +101,12 @@
     <script src="scriptNavbar.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const apiUrl = ('/api/gallery',{
-            headers:{
-              'Authorization': `Bearer ${token}`
-            }
-          });
+            const apiUrl = ('/api/gallery');
 
             // Fetch images from the API
             fetch(apiUrl, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${getCookie('accessToken')}`
                 }
             })
                 .then(response => {
@@ -161,11 +157,6 @@
                 .catch(error => console.error('Error fetching data:', error));
         });
     </script>    
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="scriptToken.js"></script>
-    <script src="scriptNavbar.js"></script>
     <script>
         // Call the function to check login status when the page loads
         document.addEventListener('DOMContentLoaded', checkLoginStatus);
