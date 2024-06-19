@@ -44,7 +44,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const eventId = 11; // Replace with the actual event ID you want to fetch data for
-            const apiUrl = `http://localhost:8080/api/volunteer/countuser/${eventId}`;
+            const apiUrl = (`http://localhost:8080/api/volunteer/countuser/${eventId}`,{
+            headers:{
+              'Authorization': `Bearer ${token}`
+            }
+          });
 
             // Function to fetch volunteer count and max volunteers for the event
             async function fetchVolunteerData() {

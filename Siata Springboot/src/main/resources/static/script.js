@@ -2,7 +2,11 @@ let allEvents = [];
 
 async function fetchData() {
     try {
-        const response = await fetch("/api/event");
+        const response = await fetch("/api/event", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
         if (!response.ok) {
             throw new Error("Could not fetch data");
@@ -135,6 +139,7 @@ async function login(event) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ email, password }),
         });
@@ -267,6 +272,7 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
                 Accept: "application/json",
             },
             body: JSON.stringify(data)

@@ -107,7 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch('/api/gallery', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(galleryData)
             })
@@ -133,7 +134,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to load gallery items
 function loadGallery() {
-    fetch('/api/gallery')
+    fetch('/api/gallery', {
+        headers :{
+            'Authorization': `Bearer ${token}`
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch gallery items.');
@@ -159,7 +164,11 @@ function loadGallery() {
 
 // Function to populate Event ID dropdown
 function populateEventDropdown() {
-    fetch('/api/event')
+    fetch('/api/event', {
+        headers :{
+            'Authorization': `Bearer ${token}`
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch events.');
@@ -184,7 +193,11 @@ function populateEventDropdown() {
 
 // Function to populate Destination ID dropdown
 function populateDestinationDropdown() {
-    fetch('/api/destination')
+    fetch('/api/destination',{
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch destinations.');

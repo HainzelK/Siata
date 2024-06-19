@@ -10,12 +10,11 @@
     <title>info Event</title>
     <link rel="icon" type="image/x-icon" href="css/siataLogo.svg">
     <style>
-      .dropdown-menu {
-        background-color: white;
-      }
+        .dropdown-menu {
+            background-color: white;
+        }
     </style>
 </head>
-
 <body>
     <!--mulai navbar-->
     <nav>
@@ -45,38 +44,32 @@
     <!--selesai navbar-->
 
     <div class="container">
-      <div class="info-title">Informasi Destinasi</div>
-      <div id="destinationContainer" class="destination-grid">
+        <div class="info-title">Informasi Destinasi</div>
+        <div id="destinationContainer" class="destination-grid">
             <!-- Existing destination cards as examples -->
-          
         </div>
     </div>
 
     <!--mulai footer-->
-  <!--mulai footer-->
-  <footer class="footer" >
-    <div class="waves">
-      <div class="wave" id="wave1"></div>
-      <div class="wave" id="wave2"></div>
-      <div class="wave" id="wave3"></div>
-      <div class="wave" id="wave4"></div>
-    </div>
-  
-    <ul class="menu">
-      <li class="menu__item"><a class="menu__link" href="#"><img src="asset/xtwitter-icon.svg" width="22" height="auto"></a></li>
-      <li class="menu__item"><a class="menu__link" href="#"><img src="asset/instagram-icon.svg" width="22" height="auto"></a></li>
-      <li class="menu__item"><a class="menu__link" href="#"><img src="asset/facebook-icon.svg"width="22" height="auto"></a></li>
-    </ul>
-
-    <ul class="menu">
-      <li class="menu__link">Siata</li>
-    </ul>
-  
-  </footer>
-  <!--selesai footer-->
+    <footer class="footer">
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+        </div>
+        <ul class="menu">
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/xtwitter-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/instagram-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/facebook-icon.svg" width="22" height="auto"></a></li>
+        </ul>
+        <ul class="menu">
+            <li class="menu__link">Siata</li>
+        </ul>
+    </footer>
     <!--selesai footer-->
 
-    <!-- Script utk navbar -->
+    <!-- Script for navbar -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="scriptToken.js"></script>
@@ -84,35 +77,43 @@
     <script>
         // Random overlay colors
         const overlayColors = ['red-overlay', 'yellow-overlay', 'blue-overlay'];
-        
-// Function to add new destination card
-function addDestinationCard(destination) {
-    const destinationContainer = document.getElementById('destinationContainer');
-    const overlayColor = overlayColors[Math.floor(Math.random() * overlayColors.length)];
-    const card = document.createElement('div');
-    card.classList.add('destination-card');
 
-    card.innerHTML = `
-        <a href="detailDestinasi.html?id=${destination.destinationId}">
-            <img src="data:image/jpeg;base64,${destination.photo}" class="destination-image" />
-            <div class="overlay ${overlayColor}"></div>
-            <div class="destination-name">${destination.destinationName}</div>
-            <div class="svg-container">
-                <img src="css/pulau.svg" class="svg-image" />
-            </div>
-        </a>
-    `;
+        // Function to add new destination card
+        function addDestinationCard(destination) {
+            const destinationContainer = document.getElementById('destinationContainer');
+            const overlayColor = overlayColors[Math.floor(Math.random() * overlayColors.length)];
+            const card = document.createElement('div');
+            card.classList.add('destination-card');
 
-    destinationContainer.appendChild(card);
-}
+            card.innerHTML = `
+                <a href="detailDestinasi.html?id=${destination.destinationId}">
+                    <img src="data:image/jpeg;base64,${destination.photo}" class="destination-image" />
+                    <div class="overlay ${overlayColor}"></div>
+                    <div class="destination-name">${destination.destinationName}</div>
+                    <div class="svg-container">
+                        <img src="css/pulau.svg" class="svg-image" />
+                    </div>
+                </a>
+            `;
 
-
+            destinationContainer.appendChild(card);
+        }
 
         // Function to fetch and display destinations
         async function fetchDestinations() {
             try {
-                const response = await fetch('/api/destination');
-                headers : { Token : getcookie('Token') }
+                const token = getCookie('accessToken');
+                if (!token) {
+                    throw new Error('Access token is missing');
+                }
+                const response = await fetch('/api/destination', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch destinations');
+                }
                 const destinations = await response.json();
                 destinations.forEach(destination => addDestinationCard(destination));
             } catch (error) {

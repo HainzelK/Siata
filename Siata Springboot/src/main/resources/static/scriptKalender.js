@@ -210,7 +210,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function fetchData() {
     try {
-      const response = await fetch("/api/event");
+      const response = await fetch("/api/event", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
       if (!response.ok) {
         throw new Error("Could not fetch data");

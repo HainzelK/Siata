@@ -101,10 +101,18 @@
     <script src="scriptNavbar.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const apiUrl = '/api/gallery';
+            const apiUrl = ('/api/gallery',{
+            headers:{
+              'Authorization': `Bearer ${token}`
+            }
+          });
 
             // Fetch images from the API
-            fetch(apiUrl)
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => {
                     console.log('Response status:', response.status);
                     if (!response.ok) {

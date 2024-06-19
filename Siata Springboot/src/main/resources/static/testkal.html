@@ -32,7 +32,11 @@
         });
 
         async function fetchData() {
-    const response = await fetch("/api/calendar");
+    const response = await fetch("/api/calendar", {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
 
     if (!response.ok) {
         throw new Error("Could not fetch data");

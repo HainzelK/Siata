@@ -64,97 +64,54 @@
     
     async function login(event) {
       event.preventDefault();
-  
+
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-  
+
       try {
         const response = await fetch("/auth/login", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({ email, password }),
           credentials: 'include'
         });
-  
+
         if (!response.ok) {
           throw new Error("Login failed");
         }
-  
+
         const data = await response.json();
         console.log("Server response:", data);
-        
+
         document.cookie = `accessToken=${data.access_token}; path=/`;
         document.cookie = `refreshToken=${data.refresh_token}; path=/`;
-  
-        const user = parseJwt(data.access_token);
-        localStorage.setItem('userId', user.id);
-        await testing();
-     
+
+        await testing(data.access_token); // Pass accessToken here
+
       } catch (error) {
         console.log("Error during login:", error);
         document.getElementById("login-message").innerText = "Error during login. Please try again.";
       }
     }
-  
-    function parseJwt(token) {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-  
-      return JSON.parse(jsonPayload);
-    }
 
-    function getCookie(name) {
-      const cookieArr = document.cookie.split(";");
-      for (let i = 0; i < cookieArr.length; i++) {
-          const cookiePair = cookieArr[i].split("=");
-          if (name === cookiePair[0].trim()) {
-              return decodeURIComponent(cookiePair[1]);
-          }
-      }
-      return null;
-    }
-
-    function deleteCookie(name) {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-    }
-
-    async function searchUserIdByEmail(email) {
-      try {
-          const response = await fetch(`/api/user/search?email=${email}`);
-          if (!response.ok) {
-              throw new Error('Failed to search user ID by email');
-          }
-          const data = await response.json();
-          return data;
-      } catch (error) {
-          console.error('Error in searchUserIdByEmail:', error);
-          throw error;
-      }
-    }
-
-    function extractEmailFromToken(token) {
-      try {
-          const tokenPayload = token.split('.')[1];
-          const decodedPayload = atob(tokenPayload);
-          const payloadObject = JSON.parse(decodedPayload);
-          return payloadObject.sub;
-      } catch (error) {
-          console.error('Error extracting email from JWT token:', error);
-          return null;
-      }
-    }
-
-    async function testing(){
+    async function testing(accessToken) {
       try {
         const token = getCookie('accessToken');
         const email = extractEmailFromToken(token);
-        const userId = await searchUserIdByEmail(email);
-        const userDataResponse = await fetch(`/api/user/id/${userId}`);
+        const userId = await searchUserIdByEmail(email, token);
+        const userDataResponse = await fetch(`/api/user/id/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept' : '*/*'
+          },
+        });
+
+        if (!userDataResponse.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
         const userData = await userDataResponse.json();
         console.log(`User Role: ${userData.role}`);
 
@@ -166,7 +123,56 @@
         }
       } catch (error) {
         console.error('Error in testing function:', error);
+        document.getElementById("login-message").innerText = "Failed to fetch user data. Please try again later.";
       }
+    }
+
+    async function searchUserIdByEmail(email, accessToken) {
+      try {
+        const token = getCookie('accessToken')
+        const response = await fetch(`/api/user/search?email=${email}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to search user ID by email');
+        }
+
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Error in searchUserIdByEmail:', error);
+        throw error;
+      }
+    }
+
+    function extractEmailFromToken(token) {
+      try {
+        const tokenPayload = token.split('.')[1];
+        const decodedPayload = atob(tokenPayload);
+        const payloadObject = JSON.parse(decodedPayload);
+        return payloadObject.sub;
+      } catch (error) {
+        console.error('Error extracting email from JWT token:', error);
+        return null;
+      }
+    }
+
+    function getCookie(name) {
+      const cookieArr = document.cookie.split(";");
+      for (let i = 0; i < cookieArr.length; i++) {
+        const cookiePair = cookieArr[i].split("=");
+        if (name === cookiePair[0].trim()) {
+          return decodeURIComponent(cookiePair[1]);
+        }
+      }
+      return null;
+    }
+
+    function deleteCookie(name) {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
     }
   </script>
 </body>

@@ -19,9 +19,6 @@
         .dropdown-menu {
             background-color: #e9ecef;
         }
-        .dropdown-item{
-            color: black;
-        }
         @media(min-width:280px) and (max-width:768px){
             footer{
                 margin-top: 40%;
@@ -140,26 +137,70 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
-    <!-- skrip navbar -->
     <script src="scriptToken.js"></script>
     <script src="scriptNavbar.js"></script>
     <script>
+        const token = getCookie('accessToken');
+        const email =  extractEmailFromToken(token);
+        const userId =  searchUserIdByEmail(email);
+        console.log(userId,email,userId);
+// Function to get a cookie by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+// Function to extract email from JWT token
+function extractEmailFromToken(token) {
+    try {
+        const tokenPayload = token.split('.')[1];
+        const decodedPayload = atob(tokenPayload);
+        const payloadObject = JSON.parse(decodedPayload);
+        return payloadObject.sub;
+    } catch (error) {
+        console.error('Error extracting email from JWT token:', error);
+        return null;
+    }
+}
+
+// Function to search user ID by email
+async function searchUserIdByEmail(email) {
+    try {
+        const response = await fetch(`/api/user/search?email=${email}`, {
+            headers: {
+                'Authorization': `Bearer ${getCookie('accessToken')}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to search user ID by email');
+        }
+        const data = await response.json();
+        if (data) {
+            console.log('API Response:', data); // Log the response for debugging
+            return data; // Assuming response contains the user ID
+        } else {
+            console.error('No user found with email:', email);
+            return null; // Return null if no user ID is found
+        }
+    } catch (error) {
+        console.error('Error in searchUserIdByEmail:', error);
+        throw error;
+    }
+}
+
 // Function to fetch event details by event ID
 async function fetchEventDetails(eventId) {
     try {
-        const token = getCookie('accessToken');
-        const response = await fetch(`/api/event/id/${eventId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const response = await fetch(`/api/event/id/${eventId}`);
         if (!response.ok) {
             throw new Error('Could not fetch event data');
         }
         const event = await response.json();
         if (event) {
-            displayEventDetails(event.eventName, event.eventImg, event.eventDescription, event.location, event.eventDate, event.eventTime, event.eventId, event.maxVol);
-            fetchUserCount(event.eventId, event.maxVol); // Fetch the user count after fetching event details
+            displayEventDetails(event.eventName, event.eventImg, event.eventDescription, event.location, event.eventDate, event.eventTime, event.eventId);
+            fetchUserCount(event.eventId); // Fetch the user count after fetching event details
         } else {
             throw new Error('Event not found');
         }
@@ -169,33 +210,28 @@ async function fetchEventDetails(eventId) {
 }
 
 // Function to fetch user count for an event
-async function fetchUserCount(eventId, maxVol) {
+async function fetchUserCount(eventId) {
     try {
-        const token = getCookie('accessToken');
-        const response = await fetch(`/api/volunteer/countuser/${eventId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const response = await fetch(`/api/volunteer/countuser/${eventId}`);
         if (!response.ok) {
             throw new Error('Could not fetch user count');
         }
         const userCount = await response.json();
-        displayUserCount(userCount, maxVol);
+        displayUserCount(userCount);
     } catch (error) {
         console.error(error);
     }
 }
 
 // Function to display user count
-function displayUserCount(count, maxVol) {
+function displayUserCount(count) {
     const userCountElement = document.getElementById('user-count');
-    userCountElement.innerText = `Jumlah Peserta: ${count}/${maxVol}`;
+    userCountElement.innerText = `Jumlah Peserta: ${count}`;
     userCountElement.classList.remove('placeholder', 'placeholder-glow');
 }
 
 // Function to display event details
-function displayEventDetails(eventName, eventImg, eventDescription, location, eventDate, eventTime, eventId, maxVol) {
+function displayEventDetails(eventName, eventImg, eventDescription, location, eventDate, eventTime, eventId) {
     const eventTitle = document.getElementById('event-title');
     const eventImgElement = document.getElementById('event-img');
     const eventDescriptionElement = document.getElementById('event-description');
@@ -253,16 +289,18 @@ async function volunteerForEvent(eventId) {
 
     const email = extractEmailFromToken(token);
     if (!email) {
-        throw new Error('Email not found in token');
+        console.error('Email not found in token');
+        $('#exampleModal').modal('show');
+        return;
     }
 
     const userId = await searchUserIdByEmail(email);
-    try {
-        if (!userId) {
-            $('#exampleModal').modal('show');
-            return;
-        }
+    if (!userId) {
+        alert('No user found with this email. Please register or check your email.');
+        return;
+    }
 
+    try {
         const response = await fetch('/api/volunteer', {
             method: 'POST',
             headers: {
@@ -279,40 +317,38 @@ async function volunteerForEvent(eventId) {
         const result = await response.json();
         alert('You have successfully volunteered for the event!');
     } catch (error) {
-        console.error(error);
+        console.error('Error volunteering for event:', error);
         alert('An error occurred. Please try again.');
     }
 }
 
-// Add event listener to volunteer button
-document.getElementById('volunteer-button').addEventListener('click', function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const eventId = urlParams.get('id');
-    if (eventId) {
-        volunteerForEvent(eventId); // Pass the event ID
-    }
-});
 
-// Placeholder function to get the logged-in user's ID
-function getUserId() {
-    // Replace with actual logic to get the logged-in user's ID
-    // For example, from session storage or a global variable
-    return sessionStorage.getItem('userId');
-}
-// Call checkLoginStatus on page load
-document.addEventListener('DOMContentLoaded', checkLoginStatus);
-
-// Add event listener to logout button
-document.getElementById('logout-button').addEventListener('click', logout);
-
-// Load event details on page load
+// Check login status on page load
 document.addEventListener('DOMContentLoaded', function () {
+    const token = getCookie('accessToken');
+    console.log("Retrieved token:", token); // Log the token for debugging
+    if (token) {
+        document.getElementById('login-signup-btn').style.display = 'none';
+        document.getElementById('profile-link').style.display = 'block';
+    } else {
+        document.getElementById('login-signup-btn').style.display = 'block';
+        document.getElementById('profile-link').style.display = 'none';
+    }
+
+    // Load event details
     const urlParams = new URLSearchParams(window.location.search);
     const eventId = urlParams.get('id');
     if (eventId) {
         fetchEventDetails(eventId);
     }
 });
+
+// Add event listener to logout button
+document.getElementById('logout-button').addEventListener('click', function() {
+    document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = 'login.html';
+});
+
     </script>
 </body>
 </html>

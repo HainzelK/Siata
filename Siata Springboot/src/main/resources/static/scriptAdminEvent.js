@@ -4,7 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const imgInput = document.getElementById("imgInput");
 
   function loadEvents() {
-    fetch("/api/event")
+    fetch("/api/event", {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -60,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify(jsonData),
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
             Accept: "application/json",
           },
         })

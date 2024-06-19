@@ -67,7 +67,11 @@
     }
     
     async function searchUserIdByEmail(email) {
-    const response = await fetch(`/api/users/search?email=${email}`);
+    const response = await fetch(`/api/users/search?email=${email}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
     if (!response.ok) {
         throw new Error('Failed to search user ID by email');
     }
@@ -89,7 +93,7 @@ function extractEmailFromToken(token) {
 }
 
 async function getUserInfo() {
-    const token = getCookie('accessToken'); // Retrieve the token from cookies
+    const token = getCookie(token); // Retrieve the token from cookies
     const userInfoDiv = document.getElementById('user-info');
 
     if (!token) {
@@ -103,7 +107,11 @@ async function getUserInfo() {
             throw new Error('Email not found in token');
         }
         const userId = await searchUserIdByEmail(email); // Search for user ID by email
-        const userDataResponse = await fetch(`/api/users/${userId}`);
+        const userDataResponse = await fetch(`/api/users/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         if (!userDataResponse.ok) {
             throw new Error('Failed to fetch user data');
         }
@@ -125,7 +133,7 @@ async function logout() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getCookie('accessToken')
+                'Authorization': 'Bearer ' + getCookie(token)
             }
         });
         if (!response.ok) {

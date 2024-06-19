@@ -114,7 +114,7 @@
         </form>
 
         <div id="event-ikuti-button">
-            <p class="history">Event yang sudah diikuti</p>
+            <p class="history">Event yang diikuti</p>
         </div>
         <div id="events-joined">
             <!-- isi history -->
@@ -149,147 +149,158 @@
     <script src="scriptToken.js"></script>
     <script src="scriptNavbar.js"></script>
     <script>
-        let allEvents = [];
-        let originalProfilePic = '';
+let allEvents = [];
+let originalProfilePic = '';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            getUserInfo();
-            getEventsJoinedByUser();
-            fetchData();
-            checkLoginStatus();
+document.addEventListener('DOMContentLoaded', () => {
+    checkLoginStatus();
+    fetchData();
+});
+
+async function fetchData() {
+    try {
+        const token = getCookie('accessToken'); // Ensure to fetch accessToken correctly
+        const response = await fetch("/api/event", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
-        async function fetchData() {
-            try {
-                const response = await fetch("/api/event");
+        if (!response.ok) {
+            throw new Error("Could not fetch data");
+        }
 
-                if (!response.ok) {
-                    throw new Error("Could not fetch data");
-                }
+        const data = await response.json();
+        console.log("Fetched data:", data);
 
-                const data = await response.json();
-                console.log("Fetched data:", data);
+        allEvents = data.map(event => ({
+            eventId: event.eventId,
+            eventName: event.eventName,
+            eventImg: event.eventImg,
+            eventDesc: event.eventDescription,
+            eventDate: new Date(event.eventDate),
+            location: event.location,
+            eventTime: event.eventTime
+        }));
+        console.log("Mapped events:", allEvents);
 
-                allEvents = data.map(event => ({
-                    eventId: event.eventId,
-                    eventName: event.eventName,
-                    eventImg: event.eventImg,
-                    eventDesc: event.eventDescription,
-                    eventDate: new Date(event.eventDate),
-                    location: event.location,
-                    eventTime: event.eventTime
-                }));
-                console.log("Mapped events:", allEvents);
+        await getEventsJoinedByUser(token);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
 
-                await getEventsJoinedByUser();
-            } catch (error) {
-                console.error("Error fetching data:", error);
+async function getUserInfo() {
+    try {
+        const token = getCookie('accessToken');
+        const email = extractEmailFromToken(token);
+        const userId = await searchUserIdByEmail(email);
+        const response = await fetch(`/api/user/id/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-        async function getUserInfo() {
-            try {
-                const token = getCookie('accessToken');
-                const email = extractEmailFromToken(token);
-                const userId = await searchUserIdByEmail(email);
-                const response = await fetch(`/api/user/id/${userId}`);
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+        const data = await response.json();
 
-                const data = await response.json();
+        document.getElementById('username').value = data.username;
+        document.getElementById('email').value = data.email;
+        document.getElementById('fullName').value = data.fullName;
+        // Password field should not be set here for security reasons
+        document.getElementById('noTelp').value = data.noTelp;
 
-                document.getElementById('username').value = data.username;
-                document.getElementById('email').value = data.email;
-                document.getElementById('fullName').value = data.fullName;
-                document.getElementById('password').value = ''; // Clear password field
-                document.getElementById('noTelp').value = data.noTelp;
+        if (data.gender === 'Male') {
+            document.getElementById('male').checked = true;
+        } else {
+            document.getElementById('female').checked = true;
+        }
 
-                if (data.gender === 'Male') {
-                    document.getElementById('male').checked = true;
-                } else {
-                    document.getElementById('female').checked = true;
-                }
+        // Set Date of Birth value if available
+        if (data.dob) {
+            document.getElementById('dob').value = data.dob;
+        }
 
-                // Set Date of Birth value if available
-                if (data.dob) {
-                    document.getElementById('dob').value = data.dob;
-                }
+        if (data.profilePic) {
+            const profilePicUrl = `data:image/png;base64,${data.profilePic}`;
+            document.getElementById('profilePicPreview').src = profilePicUrl;
+            document.getElementById('profilePicPreview').style.display = 'block';
+            originalProfilePic = profilePicUrl;
+        }
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+}
 
-                if (data.profilePic) {
-                    const profilePicUrl = `data:image/png;base64,${data.profilePic}`;
-                    document.getElementById('profilePicPreview').src = profilePicUrl;
-                    document.getElementById('profilePicPreview').style.display = 'block';
-                    originalProfilePic = profilePicUrl;
-                }
-            } catch (error) {
-                console.error('There was a problem with the fetch operation:', error);
+async function getEventsJoinedByUser(token) {
+    try {
+        const email = extractEmailFromToken(token);
+        const userId = await searchUserIdByEmail(email);
+        const response = await fetch(`/api/volunteer/user/${userId}/events`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
 
-        async function getEventsJoinedByUser() {
-            try {
-                const token = getCookie('accessToken');
-                const email = extractEmailFromToken(token);
-                const userId = await searchUserIdByEmail(email);
-                const response = await fetch(`/api/volunteer/user/${userId}/events`);
+        const data = await response.json();
+        const eventsContainer = document.getElementById('events-joined');
+        const joinedEvents = allEvents.filter(event => data.some(joined => joined.eventId === event.eventId));
+        joinedEvents.sort((a, b) => b.eventDate - a.eventDate);
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                const eventsContainer = document.getElementById('events-joined');
-                const joinedEvents = allEvents.filter(event => data.some(joined => joined.eventId === event.eventId));
-                joinedEvents.sort((a, b) => b.eventDate - a.eventDate);
-
-                if (joinedEvents.length === 0) {
-                    eventsContainer.innerHTML = '<p>Tidak ada event yang diikuti.</p>';
-                } else {
-                    const eventsList = joinedEvents.map(event => `
-                        <div class="history-list">
-                            <h3>${event.eventName}</h3>
-                            <p>${event.eventDate.toDateString()}</p>
-                        </div>
-                    `).join('');
-                    eventsContainer.innerHTML = eventsList;
-                }
-            } catch (error) {
-                console.error('There was a problem with the fetch operation:', error);
-                const eventsContainer = document.getElementById('events-joined');
-                if (eventsContainer) {
-                    eventsContainer.innerHTML = '<p>Gagal memuat event.</p>';
-                }
-            }
+        if (joinedEvents.length === 0) {
+            eventsContainer.innerHTML = '<p>Tidak ada event yang diikuti.</p>';
+        } else {
+            const eventsList = joinedEvents.map(event => `
+                <div class="history-list">
+                    <h3>${event.eventName}</h3>
+                    <p>${event.eventDate.toDateString()}</p>
+                </div>
+            `).join('');
+            eventsContainer.innerHTML = eventsList;
         }
-
-        function toggleEditMode() {
-            const formFields = document.querySelectorAll('.form-control');
-            formFields.forEach(field => field.disabled = false);
-
-            const genderFields = document.querySelectorAll('input[name="gender"]');
-            genderFields.forEach(field => field.disabled = false);
-
-            document.getElementById('edit-button').style.display = 'none';
-            document.getElementById('save-button').style.display = 'inline-block';
-            document.getElementById('cancel-button').style.display = 'inline-block';
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        const eventsContainer = document.getElementById('events-joined');
+        if (eventsContainer) {
+            eventsContainer.innerHTML = '<p>Tidak ada event ditemukan.</p>';
         }
+    }
+}
 
-        function cancelEditMode() {
-            const formFields = document.querySelectorAll('.form-control');
-            formFields.forEach(field => field.disabled = true);
+function toggleEditMode() {
+    const formFields = document.querySelectorAll('.form-control');
+    formFields.forEach(field => field.disabled = false);
 
-            const genderFields = document.querySelectorAll('input[name="gender"]');
-            genderFields.forEach(field => field.disabled = true);
+    const genderFields = document.querySelectorAll('input[name="gender"]');
+    genderFields.forEach(field => field.disabled = false);
 
-            getUserInfo();
+    document.getElementById('edit-button').style.display = 'none';
+    document.getElementById('save-button').style.display = 'inline-block';
+    document.getElementById('cancel-button').style.display = 'inline-block';
+}
 
-            document.getElementById('edit-button').style.display = 'inline-block';
-            document.getElementById('save-button').style.display = 'none';
-            document.getElementById('cancel-button').style.display = 'none';
-        }
+function cancelEditMode() {
+    const formFields = document.querySelectorAll('.form-control');
+    formFields.forEach(field => field.disabled = true);
 
-        async function updateUserInfo() {
+    const genderFields = document.querySelectorAll('input[name="gender"]');
+    genderFields.forEach(field => field.disabled = true);
+
+    getUserInfo();
+
+    document.getElementById('edit-button').style.display = 'inline-block';
+    document.getElementById('save-button').style.display = 'none';
+    document.getElementById('cancel-button').style.display = 'none';
+}
+
+async function updateUserInfo() {
     try {
         const token = getCookie('accessToken');
         const email = extractEmailFromToken(token);
@@ -298,13 +309,10 @@
         const username = document.getElementById('username').value;
         const userEmail = document.getElementById('email').value;
         const fullName = document.getElementById('fullName').value;
-        const password = document.getElementById('password').value;
+        // Password field is not updated here for security reasons
         const gender = document.querySelector('input[name="gender"]:checked').value;
         const dobInput = document.getElementById('dob').value;
-        
-        // Convert dob to yyyy/mm/dd
         const dob = new Date(dobInput).toISOString().slice(0, 10).replace(/-/g, '/');
-        
         const noTelp = document.getElementById('noTelp').value;
 
         const profilePicFile = document.getElementById('profilePic').files[0];
@@ -318,7 +326,6 @@
                     username,
                     email: userEmail,
                     fullName,
-                    password,
                     profilePic: profilePicBase64,
                     gender,
                     dob,
@@ -331,7 +338,6 @@
                 username,
                 email: userEmail,
                 fullName,
-                password,
                 profilePic: originalProfilePic, // assuming originalProfilePic already has the prefix 'data:image/jpeg;base64,'
                 gender,
                 dob,
@@ -343,61 +349,78 @@
     }
 }
 
+async function sendUpdateRequest(userId, userDetails) {
+    try {
+        const token = getCookie('accessToken');
+        const response = await fetch(`/api/user/id/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(userDetails)
+        });
 
-        async function sendUpdateRequest(userId, userDetails) {
-            try {
-                const response = await fetch(`/api/user/id/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(userDetails)
-                });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+        cancelEditMode();
+        alert('Profile updated successfully');
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('Failed to update profile');
+    }
+}
 
-                cancelEditMode();
-                alert('Profile updated successfully');
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                alert('Failed to update profile');
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function extractEmailFromToken(token) {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub;
+}
+
+async function searchUserIdByEmail(email) {
+    try {
+        const token = getCookie('accessToken');
+        const response = await fetch(`/api/user/search?email=${email}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+        
+        const userId = await response.json();
+        return userId;
+    } catch (error) {
+        console.error('Error searching user by email:', error);
+        throw error;
+    }
+}
 
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
+function checkLoginStatus() {
+    const token = getCookie('accessToken');
+    if (token) {
+        document.getElementById('login-signup-btn').style.display = 'none';
+        document.getElementById('profile-link').style.display = 'block';
+        getUserInfo(); // Fetch user info if logged in
+    } else {
+        document.getElementById('login-signup-btn').style.display = 'block';
+        document.getElementById('profile-link').style.display = 'none';
+    }
+}
 
-        function extractEmailFromToken(token) {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            return payload.sub;
-        }
+function openMenu() {
+    document.querySelector('.nav').classList.toggle('open');
+}
 
-        async function searchUserIdByEmail(email) {
-            const response = await fetch(`/api/user/search?email=${email}`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const userId = await response.json();
-            return userId;
-        }
-
-        function checkLoginStatus() {
-            const token = getCookie('accessToken');
-            if (token) {
-                document.getElementById('login-signup-btn').style.display = 'none';
-            } else {
-                document.getElementById('profile-link').style.display = 'none';
-            }
-        }
-
-        function openMenu() {
-            document.querySelector('.nav').classList.toggle('open');
-        }
     </script>
 </body>
 </html>
