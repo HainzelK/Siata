@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Management</title>
+    <link rel="stylesheet" href="css/styleNav.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <nav>
+        <a href="#">
+            <img class="logo" src="css/siataLogo.svg" alt="Siata Logo">
+        </a>
+        <button onclick="openMenu()" class="menu-icon" aria-label="Menu">
+            <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6H20M4 12H20M13 18H20" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            </svg>
+        </button>
+        <ul class="nav">
+            <li><a href="index.html" class="link">Home</a></li>
+            <li><a href="kalender" class="link">Kalender</a></li>
+            <li><a href="listEvent.html" class="link">Event</a></li>
+            <li><a href="infoDestinasi.html" class="link">Destinasi</a></li>
+            <li class="nav-item dropdown">
+                <a href="#" id="profile-link" class="link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                <ul class="dropdown-menu" aria-labelledby="profile-link">
+                    <li><a class="dropdown-item" href="profile.html" id="lihat-detail-button">Lihat Detail</a></li>
+                    <li><a class="dropdown-item" href="#" id="logout-button">Logout</a></li>
+                </ul>
+            </li>
+            <li><a href="login.html" id="login-signup-btn" class="login-signup-btn">Login/Signup</a></li>
+        </ul>
+    </nav>
+
+    <h1>Gallery Management</h1>
+    <div>
+        <h2>Add Gallery Item</h2>
+        <form id="galleryForm" enctype="multipart/form-data">
+            <label for="mediaType">Media Type:</label>
+            <input type="text" id="mediaType" name="mediaType" required>
+            
+            <label for="mediaUrl">Media Image:</label>
+            <input type="file" id="mediaUrl" name="mediaUrl" required />
+
+            <label for="eventId">Event ID:</label>
+            <select id="eventId" name="eventId">
+                <option value="">Select Event</option>
+                <!-- Populate options dynamically using JavaScript -->
+            </select>
+
+            <label for="destinationId">Destination ID:</label>
+            <select id="destinationId" name="destinationId">
+                <option value="">Select Destination</option>
+                <!-- Populate options dynamically using JavaScript -->
+            </select>
+
+            <button type="submit" style="color: green; font-weight: 800;">Add Gallery Item</button>
+        </form>
+    </div>
+
+    <h2>Gallery</h2>
+    <div id="gallery" class="gallery"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="scriptToken.js"></script>
+    <script src="scriptNavbar.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load gallery items on page load
+    loadGallery();
+
+    // Populate Event ID dropdown
+    populateEventDropdown();
+
+    // Populate Destination ID dropdown
+    populateDestinationDropdown();
+
+    // Event listener for gallery form submission
+    document.getElementById('galleryForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const mediaType = document.getElementById('mediaType').value;
+        const mediaFile = document.getElementById('mediaUrl').files[0];
+
+        // Ensure a file is selected
+        if (!mediaFile) {
+            alert('Please select a media file.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onloadend = function() {
+            const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+
+            const galleryData = {
+                mediaType: mediaType,
+                mediaUrl: `data:${mediaFile.type};base64,${base64String}`,
+                eventId: document.getElementById('eventId').value,
+                destinationId: document.getElementById('destinationId').value
+            };
+
+            // POST request to add gallery item
+            fetch('/api/gallery', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(galleryData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to add gallery item.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Gallery item added successfully!');
+                loadGallery(); // Reload gallery items after adding
+            })
+            .catch(error => {
+                console.error('Error adding gallery item:', error);
+                alert('Failed to add gallery item. Please try again.');
+            });
+        };
+
+        reader.readAsDataURL(mediaFile);
+    });
+});
+
+// Function to load gallery items
+function loadGallery() {
+    fetch('/api/gallery', {
+        headers :{
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch gallery items.');
+            }
+            return response.json();
+        })
+        .then(galleries => {
+            const galleryDiv = document.getElementById('gallery');
+            galleryDiv.innerHTML = '';
+            galleries.forEach(gallery => {
+                const img = document.createElement('img');
+                img.src = gallery.mediaUrl;
+                img.alt = gallery.mediaType;
+                img.className = 'gallery-item';
+                galleryDiv.appendChild(img);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching gallery items:', error);
+            alert('Failed to fetch gallery items. Please try again.');
+        });
+}
+
+// Function to populate Event ID dropdown
+function populateEventDropdown() {
+    fetch('/api/event', {
+        headers :{
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch events.');
+            }
+            return response.json();
+        })
+        .then(events => {
+            const eventIdSelect = document.getElementById('eventId');
+            eventIdSelect.innerHTML = '<option value="">Select Event</option>';
+            events.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.eventId;
+                option.textContent = event.eventName;
+                eventIdSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching events:', error);
+            alert('Failed to fetch events. Please try again.');
+        });
+}
+
+// Function to populate Destination ID dropdown
+function populateDestinationDropdown() {
+    fetch('/api/destination',{
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch destinations.');
+            }
+            return response.json();
+        })
+        .then(destinations => {
+            const destinationIdSelect = document.getElementById('destinationId');
+            destinationIdSelect.innerHTML = '<option value="">Select Destination</option>';
+            destinations.forEach(destination => {
+                const option = document.createElement('option');
+                option.value = destination.destinationId;
+                option.textContent = destination.destinationName;
+                destinationIdSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching destinations:', error);
+            alert('Failed to fetch destinations. Please try again.');
+        });
+}
+
+    </script>
+</body>
+</html>
