@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Event Management</h1>
+    <div>
+        <h2>Add Event</h2>
+        <form id="eventForm">
+            <label for="eventName">Event Name:</label>
+            <input type="text" id="eventName" name="eventName" required>
+            <label for="eventDescription">Event Description:</label>
+            <textarea id="eventDescription" name="eventDescription" required></textarea>
+            <label for="eventDate">Event Date:</label>
+            <input type="date" id="eventDate" name="eventDate" required>
+            <label for="eventTime">Event Time:</label>
+            <input type="time" id="eventTime" name="eventTime" required>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+            <button type="submit">Add Event</button>
+        </form>
+    </div>
+    <div>
+        <h2>Event List</h2>
+        <ul id="eventList"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
