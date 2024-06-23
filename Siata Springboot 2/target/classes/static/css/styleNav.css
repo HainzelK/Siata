@@ -1,0 +1,165 @@
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+button {
+  all: unset;
+}
+
+nav {
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 40px;
+  background-color: #395886;
+  overflow: visible; /* Ensure it's visible or remove overflow property if not needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.0);
+}
+
+ul.nav {
+  display: flex;
+  gap: 1.2rem;
+  list-style: none;
+}
+
+
+
+/* General link styling */
+.link, .login-signup-btn {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+  padding: 0.5rem;
+  position: relative;
+  display: inline-block; /* Ensures proper alignment and spacing */
+  background: none; /* Removes any background styling */
+  border: none; /* Removes border */
+  cursor: pointer;
+}
+
+a.link:hover{
+    color: white !important;
+}
+
+/* Hover effect for both links and button */
+.link:hover, .login-signup-btn:hover {
+  color: white !important;
+  background-color: #395886; /* Example hover background color */
+}
+
+.logo {
+  width: 40px;
+  height: auto;
+}
+
+.menu-icon {
+  display: none;
+  width: 24px;
+  height: 24px;
+}
+
+/* Ensure vertical alignment for all nav items */
+nav ul.nav, .login-signup-btn {
+  display: flex;
+  align-items: center; /* Aligns items vertically */
+  list-style: none;
+}
+
+/* Media Query for Responsive behavior of the Navbar */
+@media only screen and (max-width: 600px) {
+  .menu-icon {
+    display: block; 
+  }
+
+
+  nav ul.nav {
+    display: none; /* Ensure it's hidden by default */
+    flex-direction: column;  
+    width: 100%;  
+    position: absolute; 
+    background-color: #395886;  
+    top: 60px;  
+    left: 0;
+    z-index: 1000; 
+  }
+
+  ul.nav.show {
+    display: flex; /* This will show the nav when the menu icon is clicked */
+  }
+
+  .container-card {
+    grid-template-columns: 1fr !important; /* Ensure it's always one column on small screens */
+    padding: 5vw; /* Adjust padding as needed */
+}
+  .container-card .custom-card {
+    width: 100%; /* Full width cards */
+}
+}
+
+/* Link and Logo Hover Effects */
+.link::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #ffff;
+  border-radius: 5px;
+  transform: scaleX(0);
+  transition: all 0.6s ease;
+}
+
+.link::before {
+  bottom: 0;
+  left: 0;
+}
+
+.link:hover::before {
+  transform: scaleX(1);
+}
+
+.logo {
+  transition: 0.35s ease;
+  text-decoration: none;
+  color: white;
+}
+
+.tombol-login { /*ini jg*/
+  background-color: white;
+  color: gray;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 7px;
+  margin-left: 20px;
+  transition-duration: 0.2s;
+}
+
+.tombol-login:hover {
+  background-color: #0056b3;
+}
+
+.dropdown-menu {
+    background-color: #395886; /* Dark gray background for the dropdown */
+    border-radius: 5px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1050; /* Ensure it appears on top */
+}
+
+.dropdown-item {
+    padding: 5px 10px;
+    cursor: pointer;
+    color: white; /* Ensuring text is visible on dark background */
+}
+
+.dropdown-item#logout-button {
+    color: red; /* Make logout button text red */
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa; /* Lighter shade on hover for contrast */
+}

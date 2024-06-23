@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styleDetail.css">
+    <link rel="stylesheet" href="css/styleFooter.css">
+    <link rel="stylesheet" href="css/styleNav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Detail Event</title>
+    <link rel="icon" type="image/x-icon" href="css/siataLogo.svg">
+    <style>
+        .img-placeholder {
+            width: 100%;
+            height: 526px;
+            background-color: #e9ecef;
+        }
+        .dropdown-menu {
+            background-color: #e9ecef;
+        }
+        @media(min-width:280px) and (max-width:768px){
+            footer{
+                margin-top: 40%;
+            }
+        }
+        .tombol-login{
+            display: block;
+            margin: 0 auto 5px;
+            width: 90%;
+        }
+
+        .descPopup{
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .modal-title.fs-5{
+            text-align: center;
+            margin-left:33.5% ;
+        }
+        .dropdown-item{
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <a href="index.html">
+            <img class="logo" src="css/siataLogo.svg" alt="Siata Logo">
+            <div style="text-decoration: none; margin-top: 3px; font-family: Nunito, sans-serif; color:#e9ecef;">Siata</div>
+        </a>
+        <button onclick="openMenu()" class="menu-icon" aria-label="Menu">
+            <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6H20M4 12H20M13 18H20" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            </svg>
+        </button>
+        <ul class="nav">
+            <li><a href="index.html" class="link">Home</a></li>
+            <li><a href="kalender" class="link">Kalender</a></li>
+            <li><a href="listEvent.html" class="link">Event</a></li>
+            <li><a href="infoDestinasi.html" class="link">Destinasi</a></li>
+            <li class="nav-item dropdown">
+                <a href="#" id="profile-link" class="link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                <ul class="dropdown-menu" aria-labelledby="profile-link">
+                    <li><a class="dropdown-item" href="profile.html" id="lihat-detail-button">Lihat Detail</a></li>
+                    <li><a class="dropdown-item" href="#" id="logout-button">Logout</a></li>
+                </ul>
+            </li>
+            <li><a href="login.html" id="login-signup-btn" class="login-signup-btn">Login/Signup</a></li>
+        </ul>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <img id="event-img" src="https://via.placeholder.com/1440x526" alt="Event Image" class="img-placeholder" />
+            </div>
+            <div class="header-overlay"></div>
+            <div class="title placeholder-glow">
+                <span id="event-title" class="placeholder col-6">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body location placeholder-glow">
+            <span id="event-location" class="placeholder col-7">Loading lokasi...</span> <br>
+            <span id="event-date" class="event-date">Tanggal: Loading...</span><br>
+            <span id="event-time" class="event-time">Jam : Loading...</span><br>
+            <span id="user-count" class="user-count">Loading...</span>
+        </div>
+        
+        <div class="card-body description placeholder-glow">
+            <span id="event-description" class="placeholder col-7">Tolong menunggu, loading data...</span>
+        </div>
+        <div class="button-container">
+            <button id="volunteer-button" class="button-background">Ayo Ikut !</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="labelPopup">Anda Belum Masuk</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="descPopup">Silakan Login atau Sign Up terlebih dahulu</p>
+                    <a href="login.html" style="text-decoration: none;"><button class="btn btn-primary tombol-login" type="button">Log In</button></a>
+                    <a href="signup.html" style="text-decoration: none;"><button class="btn btn-primary tombol-login" type="button">Sign Up</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" >
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+        </div>
+      
+        <ul class="menu">
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/xtwitter-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/instagram-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/facebook-icon.svg" width="22" height="auto"></a></li>
+        </ul>
+      
+        <ul class="menu">
+            <li class="menu__link">Siata</li>
+        </ul>
+      
+    </footer>
+    <!-- End Footer -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="scriptToken.js"></script>
+    <script src="scriptNavbar.js"></script>
+    <script>
+        const token = getCookie('accessToken');
+        const email =  extractEmailFromToken(token);
+        const userId =  searchUserIdByEmail(email);
+        console.log(userId,email,userId);
+// Function to get a cookie by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+// Function to extract email from JWT token
+function extractEmailFromToken(token) {
+    try {
+        const tokenPayload = token.split('.')[1];
+        const decodedPayload = atob(tokenPayload);
+        const payloadObject = JSON.parse(decodedPayload);
+        return payloadObject.sub;
+    } catch (error) {
+        console.error('Error extracting email from JWT token:', error);
+        return null;
+    }
+}
+
+// Function to search user ID by email
+async function searchUserIdByEmail(email) {
+    try {
+        const response = await fetch(`/api/user/search?email=${email}`, {
+            headers: {
+                'Authorization': `Bearer ${getCookie('accessToken')}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to search user ID by email');
+        }
+        const data = await response.json();
+        if (data) {
+            console.log('API Response:', data); // Log the response for debugging
+            return data; // Assuming response contains the user ID
+        } else {
+            console.error('No user found with email:', email);
+            return null; // Return null if no user ID is found
+        }
+    } catch (error) {
+        console.error('Error in searchUserIdByEmail:', error);
+        throw error;
+    }
+}
+
+// Function to fetch event details by event ID
+async function fetchEventDetails(eventId) {
+    try {
+        const response = await fetch(`/api/event/id/${eventId}`);
+        if (!response.ok) {
+            throw new Error('Could not fetch event data');
+        }
+        const event = await response.json();
+        if (event) {
+            displayEventDetails(event.eventName, event.eventImg, event.eventDescription, event.location, event.eventDate, event.eventTime, event.eventId, event.maxVol);
+            fetchUserCount(event.eventId, event.maxVol); // Fetch the user count after fetching event details
+        } else {
+            throw new Error('Event not found');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Function to fetch user count for an event
+async function fetchUserCount(eventId, maxVol) {
+    try {
+        const response = await fetch(`/api/volunteer/countuser/${eventId}`);
+        if (!response.ok) {
+            throw new Error('Could not fetch user count');
+        }
+        const userCount = await response.json();
+        displayUserCount(userCount, maxVol);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Function to display user count
+function displayUserCount(count, maxVol) {
+    const userCountElement = document.getElementById('user-count');
+    userCountElement.innerText = `Jumlah Peserta: ${count}/${maxVol}`;
+    userCountElement.classList.remove('placeholder', 'placeholder-glow');
+}
+
+// Function to display event details
+function displayEventDetails(eventName, eventImg, eventDescription, location, eventDate, eventTime, eventId) {
+    const eventTitle = document.getElementById('event-title');
+    const eventImgElement = document.getElementById('event-img');
+    const eventDescriptionElement = document.getElementById('event-description');
+    const eventLocationElement = document.getElementById('event-location');
+    const eventDateElement = document.getElementById('event-date');
+    const eventTimeElement = document.getElementById('event-time');
+    const volunteerButton = document.getElementById('volunteer-button');
+
+    eventTitle.innerText = eventName;
+    eventImgElement.src = `data:image/jpeg;base64,${eventImg}`;
+    eventDescriptionElement.innerText = eventDescription;
+    eventLocationElement.innerText = `Lokasi: ${location}`;
+
+    // Format date in Bahasa Indonesia
+    const formattedDate = new Date(eventDate).toLocaleDateString('id-ID', {
+        weekday: 'long', // "Minggu", "Senin", etc.
+        year: 'numeric', // "2021"
+        month: 'long', // "Januari", "Februari", etc.
+        day: 'numeric' // "31"
+    });
+    eventDateElement.innerText = `Tanggal: ${formattedDate}`;
+
+    eventTimeElement.innerText = `Waktu: ${eventTime}`;
+
+    // Remove placeholder classes after setting the content
+    eventTitle.classList.remove('placeholder', 'col-6', 'placeholder-glow');
+    eventImgElement.classList.remove('img-placeholder');
+    eventDescriptionElement.classList.remove('placeholder', 'col-7', 'placeholder-glow');
+    eventLocationElement.classList.remove('placeholder', 'col-7', 'placeholder-glow');
+    eventDateElement.classList.remove('placeholder', 'placeholder-glow');
+    eventTimeElement.classList.remove('placeholder', 'placeholder-glow');
+
+    // Disable volunteer button if the event date is in the past
+    const currentDate = new Date();
+    const eventDateObject = new Date(eventDate);
+    if (eventDateObject < currentDate) {
+        volunteerButton.disabled = true;
+        volunteerButton.innerText = 'Event sudah lewat';
+        volunteerButton.classList.add('disabled');
+    } else {
+        // Add event listener to volunteer button
+        volunteerButton.addEventListener('click', function () {
+            volunteerForEvent(eventId); // Pass the event ID
+        });
+    }
+}
+
+// Function to volunteer for an event
+async function volunteerForEvent(eventId) {
+    const token = getCookie('accessToken');
+    if (!token) {
+        $('#exampleModal').modal('show');
+        return;
+    }
+
+    const email = extractEmailFromToken(token);
+    if (!email) {
+        console.error('Email not found in token');
+        $('#exampleModal').modal('show');
+        return;
+    }
+
+    const userId = await searchUserIdByEmail(email);
+    if (!userId) {
+        alert('No user found with this email. Please register or check your email.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/volunteer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId, eventId })
+        });
+
+        if (!response.ok) {
+            throw new Error('Could not volunteer for the event');
+        }
+
+        const result = await response.json();
+        alert('Anda sudah masuk dalam event !');
+    } catch (error) {
+        console.error('Error volunteering for event:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+
+
+// Check login status on page load
+document.addEventListener('DOMContentLoaded', function () {
+    const token = getCookie('accessToken');
+    console.log("Retrieved token:", token); // Log the token for debugging
+    if (token) {
+        document.getElementById('login-signup-btn').style.display = 'none';
+        document.getElementById('profile-link').style.display = 'block';
+    } else {
+        document.getElementById('login-signup-btn').style.display = 'block';
+        document.getElementById('profile-link').style.display = 'none';
+    }
+
+    // Load event details
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('id');
+    if (eventId) {
+        fetchEventDetails(eventId);
+    }
+});
+
+// Add event listener to logout button
+document.getElementById('logout-button').addEventListener('click', function() {
+    document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = 'login.html';
+});
+
+    </script>
+</body>
+</html>

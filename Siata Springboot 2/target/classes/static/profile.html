@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styleNav.css">
+    <link rel="stylesheet" href="css/styleFooter.css">
+    <link rel="stylesheet" href="css/styleProfile.css">
+
+    <style>
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .dropdown-menu {
+            background-color: white;
+        }
+
+        .dropdown-item {
+            color: #252525;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control[disabled] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <a class="logo" href="index.html">
+            <img class="logo" src="css/siataLogo.svg" alt="Siata Logo">
+            Siata
+        </a>
+        <button onclick="openMenu()" class="menu-icon" aria-label="Menu">
+            <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6H20M4 12H20M13 18H20" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            </svg>
+        </button>
+        <ul class="nav">
+            <li><a href="index.html" class="link">Home</a></li>
+            <li><a href="kalender" class="link">Kalender</a></li>
+            <li><a href="listEvent.html" class="link">Event</a></li>
+            <li><a href="infoDestinasi.html" class="link">Destinasi</a></li>
+            <li class="nav-item dropdown">
+                <a href="#" id="profile-link" class="link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+                <ul class="dropdown-menu" aria-labelledby="profile-link">
+                    <li><a class="dropdown-item" href="profile.html" id="lihat-detail-button">Lihat Detail</a></li>
+                    <li><a class="dropdown-item" href="#" id="logout-button">Logout</a></li>
+                </ul>
+            </li>
+            <li><a href="login.html" id="login-signup-btn" class="login-signup-btn">Login/Signup</a></li>
+        </ul>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container">
+        <h1>Profil</h1>
+        
+        <form id="user-info-form" class="user-info-form">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <div>
+                    <label><input type="radio" id="male" name="gender" value="Male" disabled> Male</label>
+                    <label><input type="radio" id="female" name="gender" value="Female" disabled> Female</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" class="form-control" disabled>
+            </div>            
+            <div class="form-group">
+                <label for="noTelp">Phone Number:</label>
+                <input type="text" id="noTelp" name="noTelp" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label for="profilePic">Profile Picture:</label>
+                <input type="file" id="profilePic" name="profilePic" class="form-control" disabled>
+                <img id="profilePicPreview" src="" alt="Profile Picture" style="max-width: 150px; display: none; margin-top: 10px;">
+            </div>
+            <button type="button" id="edit-button" onclick="toggleEditMode()">Edit</button>
+            <button type="button" id="save-button" onclick="updateUserInfo()" style="display:none;">Save</button>
+            <button type="button" id="cancel-button" onclick="cancelEditMode()" style="display:none;">Cancel</button>
+        </form>
+
+        <div id="event-ikuti-button">
+            <p class="history">Event yang diikuti</p>
+        </div>
+        <div id="events-joined">
+            <!-- isi history -->
+        </div>
+    </div>
+
+    <!--mulai footer-->
+    <footer class="footer">
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+        </div>
+    
+        <ul class="menu">
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/xtwitter-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/instagram-icon.svg" width="22" height="auto"></a></li>
+            <li class="menu__item"><a class="menu__link" href="#"><img src="asset/facebook-icon.svg"width="22" height="auto"></a></li>
+        </ul>
+
+        <ul class="menu">
+            <li class="menu__link">Siata</li>
+        </ul>
+    </footer>
+    <!--selesai footer-->
+
+    <!-- Script utk navbar -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+
+    <script src="scriptToken.js"></script>
+    <script src="scriptNavbar.js"></script>
+    <script>
+let allEvents = [];
+let originalProfilePic = '';
+
+document.addEventListener('DOMContentLoaded', () => {
+    checkLoginStatus();
+    fetchData();
+});
+
+async function fetchData() {
+    try {
+        const token = getCookie('accessToken'); // Ensure to fetch accessToken correctly
+        const response = await fetch("/api/event", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Could not fetch data");
+        }
+
+        const data = await response.json();
+        console.log("Fetched data:", data);
+
+        allEvents = data.map(event => ({
+            eventId: event.eventId,
+            eventName: event.eventName,
+            eventImg: event.eventImg,
+            eventDesc: event.eventDescription,
+            eventDate: new Date(event.eventDate),
+            location: event.location,
+            eventTime: event.eventTime
+        }));
+        console.log("Mapped events:", allEvents);
+
+        await getEventsJoinedByUser(token);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+async function getUserInfo() {
+    try {
+        const token = getCookie('accessToken');
+        const email = extractEmailFromToken(token);
+        const userId = await searchUserIdByEmail(email);
+        const response = await fetch(`/api/user/id/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        document.getElementById('username').value = data.username;
+        document.getElementById('email').value = data.email;
+        document.getElementById('fullName').value = data.fullName;
+        // Password field should not be set here for security reasons
+        document.getElementById('noTelp').value = data.noTelp;
+
+        if (data.gender === 'Male') {
+            document.getElementById('male').checked = true;
+        } else {
+            document.getElementById('female').checked = true;
+        }
+
+        // Set Date of Birth value if available
+        if (data.dob) {
+            document.getElementById('dob').value = data.dob;
+        }
+
+        if (data.profilePic) {
+            const profilePicUrl = `data:image/png;base64,${data.profilePic}`;
+            document.getElementById('profilePicPreview').src = profilePicUrl;
+            document.getElementById('profilePicPreview').style.display = 'block';
+            originalProfilePic = profilePicUrl;
+        }
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+}
+
+async function getEventsJoinedByUser(token) {
+    try {
+        const email = extractEmailFromToken(token);
+        const userId = await searchUserIdByEmail(email);
+        const response = await fetch(`/api/volunteer/user/${userId}/events`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const eventsContainer = document.getElementById('events-joined');
+        const joinedEvents = allEvents.filter(event => data.some(joined => joined.eventId === event.eventId));
+        joinedEvents.sort((a, b) => b.eventDate - a.eventDate);
+
+        if (joinedEvents.length === 0) {
+            eventsContainer.innerHTML = '<p>Tidak ada event yang diikuti.</p>';
+        } else {
+            const eventsList = joinedEvents.map(event => `
+                <div class="history-list">
+                    <h3>${event.eventName}</h3>
+                    <p>${event.eventDate.toDateString()}</p>
+                </div>
+            `).join('');
+            eventsContainer.innerHTML = eventsList;
+        }
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        const eventsContainer = document.getElementById('events-joined');
+        if (eventsContainer) {
+            eventsContainer.innerHTML = '<p>Tidak ada event ditemukan.</p>';
+        }
+    }
+}
+
+function toggleEditMode() {
+    const formFields = document.querySelectorAll('.form-control');
+    formFields.forEach(field => field.disabled = false);
+
+    const genderFields = document.querySelectorAll('input[name="gender"]');
+    genderFields.forEach(field => field.disabled = false);
+
+    document.getElementById('edit-button').style.display = 'none';
+    document.getElementById('save-button').style.display = 'inline-block';
+    document.getElementById('cancel-button').style.display = 'inline-block';
+}
+
+function cancelEditMode() {
+    const formFields = document.querySelectorAll('.form-control');
+    formFields.forEach(field => field.disabled = true);
+
+    const genderFields = document.querySelectorAll('input[name="gender"]');
+    genderFields.forEach(field => field.disabled = true);
+
+    getUserInfo();
+
+    document.getElementById('edit-button').style.display = 'inline-block';
+    document.getElementById('save-button').style.display = 'none';
+    document.getElementById('cancel-button').style.display = 'none';
+}
+
+async function updateUserInfo() {
+    try {
+        const token = getCookie('accessToken');
+        const email = extractEmailFromToken(token);
+        const userId = await searchUserIdByEmail(email);
+
+        const username = document.getElementById('username').value;
+        const userEmail = document.getElementById('email').value;
+        const fullName = document.getElementById('fullName').value;
+        // Password field is not updated here for security reasons
+        const gender = document.querySelector('input[name="gender"]:checked').value;
+        const dobInput = document.getElementById('dob').value;
+        const dob = new Date(dobInput).toISOString().slice(0, 10).replace(/-/g, '/');
+        const noTelp = document.getElementById('noTelp').value;
+
+        const profilePicFile = document.getElementById('profilePic').files[0];
+        let profilePicBase64 = '';
+
+        if (profilePicFile) {
+            const reader = new FileReader();
+            reader.onload = async () => {
+                profilePicBase64 = 'data:image/jpeg;base64,' + reader.result.split(',')[1];
+                await sendUpdateRequest(userId, {
+                    username,
+                    email: userEmail,
+                    fullName,
+                    profilePic: profilePicBase64,
+                    gender,
+                    dob,
+                    noTelp
+                });
+            };
+            reader.readAsDataURL(profilePicFile);
+        } else {
+            await sendUpdateRequest(userId, {
+                username,
+                email: userEmail,
+                fullName,
+                profilePic: originalProfilePic, // assuming originalProfilePic already has the prefix 'data:image/jpeg;base64,'
+                gender,
+                dob,
+                noTelp
+            });
+        }
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+}
+
+async function sendUpdateRequest(userId, userDetails) {
+    try {
+        const token = getCookie('accessToken');
+        const response = await fetch(`/api/user/id/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(userDetails)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        cancelEditMode();
+        alert('Profile updated successfully');
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('Failed to update profile');
+    }
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function extractEmailFromToken(token) {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.sub;
+}
+
+async function searchUserIdByEmail(email) {
+    try {
+        const token = getCookie('accessToken');
+        const response = await fetch(`/api/user/search?email=${email}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const userId = await response.json();
+        return userId;
+    } catch (error) {
+        console.error('Error searching user by email:', error);
+        throw error;
+    }
+}
+
+function checkLoginStatus() {
+    const token = getCookie('accessToken');
+    if (token) {
+        document.getElementById('login-signup-btn').style.display = 'none';
+        document.getElementById('profile-link').style.display = 'block';
+        getUserInfo(); // Fetch user info if logged in
+    } else {
+        document.getElementById('login-signup-btn').style.display = 'block';
+        document.getElementById('profile-link').style.display = 'none';
+    }
+}
+
+function openMenu() {
+    document.querySelector('.nav').classList.toggle('open');
+}
+
+    </script>
+</body>
+</html>
+
+       

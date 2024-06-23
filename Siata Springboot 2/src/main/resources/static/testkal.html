@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calendar</title>
+    <link rel="stylesheet" href="css/styleKalender.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="calendar-wrapper">
+        <table id="calendar-table">
+            <thead>
+                <tr>
+                    <th>Calendar ID</th>
+                    <th>Event ID</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Summary</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body">
+                <!-- Calendar data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch initial data from the backend when the page loads
+            fetchData();
+        });
+
+        async function fetchData() {
+    const response = await fetch("/api/calendar", {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error("Could not fetch data");
+    }
+
+    const data = await response.json();
+    console.log("Fetched data:", data);  // Log the fetched data
+
+    // Check the length of data
+    console.log("Data length:", data.length);
+
+    const calendarEvents = data.map(calendar => ({
+        calendar_id: calendar.calendarId,
+        event_id: calendar.eventId.eventId,
+        start_time: calendar.startTime,
+        end_time: calendar.endTime,
+        summary: calendar.summary
+    }));
+
+    console.log("Calendar events:", calendarEvents);  // Log the mapped data
+
+    let calendarBody = $('#calendar-body');
+    calendarEvents.forEach(data => {
+        let row = $('<tr></tr>');
+        row.append(`<td>${data.calendar_id}</td>`);
+        row.append(`<td>${data.event_id}</td>`);
+        row.append(`<td>${data.start_time}</td>`);
+        row.append(`<td>${data.end_time}</td>`);
+        row.append(`<td>${data.summary}</td>`);
+        calendarBody.append(row);
+    });
+}
+    </script>
+</body>
+</html>

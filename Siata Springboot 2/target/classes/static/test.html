@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info</title>
+    <style>body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+    }
+    
+    h1 {
+        margin-bottom: 20px;
+    }
+    
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    
+    button:hover {
+        background-color: #0056b3;
+    }
+    
+    .user-info {
+        margin-top: 20px;
+        text-align: left;
+    }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>User Information</h1>
+        <button onclick="getUserInfo()">Get User Info</button>
+        <button onclick="logout()">Logout</button>
+        <div id="user-info" class="user-info"></div>
+    </div>
+    <script>
+    function getCookie(name) {
+        let cookieArr = document.cookie.split(";");
+        for (let i = 0; i < cookieArr.length; i++) {
+            let cookiePair = cookieArr[i].split("=");
+            if (name === cookiePair[0].trim()) {
+                return decodeURIComponent(cookiePair[1]);
+            }
+        }
+        return null;
+    }
+    
+    async function searchUserIdByEmail(email) {
+    const response = await fetch(`/api/users/search?email=${email}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Failed to search user ID by email');
+    }
+    const data = await response.json();
+    return data;
+}
+
+function extractEmailFromToken(token) {
+    try {
+        const tokenPayload = token.split('.')[1]; // JWT token consists of three parts separated by dots. We need the second part which contains the payload.
+        const decodedPayload = atob(tokenPayload); // Decode the payload from base64
+        const payloadObject = JSON.parse(decodedPayload); // Parse the payload as JSON object
+        const email = payloadObject.sub; // Assuming 'sub' claim contains the email
+        return email;
+    } catch (error) {
+        console.error('Error extracting email from JWT token:', error);
+        return null;
+    }
+}
+
+async function getUserInfo() {
+    const token = getCookie(token); // Retrieve the token from cookies
+    const userInfoDiv = document.getElementById('user-info');
+
+    if (!token) {
+        userInfoDiv.innerHTML = '<p style="color: red;">Token is missing from cookies</p>';
+        return;
+    }
+
+    try {
+        const email = extractEmailFromToken(token); // Extract email from token
+        if (!email) {
+            throw new Error('Email not found in token');
+        }
+        const userId = await searchUserIdByEmail(email); // Search for user ID by email
+        const userDataResponse = await fetch(`/api/users/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!userDataResponse.ok) {
+            throw new Error('Failed to fetch user data');
+        }
+        const userData = await userDataResponse.json();
+        userInfoDiv.innerHTML = `
+            <p><strong>Name:</strong> ${userData.username}</p>
+            <p><strong>Email:</strong> ${userData.email}</p>
+            <p><strong>Phone:</strong> ${userData.noTelp}</p>
+            <p><strong>Role:</strong> ${userData.role}</p>
+        `;
+    } catch (error) {
+        userInfoDiv.innerHTML = '<p style="color: red;">' + error.message + '</p>';
+    }
+}
+
+async function logout() {
+    try {
+        const response = await fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getCookie(token)
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Logout failed');
+        }
+        // Clear user interface
+        document.getElementById('user-info').innerHTML = '';
+        // Optionally redirect or reload
+        window.location.href = '/login.html';
+    } catch (error) {
+        console.error('Error during logout:', error);
+    }
+}
+    </script>
+</body>
+</html>
