@@ -105,11 +105,7 @@
             const apiUrl = ('/api/gallery');
 
             // Fetch images from the API
-            fetch(apiUrl, {
-                headers: {
-                    'Authorization': `Bearer ${getCookie('accessToken')}`
-                }
-            })
+            fetch(apiUrl)
                 .then(response => {
                     console.log('Response status:', response.status);
                     if (!response.ok) {

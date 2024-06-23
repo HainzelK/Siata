@@ -3,11 +3,7 @@ let allEvents = [];
 async function fetchData() {
     try {
         
-        const response = await fetch("/api/event", {
-            headers: {
-                'Authorization': `Bearer ${getCookie('accessToken')}`
-            }
-        });
+        const response = await fetch("/api/event");
 
         if (!response.ok) {
             throw new Error("Could not fetch data");

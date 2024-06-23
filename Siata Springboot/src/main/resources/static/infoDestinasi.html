@@ -110,11 +110,7 @@
                 if (!token) {
                     throw new Error('Access token is missing');
                 }
-                const response = await fetch('/api/destination', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                const response = await fetch('/api/destination');
                 if (!response.ok) {
                     throw new Error('Failed to fetch destinations');
                 }

@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/user/id/**").hasAnyAuthority("USER","ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/volunteer/**").hasAnyAuthority("USER","ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/user/id/**").hasAnyAuthority("USER","ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/volunteer/**").hasAnyAuthority("USER","ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/**").hasAuthority("ADMIN")

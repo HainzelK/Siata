@@ -123,3 +123,12 @@ body {
         height: 696px;
     }
 }
+
+@media (max-width:500px){
+    .destination-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .destination-name{
+        font-size: 1.5rem;
+    }
+}

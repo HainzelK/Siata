@@ -120,18 +120,13 @@
             const destinationId = urlParams.get('id');
             const accessToken = getCookie('accessToken'); // Get the access token from the cookie
 
-            if (!accessToken) {
-                console.error('Access token is missing');
-                // Handle missing access token, e.g., redirect to login
-                return;
-            }
+            // if (!accessToken) {
+            //     console.error('Access token is missing');
+            //     // Handle missing access token, e.g., redirect to login
+            //     return;
+            // }
 
-            fetch(`/api/destination/id/${destinationId}`, {
-
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
+            fetch(`/api/destination/id/${destinationId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
